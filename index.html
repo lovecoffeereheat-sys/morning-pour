@@ -950,13 +950,11 @@ function setDate(){
 }
 
 // ── INIT ──
-document.addEventListener("DOMContentLoaded", function(){
-  setDate();
-  renderDaily(getDailyAff());
-  renderMonthly(getMonthlyAff());
-  renderShowup(getShowup());
-  loadWord();
-});
+setDate();
+renderDaily(getDailyAff());
+renderMonthly(getMonthlyAff());
+renderShowup(getShowup());
+loadWord();
 
 // ── TABS ──
 function switchTab(id, btn) {
@@ -990,7 +988,7 @@ async function loadTopThree(){
         <div class="asana-card-title">${escH(t.name)}</div>
       </div>`).join('');
   } catch(e) {
-    document.getElementById('topthree-content').innerHTML = '<div class="empty-state">couldn't reach asana right now</div>';
+    document.getElementById('topthree-content').innerHTML = '<div class="empty-state">could not reach asana right now</div>';
   }
 }
 
@@ -1019,7 +1017,7 @@ async function loadSchool(){
     });
   } catch(e) {
     ['naliyah','emma','both'].forEach(s => {
-      document.getElementById('school-'+s).innerHTML = '<div class="empty-state">couldn't reach asana right now</div>';
+      document.getElementById('school-'+s).innerHTML = '<div class="empty-state">could not reach asana right now</div>';
     });
   }
 }
@@ -1050,7 +1048,7 @@ async function loadLongSteep(){
         </div>`;
     }).join('');
   } catch(e) {
-    document.getElementById('longsteep-content').innerHTML = '<div class="empty-state">couldn't reach asana right now</div>';
+    document.getElementById('longsteep-content').innerHTML = '<div class="empty-state">could not reach asana right now</div>';
   }
 }
 
