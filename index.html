@@ -418,6 +418,134 @@ html,body{
   animation: fadeIn .8s ease .9s both;
 }
 
+
+/* ── TABS ── */
+.tab-nav {
+  display:flex;
+  gap:4px;
+  padding:0 1.5rem;
+  max-width:560px;
+  margin:0 auto 1.5rem;
+  animation: fadeIn .8s ease .3s both;
+}
+.tab-btn {
+  font-family:'DM Mono',monospace;
+  font-size:7.5px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--rose-mid);
+  background:var(--rose-paler);
+  border:1px solid var(--rose-border);
+  border-radius:20px;
+  padding:6px 14px;
+  cursor:pointer;
+  transition:all .15s;
+  flex:1;
+  text-align:center;
+}
+.tab-btn.active {
+  background:var(--rose);
+  color:#f5efe8;
+  border-color:var(--rose);
+}
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+
+/* ── ASANA CARDS ── */
+.asana-card {
+  background:white;
+  border:1px solid var(--rose-border);
+  border-radius:12px;
+  padding:1rem 1.2rem;
+  margin-bottom:.75rem;
+}
+.asana-card-title {
+  font-family:'Lora',serif;
+  font-size:.95rem;
+  color:var(--ink);
+  margin-bottom:.3rem;
+  line-height:1.4;
+}
+.asana-card-meta {
+  font-family:'DM Mono',monospace;
+  font-size:7.5px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--rose-soft);
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.asana-card-meta span {
+  color:var(--rose-mid);
+}
+.asana-status {
+  display:inline-block;
+  font-family:'DM Mono',monospace;
+  font-size:7px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  padding:3px 9px;
+  border-radius:20px;
+  margin-bottom:.5rem;
+}
+.status-my-move { background:var(--rose-pale); color:var(--rose); }
+.status-waiting { background:#faeeda; color:#633806; }
+.status-blocked { background:#f0e8f0; color:#4a1e4a; }
+.top3-num {
+  font-family:'Playfair Display',serif;
+  font-style:italic;
+  font-size:1.4rem;
+  color:var(--rose);
+  min-width:28px;
+}
+.top3-row {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:.8rem 0;
+  border-bottom:1px solid var(--rose-border);
+}
+.top3-row:last-child { border-bottom:none; }
+.student-section {
+  margin-bottom:1.2rem;
+}
+.student-label {
+  font-family:'DM Mono',monospace;
+  font-size:8px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:.6rem;
+  padding-bottom:.4rem;
+  border-bottom:1px solid var(--rose-border);
+}
+.loading-state {
+  text-align:center;
+  padding:2rem;
+  font-family:'DM Mono',monospace;
+  font-size:8px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--rose-soft);
+}
+.empty-state {
+  text-align:center;
+  padding:1.5rem;
+  font-family:'Lora',serif;
+  font-style:italic;
+  font-size:.9rem;
+  color:var(--rose-soft);
+}
+.next-action {
+  font-family:'Lora',serif;
+  font-style:italic;
+  font-size:.82rem;
+  color:var(--rose-mid);
+  margin-top:.4rem;
+  line-height:1.5;
+}
+
 /* ── LOADING RING ── */
 .loading-ring {
   display:inline-block;
@@ -513,7 +641,7 @@ html,body{
 
   <!-- OPEN ASANA -->
   <div class="asana-btn-wrap">
-    <a class="asana-btn" href="https://app.asana.com/0/1215878245659492" target="_blank">
+    <a class="asana-btn" href="https://app.asana.com/1/1182497100078086/project/1214131354603805/list/1214131354603822" target="_blank">
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
         <circle cx="12" cy="5" r="3.5"/>
         <circle cx="5.5" cy="16" r="3.5"/>
@@ -523,9 +651,55 @@ html,body{
     </a>
   </div>
 
-  <div class="morning-footer">reheated · the morning pour · grace sarah</div>
+</div>
+
+<!-- ── TABS ── -->
+<div class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('topthree',this)">top three</button>
+  <button class="tab-btn" onclick="switchTab('school',this)">school</button>
+  <button class="tab-btn" onclick="switchTab('longsteep',this)">long steep</button>
+</div>
+
+<div style="max-width:560px;margin:0 auto;padding:0 1.5rem 4rem;">
+
+  <!-- TOP THREE -->
+  <div class="tab-panel active" id="tab-topthree">
+    <div class="sip-card">
+      <div class="card-eyebrow">today's top three · asana</div>
+      <div id="topthree-content"><div class="loading-state"><span class="loading-ring"></span></div></div>
+    </div>
+  </div>
+
+  <!-- SCHOOL -->
+  <div class="tab-panel" id="tab-school">
+    <div class="sip-card">
+      <div class="card-eyebrow">this week's school</div>
+      <div class="student-section">
+        <div class="student-label">Naliyah</div>
+        <div id="school-naliyah"><div class="loading-state"><span class="loading-ring"></span></div></div>
+      </div>
+      <div class="student-section">
+        <div class="student-label">Emma</div>
+        <div id="school-emma"><div class="loading-state"><span class="loading-ring"></span></div></div>
+      </div>
+      <div class="student-section">
+        <div class="student-label">Both</div>
+        <div id="school-both"><div class="loading-state"><span class="loading-ring"></span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LONG STEEP -->
+  <div class="tab-panel" id="tab-longsteep">
+    <div class="sip-card">
+      <div class="card-eyebrow">long steep · active cases</div>
+      <div id="longsteep-content"><div class="loading-state"><span class="loading-ring"></span></div></div>
+    </div>
+  </div>
 
 </div>
+
+<div class="morning-footer" style="text-align:center;padding:0 0 2rem;font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.14em;text-transform:uppercase;color:var(--rose-border);">reheated · the morning pour · grace sarah</div>
 
 <script>
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -781,6 +955,109 @@ renderDaily(getDailyAff());
 renderMonthly(getMonthlyAff());
 renderShowup(getShowup());
 loadWord();
+
+// ── TABS ──
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+  if(id === 'topthree' && !window._topthreeLoaded) loadTopThree();
+  if(id === 'school' && !window._schoolLoaded) loadSchool();
+  if(id === 'longsteep' && !window._longsteepLoaded) loadLongSteep();
+}
+
+const PROXY = '/.netlify/functions/asana-proxy';
+
+function escH(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+async function loadTopThree(){
+  window._topthreeLoaded = true;
+  try {
+    const res = await fetch(PROXY + '?view=topthree');
+    const data = await res.json();
+    const el = document.getElementById('topthree-content');
+    if(!data.tasks || data.tasks.length === 0){
+      el.innerHTML = '<div class="empty-state">nothing due today — the cup is clear ☕</div>';
+      return;
+    }
+    const nums = ['1','2','3'];
+    el.innerHTML = data.tasks.map((t,i) => `
+      <div class="top3-row">
+        <div class="top3-num">${nums[i]||i+1}</div>
+        <div class="asana-card-title">${escH(t.name)}</div>
+      </div>`).join('');
+  } catch(e) {
+    document.getElementById('topthree-content').innerHTML = '<div class="empty-state">couldn't reach asana right now</div>';
+  }
+}
+
+async function loadSchool(){
+  window._schoolLoaded = true;
+  try {
+    const res = await fetch(PROXY + '?view=school');
+    const data = await res.json();
+    const tasks = data.tasks || [];
+    
+    ['Naliyah','Emma','Both'].forEach(student => {
+      const id = 'school-' + student.toLowerCase();
+      const filtered = tasks.filter(t => 
+        t.student === student || t.section === student
+      );
+      const el = document.getElementById(id);
+      if(!filtered.length){
+        el.innerHTML = '<div class="empty-state">nothing planned this week</div>';
+        return;
+      }
+      el.innerHTML = filtered.map(t => `
+        <div class="asana-card">
+          <div class="asana-card-title">${escH(t.name)}</div>
+          ${t.subject ? `<div class="asana-card-meta"><span>${escH(t.subject)}</span></div>` : ''}
+        </div>`).join('');
+    });
+  } catch(e) {
+    ['naliyah','emma','both'].forEach(s => {
+      document.getElementById('school-'+s).innerHTML = '<div class="empty-state">couldn't reach asana right now</div>';
+    });
+  }
+}
+
+async function loadLongSteep(){
+  window._longsteepLoaded = true;
+  try {
+    const res = await fetch(PROXY + '?view=longsteep');
+    const data = await res.json();
+    const el = document.getElementById('longsteep-content');
+    const tasks = data.tasks || [];
+    if(!tasks.length){
+      el.innerHTML = '<div class="empty-state">no active cases right now ☕</div>';
+      return;
+    }
+    el.innerHTML = tasks.map(t => {
+      const statusClass = t.section === 'My Move' ? 'status-my-move' :
+                         t.section === 'Waiting' ? 'status-waiting' : 'status-blocked';
+      return `
+        <div class="asana-card">
+          <div class="asana-status ${statusClass}">${escH(t.section||'active')}</div>
+          <div class="asana-card-title">${escH(t.name)}</div>
+          <div class="asana-card-meta">
+            ${t.category ? `<span>${escH(t.category)}</span>` : ''}
+            ${t.court ? `whose court: <span>${escH(t.court)}</span>` : ''}
+          </div>
+          ${t.nextAction ? `<div class="next-action">→ ${escH(t.nextAction)}</div>` : ''}
+        </div>`;
+    }).join('');
+  } catch(e) {
+    document.getElementById('longsteep-content').innerHTML = '<div class="empty-state">couldn't reach asana right now</div>';
+  }
+}
+
+// load top three on page load
+window._topthreeLoaded = false;
+window._schoolLoaded = false;
+window._longsteepLoaded = false;
+loadTopThree();
+
 </script>
 </body>
 </html>
