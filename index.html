@@ -950,11 +950,13 @@ function setDate(){
 }
 
 // ── INIT ──
-setDate();
-renderDaily(getDailyAff());
-renderMonthly(getMonthlyAff());
-renderShowup(getShowup());
-loadWord();
+document.addEventListener("DOMContentLoaded", function(){
+  setDate();
+  renderDaily(getDailyAff());
+  renderMonthly(getMonthlyAff());
+  renderShowup(getShowup());
+  loadWord();
+});
 
 // ── TABS ──
 function switchTab(id, btn) {
