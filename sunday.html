@@ -39,9 +39,10 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 
 /* STEP TABS */
 .steps-row{display:flex;padding:0 28px;border-bottom:0.5px solid var(--border);background:var(--card);overflow-x:auto}
-.step-tab{padding:11px 14px 9px;font-size:11px;letter-spacing:0.05em;color:var(--text-faint);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;display:flex;align-items:center;gap:6px;transition:color 0.15s}
+.step-tab{padding:11px 14px 9px;font-size:11px;letter-spacing:0.05em;color:var(--text-soft);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;display:flex;align-items:center;gap:6px;transition:all 0.15s}
 .step-tab.active{color:var(--espresso);border-bottom-color:var(--rose)}
 .step-tab.done{color:var(--text-faint)}
+.step-tab:not(.active):hover{color:var(--text-soft);background:rgba(148,78,99,0.04);border-radius:4px}
 .step-num{width:17px;height:17px;border-radius:50%;background:var(--border);color:var(--text-soft);font-size:9px;display:flex;align-items:center;justify-content:center;font-weight:500;flex-shrink:0}
 .step-tab.active .step-num{background:var(--rose);color:#fdf0f4}
 .step-tab.done .step-num{background:var(--text-faint);color:#fff}
