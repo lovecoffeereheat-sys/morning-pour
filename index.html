@@ -1,9 +1,415 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="refresh" content="0;url=sunday.html">
-<title>morning pour</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>the other pot · grace</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☕</text></svg>">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Anton&display=swap">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --rose:#944e63;--rose-mid:#b47b84;--rose-soft:#caa6a6;
+  --rose-warm:#d6a39a;--rose-bg:#f6e6e3;--rose-card:#fdf5f3;
+  --navy:#16042d;--espresso:#2c1810;--cream:#e8d5c4;
+  --amber:#c4a45a;--slate:#3d4a5c;
+  --border:#e8cfc9;--text:#2c1810;--text-soft:#9e7d68;--text-faint:#c4a898;
+}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--rose-bg);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+}
+
+/* TOPBAR */
+.topbar{
+  background:var(--espresso);
+  display:flex;align-items:center;
+  padding:0 28px;height:52px;
+}
+.topbar-logo{font-family:'Anton',sans-serif;font-size:13px;letter-spacing:0.1em;color:var(--cream)}
+.topbar-logo em{color:var(--rose);font-style:normal}
+.topbar-date{font-family:'Playfair Display',serif;font-style:italic;font-size:12px;color:#5a3828;margin-left:14px}
+
+/* HERO */
+.hero{
+  padding:48px 28px 36px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.hero-steam{
+  position:absolute;top:0;left:50%;transform:translateX(-50%);
+  opacity:0.06;pointer-events:none;
+}
+.hero-eyebrow{
+  font-size:10px;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--rose);margin-bottom:12px;
+}
+.hero-title{
+  font-family:'Anton',sans-serif;font-size:42px;
+  letter-spacing:0.06em;color:var(--espresso);
+  line-height:1.1;margin-bottom:8px;
+}
+.hero-title em{color:var(--rose);font-style:normal}
+.hero-sub{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:15px;color:var(--text-soft);margin-bottom:4px;
+}
+.hero-greeting{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:13px;color:var(--text-faint);
+}
+
+/* TOOL GRID */
+.tool-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:14px;
+  padding:0 28px 48px;
+  max-width:960px;
+  margin:0 auto;
+  width:100%;
+}
+
+.tool-card{
+  background:var(--rose-card);
+  border:0.5px solid var(--border);
+  border-radius:14px;
+  padding:22px 22px 18px;
+  text-decoration:none;
+  color:inherit;
+  display:flex;
+  flex-direction:column;
+  gap:0;
+  transition:transform 0.15s, box-shadow 0.15s;
+  position:relative;
+  overflow:hidden;
+}
+.tool-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(44,24,16,0.08);
+}
+.tool-card-accent{
+  position:absolute;top:0;left:0;right:0;height:3px;
+  border-radius:14px 14px 0 0;
+}
+.tool-card-icon{
+  width:40px;height:40px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;margin-bottom:14px;flex-shrink:0;
+}
+.tool-card-eyebrow{
+  font-size:9px;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--text-faint);margin-bottom:5px;
+}
+.tool-card-name{
+  font-family:'Playfair Display',serif;font-size:18px;
+  color:var(--espresso);margin-bottom:6px;line-height:1.2;
+}
+.tool-card-name em{font-style:italic;color:var(--rose)}
+.tool-card-desc{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:12px;color:var(--text-soft);line-height:1.5;
+  margin-bottom:14px;flex:1;
+}
+.tool-card-features{
+  display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px;
+}
+.feature-pill{
+  font-size:9px;letter-spacing:0.04em;
+  padding:3px 9px;border-radius:20px;
+  border:0.5px solid var(--border);
+  color:var(--text-soft);background:var(--rose-bg);
+}
+.tool-card-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-top:14px;border-top:0.5px solid var(--border);
+}
+.tool-card-status{
+  font-size:9px;letter-spacing:0.07em;text-transform:uppercase;
+  padding:3px 9px;border-radius:20px;
+}
+.status-live{background:#e8f5e9;color:#2e7d32}
+.status-soon{background:var(--rose-bg);color:var(--rose-mid)}
+.status-sheets{background:#e8f0fe;color:#1a73e8}
+.tool-card-arrow{
+  font-size:18px;color:var(--text-faint);transition:color 0.15s,transform 0.15s;
+}
+.tool-card:hover .tool-card-arrow{color:var(--rose);transform:translateX(3px)}
+
+/* COMING SOON — muted */
+.tool-card.coming{opacity:0.72;cursor:default}
+.tool-card.coming:hover{transform:none;box-shadow:none}
+
+/* DIVIDER */
+.section-divider{
+  display:flex;align-items:center;gap:12px;
+  padding:0 28px 18px;max-width:960px;margin:0 auto;width:100%;
+}
+.section-divider-line{flex:1;height:0.5px;background:var(--border)}
+.section-divider-text{
+  font-size:9px;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--text-faint);white-space:nowrap;
+}
+
+/* FOOTER */
+.footer{
+  margin-top:auto;
+  padding:20px 28px;
+  border-top:0.5px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:8px;
+}
+.footer-brand{
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:11px;color:var(--text-faint);
+}
+.footer-note{font-size:10px;color:var(--text-faint)}
+
+/* CUP SVG */
+.cup-small{display:inline-block;vertical-align:middle}
+</style>
 </head>
-<body></body>
+<body>
+
+<div class="topbar">
+  <span class="topbar-logo">THE OTHER<em> </em>POT</span>
+  <span class="topbar-date" id="topbarDate"></span>
+</div>
+
+<div class="hero">
+  <div class="hero-steam">
+    <svg width="200" height="180" viewBox="0 0 200 180" fill="none">
+      <path d="M60 160 Q55 120 65 90 Q75 60 60 30" stroke="#2c1810" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <path d="M100 160 Q95 115 105 80 Q115 45 100 10" stroke="#2c1810" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <path d="M140 160 Q135 120 145 90 Q155 60 140 30" stroke="#2c1810" stroke-width="3" stroke-linecap="round" fill="none"/>
+    </svg>
+  </div>
+  <div class="hero-eyebrow">your life OS · grace sarah</div>
+  <div class="hero-title">THE OTHER<em> POT</em></div>
+  <div class="hero-sub">the whole life, not just the work.</div>
+  <div class="hero-greeting" id="heroGreeting"></div>
+</div>
+
+<div class="section-divider">
+  <div class="section-divider-line"></div>
+  <div class="section-divider-text">morning pour · work & content</div>
+  <div class="section-divider-line"></div>
+</div>
+
+<div class="tool-grid">
+
+  <!-- Sunday Planning -->
+  <a href="sunday.html" class="tool-card">
+    <div class="tool-card-accent" style="background:var(--rose)"></div>
+    <div class="tool-card-icon" style="background:#f5d8e2">☕</div>
+    <div class="tool-card-eyebrow">morning pour · weekly ritual</div>
+    <div class="tool-card-name">sunday <em>planning</em></div>
+    <div class="tool-card-desc">the sunday pour — clear the cup, look at the week, pour it out. five steps, one ritual.</div>
+    <div class="tool-card-features">
+      <span class="feature-pill">5-step ritual</span>
+      <span class="feature-pill">asana connected</span>
+      <span class="feature-pill">content map</span>
+      <span class="feature-pill">brain dump</span>
+      <span class="feature-pill">google calendar</span>
+    </div>
+    <div class="tool-card-footer">
+      <span class="tool-card-status status-live">live</span>
+      <i class="ti ti-arrow-right tool-card-arrow"></i>
+    </div>
+  </a>
+
+  <!-- Time Blocker -->
+  <a href="pour.html" class="tool-card coming">
+    <div class="tool-card-accent" style="background:var(--slate)"></div>
+    <div class="tool-card-icon" style="background:#d8dde8">⏱</div>
+    <div class="tool-card-eyebrow">morning pour · daily execution</div>
+    <div class="tool-card-name">the <em>time blocker</em></div>
+    <div class="tool-card-desc">drag your week into the day. asana tasks, google calendar events, your blocks — one view.</div>
+    <div class="tool-card-features">
+      <span class="feature-pill">day view</span>
+      <span class="feature-pill">drag to schedule</span>
+      <span class="feature-pill">asana sidebar</span>
+      <span class="feature-pill">gcal overlay</span>
+    </div>
+    <div class="tool-card-footer">
+      <span class="tool-card-status status-soon">building next</span>
+      <i class="ti ti-arrow-right tool-card-arrow"></i>
+    </div>
+  </a>
+
+  <!-- Content Map -->
+  <a href="content-maps/july-2026-content-map.html" class="tool-card">
+    <div class="tool-card-accent" style="background:var(--amber)"></div>
+    <div class="tool-card-icon" style="background:#f5e8d0">🗓</div>
+    <div class="tool-card-eyebrow">morning pour · content planning</div>
+    <div class="tool-card-name">content <em>map</em></div>
+    <div class="tool-card-desc">Q3 2026 — july, august, september. batch write sundays, publish tuesdays, notes tue–thu.</div>
+    <div class="tool-card-features">
+      <span class="feature-pill">july</span>
+      <span class="feature-pill">august</span>
+      <span class="feature-pill">september</span>
+      <span class="feature-pill">Q3 milestones</span>
+    </div>
+    <div class="tool-card-footer">
+      <span class="tool-card-status status-live">live</span>
+      <i class="ti ti-arrow-right tool-card-arrow"></i>
+    </div>
+  </a>
+
+</div>
+
+<div class="section-divider">
+  <div class="section-divider-line"></div>
+  <div class="section-divider-text">the other pot · life layer</div>
+  <div class="section-divider-line"></div>
+</div>
+
+<div class="tool-grid">
+
+  <!-- The Slow Steep -->
+  <a href="steep.html" class="tool-card coming">
+    <div class="tool-card-accent" style="background:var(--amber)"></div>
+    <div class="tool-card-icon" style="background:#f5e8d0">💰</div>
+    <div class="tool-card-eyebrow">the other pot · finances</div>
+    <div class="tool-card-name">the <em>slow steep</em></div>
+    <div class="tool-card-desc">your money, your terms. view and log from your 2026 budget — income, expenses, left over.</div>
+    <div class="tool-card-features">
+      <span class="feature-pill">google sheets</span>
+      <span class="feature-pill">monthly view</span>
+      <span class="feature-pill">log expenses</span>
+      <span class="feature-pill">income tracking</span>
+    </div>
+    <div class="tool-card-footer">
+      <span class="tool-card-status status-soon">building soon</span>
+      <i class="ti ti-arrow-right tool-card-arrow"></i>
+    </div>
+  </a>
+
+  <!-- The Body -->
+  <a href="body.html" class="tool-card coming">
+    <div class="tool-card-accent" style="background:var(--rose-mid)"></div>
+    <div class="tool-card-icon" style="background:#f5d8e2">🌿</div>
+    <div class="tool-card-eyebrow">the other pot · wellness</div>
+    <div class="tool-card-name">the <em>body</em></div>
+    <div class="tool-card-desc">movement, sleep, mood, water, symptoms. cycle tracking for you, naliyah, and emma.</div>
+    <div class="tool-card-features">
+      <span class="feature-pill">daily wellness log</span>
+      <span class="feature-pill">period tracker</span>
+      <span class="feature-pill">grace + naliyah + emma</span>
+      <span class="feature-pill">google sheets</span>
+    </div>
+    <div class="tool-card-footer">
+      <span class="tool-card-status status-soon">building soon</span>
+      <i class="ti ti-arrow-right tool-card-arrow"></i>
+    </div>
+  </a>
+
+  <!-- The Table -->
+  <a href="table.html" class="tool-card coming">
+    <div class="tool-card-accent" style="background:var(--rose-warm)"></div>
+    <div class="tool-card-icon" style="background:#fde8e0">🍽</div>
+    <div class="tool-card-eyebrow">the other pot · meals</div>
+    <div class="tool-card-name">the <em>table</em></div>
+    <div class="tool-card-desc">weekly meal planning for the whole family. meal library with photos, grocery list auto-generates.</div>
+    <div class="tool-card-features">
+      <span class="feature-pill">meal library</span>
+      <span class="feature-pill">weekly planner</span>
+      <span class="feature-pill">grocery list</span>
+      <span class="feature-pill">whole family</span>
+    </div>
+    <div class="tool-card-footer">
+      <span class="tool-card-status status-soon">building soon</span>
+      <i class="ti ti-arrow-right tool-card-arrow"></i>
+    </div>
+  </a>
+
+</div>
+
+<div class="section-divider">
+  <div class="section-divider-line"></div>
+  <div class="section-divider-text">your sheets · open in google</div>
+  <div class="section-divider-line"></div>
+</div>
+
+<div class="tool-grid" style="padding-bottom:32px">
+
+  <a href="https://docs.google.com/spreadsheets/d/1owdAEX5y1x7nOAQbPIX_WWZufylUAbFf" target="_blank" class="tool-card">
+    <div class="tool-card-accent" style="background:#1a73e8"></div>
+    <div class="tool-card-icon" style="background:#e8f0fe">📊</div>
+    <div class="tool-card-eyebrow">google sheets · finances</div>
+    <div class="tool-card-name">the slow steep <em>2026</em></div>
+    <div class="tool-card-desc">your monthly budget — income, fixed, variable, business, savings. open directly in google sheets.</div>
+    <div class="tool-card-features">
+      <span class="feature-pill">jan–dec 2026</span>
+      <span class="feature-pill">RO income</span>
+      <span class="feature-pill">dashboard</span>
+    </div>
+    <div class="tool-card-footer">
+      <span class="tool-card-status status-sheets">google sheets</span>
+      <i class="ti ti-external-link tool-card-arrow"></i>
+    </div>
+  </a>
+
+  <a href="#" class="tool-card coming" id="wellnessSheetCard">
+    <div class="tool-card-accent" style="background:#944e63"></div>
+    <div class="tool-card-icon" style="background:#f5d8e2">🌿</div>
+    <div class="tool-card-eyebrow">google sheets · wellness</div>
+    <div class="tool-card-name">the body · <em>wellness log</em></div>
+    <div class="tool-card-desc">daily movement, sleep, mood, water, symptoms. upload to google drive to activate.</div>
+    <div class="tool-card-features">
+      <span class="feature-pill">daily log</span>
+      <span class="feature-pill">weekly summary</span>
+    </div>
+    <div class="tool-card-footer">
+      <span class="tool-card-status status-soon">upload to activate</span>
+      <i class="ti ti-external-link tool-card-arrow"></i>
+    </div>
+  </a>
+
+  <a href="#" class="tool-card coming" id="periodSheetCard">
+    <div class="tool-card-accent" style="background:#b47b84"></div>
+    <div class="tool-card-icon" style="background:#f5d8e2">🌸</div>
+    <div class="tool-card-eyebrow">google sheets · cycle tracking</div>
+    <div class="tool-card-name">the body · <em>period tracker</em></div>
+    <div class="tool-card-desc">cycle tracking for grace, naliyah, and emma. perimenopause-aware for grace. upload to activate.</div>
+    <div class="tool-card-features">
+      <span class="feature-pill">grace · perimenopause</span>
+      <span class="feature-pill">naliyah + emma</span>
+    </div>
+    <div class="tool-card-footer">
+      <span class="tool-card-status status-soon">upload to activate</span>
+      <i class="ti ti-external-link tool-card-arrow"></i>
+    </div>
+  </a>
+
+</div>
+
+<div class="footer">
+  <span class="footer-brand">the other pot · grace sarah · regina, sk</span>
+  <span class="footer-note">☕ built for one. maybe for many.</span>
+</div>
+
+<script>
+// Greeting
+const greetings = {
+  0: "sunday. the best cup of the week.",
+  1: "monday. fresh pot.",
+  2: "tuesday. the work is in the cup.",
+  3: "wednesday. halfway through the steep.",
+  4: "thursday. almost there.",
+  5: "friday. the last pour of the week.",
+  6: "saturday. no rush today.",
+};
+const now = new Date();
+document.getElementById('heroGreeting').textContent = greetings[now.getDay()];
+document.getElementById('topbarDate').textContent = now.toLocaleDateString('en-CA', {weekday:'long', month:'long', day:'numeric', year:'numeric'});
+</script>
+</body>
 </html>
