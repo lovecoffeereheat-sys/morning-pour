@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Background circle -->
+  <circle cx="16" cy="16" r="16" fill="#8b2252"/>
+  
+  <!-- Steam lines -->
+  <path d="M11 8 Q10 6 11 4 Q12 2 11 0" stroke="#f6e6e3" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.7"/>
+  <path d="M15 7 Q14 5 15 3 Q16 1 15 0" stroke="#f6e6e3" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.7"/>
+  <path d="M19 8 Q18 6 19 4 Q20 2 19 0" stroke="#f6e6e3" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.7"/>
+
+  <!-- Cup body -->
+  <path d="M8 13 C7 18 7 22 9 25 C11 27 13 28 16 28 C19 28 21 27 23 25 C25 22 25 18 24 13 Z" fill="#f5efe8" stroke="#f6e6e3" stroke-width="0.5"/>
+  
+  <!-- Cup rim ellipse -->
+  <ellipse cx="16" cy="13" rx="8" ry="2.5" fill="#f5efe8" stroke="#f6e6e3" stroke-width="0.5"/>
+  
+  <!-- Coffee surface -->
+  <ellipse cx="16" cy="13" rx="6" ry="1.8" fill="#c4a45a" opacity="0.5"/>
+  
+  <!-- Coffee sheen -->
+  <ellipse cx="13.5" cy="12.5" rx="2" ry="0.8" fill="white" opacity="0.2"/>
+  
+  <!-- Handle -->
+  <path d="M24 16 C28 16 30 19 30 21 C30 23 28 25 24 24" stroke="#f6e6e3" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  
+  <!-- Saucer -->
+  <ellipse cx="16" cy="28" rx="10" ry="2" fill="#f2e8ec" opacity="0.6"/>
+  <ellipse cx="16" cy="27.5" rx="10" ry="2" fill="none" stroke="#f6e6e3" stroke-width="0.5"/>
+</svg>

@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>sunday planning · morning pour</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☕</text></svg>">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Anton&display=swap">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --rose:#944e63;--rose-light:#f5d8e2;--rose-bg:#fdf0f2;
+  --navy:#1e2433;--navy-light:#d0d8e8;
+  --amber:#c4a45a;--amber-light:#f5e8d0;--amber-bg:#f5f0e4;
+  --slate:#3d4a5c;--slate-light:#d8dde8;
+  --espresso:#2c1810;--cream:#e8d5c4;
+  --bg:#f6e6e3;--card:#fdf5f3;--border:#e8cfc9;--border-soft:#ede6df;
+  --text:#2c1810;--text-mid:#6b4c3b;--text-soft:#9e7d68;--text-faint:#c4a898;
+}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* TOPBAR */
+.topbar{background:var(--espresso);display:flex;align-items:center;padding:0 24px;height:52px;position:sticky;top:0;z-index:100}
+.topbar-logo{font-family:'Anton',sans-serif;font-size:13px;letter-spacing:0.1em;color:var(--cream)}
+.topbar-logo em{color:var(--rose);font-style:normal}
+.topbar-sep{width:1px;height:16px;background:#4a2c1a;margin:0 14px}
+.topbar-sub{font-family:'Playfair Display',serif;font-style:italic;font-size:13px;color:#7a5540}
+.topbar-spacer{flex:1}
+.topbar-link{font-size:11px;color:#5a3828;letter-spacing:0.05em;cursor:pointer;display:flex;align-items:center;gap:5px;text-decoration:none}
+.topbar-link:hover{color:var(--cream)}
+
+/* HERO */
+.hero{padding:32px 28px 24px;border-bottom:0.5px solid var(--border)}
+.hero-eyebrow{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--rose);margin-bottom:8px}
+.hero-title{font-family:'Playfair Display',serif;font-size:26px;color:var(--espresso);line-height:1.2;margin-bottom:7px}
+.hero-title em{font-style:italic;color:var(--rose)}
+.hero-sub{font-family:'Playfair Display',serif;font-style:italic;font-size:13px;color:var(--text-soft)}
+
+/* STEP TABS */
+.steps-row{display:flex;padding:0 28px;border-bottom:0.5px solid var(--border);background:var(--card);overflow-x:auto}
+.step-tab{padding:11px 14px 9px;font-size:11px;letter-spacing:0.05em;color:var(--text-faint);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;display:flex;align-items:center;gap:6px;transition:color 0.15s}
+.step-tab.active{color:var(--espresso);border-bottom-color:var(--rose)}
+.step-tab.done{color:var(--text-faint)}
+.step-tab.done:hover{color:var(--text-soft)}
+.step-num{width:17px;height:17px;border-radius:50%;background:var(--border);color:var(--text-soft);font-size:9px;display:flex;align-items:center;justify-content:center;font-weight:500;flex-shrink:0}
+.step-tab.active .step-num{background:var(--rose);color:#fdf0f4}
+.step-tab.done .step-num{background:var(--text-faint);color:#fff}
+
+/* STEP PANELS */
+.step-panel{display:none;padding:26px 28px 40px;max-width:780px}
+.step-panel.active{display:block}
+.section-label{font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-faint);margin-bottom:16px}
+
+/* CARDS */
+.card{background:var(--card);border:0.5px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:12px}
+.card-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px}
+.card-title{font-family:'Playfair Display',serif;font-size:15px;color:var(--espresso)}
+.card-desc{font-family:'Playfair Display',serif;font-style:italic;font-size:12px;color:var(--text-soft);line-height:1.5;margin-bottom:14px}
+
+/* TOGGLE */
+.toggle{display:flex;align-items:center;gap:7px;cursor:pointer;user-select:none}
+.toggle-track{width:30px;height:17px;background:var(--border);border-radius:20px;position:relative;transition:background 0.2s;flex-shrink:0}
+.toggle-track.on{background:var(--rose)}
+.toggle-thumb{position:absolute;top:2px;left:2px;width:13px;height:13px;border-radius:50%;background:#fff;transition:left 0.2s}
+.toggle-track.on .toggle-thumb{left:15px}
+.toggle-label{font-size:11px;color:var(--text-faint);letter-spacing:0.04em}
+.toggle-label.on{color:var(--rose)}
+.section-hidden{opacity:0.35;pointer-events:none;transition:opacity 0.2s}
+
+/* DAY GRID */
+.day-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:0}
+.day-pill{background:var(--bg);border:0.5px solid var(--border-soft);border-radius:8px;padding:8px 6px;text-align:center;cursor:pointer;transition:all 0.15s}
+.day-pill:hover{border-color:var(--rose)}
+.day-pill.on{background:var(--rose);border-color:var(--rose)}
+.day-pill-name{font-size:10px;letter-spacing:0.05em;color:var(--text-soft);display:block}
+.day-pill.on .day-pill-name{color:#fdf0f4}
+.day-pill-tag{font-size:9px;color:var(--text-faint);margin-top:2px;display:block;font-family:'Playfair Display',serif;font-style:italic}
+.day-pill.on .day-pill-tag{color:rgba(253,240,244,0.7)}
+
+/* ENERGY CHIPS */
+.energy-row{display:flex;gap:6px;flex-wrap:wrap}
+.energy-chip{background:var(--bg);border:0.5px solid var(--border-soft);border-radius:20px;padding:7px 13px;font-size:11px;color:var(--text-soft);cursor:pointer;display:flex;align-items:center;gap:5px;transition:all 0.15s}
+.energy-chip:hover{border-color:var(--navy)}
+.energy-chip.on{background:var(--navy);border-color:var(--navy);color:var(--amber)}
+.energy-chip i{font-size:14px}
+
+/* TEXTAREA */
+textarea{width:100%;background:var(--bg);border:0.5px solid var(--border-soft);border-radius:8px;padding:10px 12px;font-size:13px;color:var(--text);font-family:'Inter',system-ui,sans-serif;resize:none;outline:none;line-height:1.6;transition:border-color 0.15s}
+textarea::placeholder{color:var(--text-faint);font-style:italic;font-family:'Playfair Display',serif}
+textarea:focus{border-color:var(--rose)}
+
+/* CONTENT MAP BANNER */
+.map-banner{background:var(--navy);border-radius:10px;padding:16px 18px;margin-bottom:14px}
+.map-banner-label{font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--amber);margin-bottom:5px}
+.map-banner-title{font-family:'Playfair Display',serif;font-size:14px;color:#f6e6e3;margin-bottom:10px}
+.map-week-items{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
+.map-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:6px;background:rgba(255,255,255,0.05)}
+.map-item-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.dot-batch{background:#3d4a5c}
+.dot-post{background:var(--rose)}
+.dot-tool{background:var(--amber)}
+.dot-note{background:#b47b84}
+.dot-flex{background:#b47b84;border:1.5px dashed var(--rose)}
+.map-item-date{font-size:10px;color:#7a8a9e;width:56px;flex-shrink:0}
+.map-item-text{font-size:12px;color:#e8d5c4;flex:1}
+.map-item-angle{font-size:10px;color:#5a6878;font-family:'Playfair Display',serif;font-style:italic}
+.map-item-badge{font-size:9px;padding:2px 8px;border-radius:20px;white-space:nowrap;flex-shrink:0;cursor:pointer;transition:all 0.15s}
+.badge-add{background:rgba(196,164,90,0.15);color:var(--amber);border:0.5px solid rgba(196,164,90,0.3)}
+.badge-add:hover{background:rgba(196,164,90,0.28)}
+.badge-added{background:rgba(74,144,112,0.12);color:#5aaa88;border:0.5px solid rgba(74,144,112,0.3)}
+.map-view-link{font-size:11px;color:#5a6878;font-family:'Playfair Display',serif;font-style:italic;cursor:pointer;text-decoration:none;display:inline-block}
+.map-view-link:hover{color:var(--amber)}
+
+/* MILESTONES */
+.milestones-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.milestone{background:var(--navy);border-radius:8px;padding:10px 12px}
+.milestone-label{font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--amber);margin-bottom:3px}
+.milestone-val{font-family:'Playfair Display',serif;font-size:13px;color:#f6e6e3;margin-bottom:1px}
+.milestone-sub{font-size:10px;color:#b47b84}
+
+/* TASK LANES */
+.pour-divider{display:flex;align-items:center;gap:10px;margin:18px 0 14px}
+.pour-divider-line{flex:1;height:0.5px;background:var(--border)}
+.pour-divider-text{font-family:'Playfair Display',serif;font-style:italic;font-size:11px;color:var(--text-faint)}
+.task-lanes{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lane{border-radius:10px;padding:14px 15px;border:0.5px solid transparent}
+.lane-content{background:var(--amber-bg);border-color:#dfd0a0}
+.lane-personal{background:var(--rose-bg);border-color:#e8c4c8}
+.lane-header{display:flex;align-items:center;gap:7px;margin-bottom:10px}
+.lane-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.lane-label{font-size:10px;letter-spacing:0.08em;text-transform:uppercase}
+.lane-content .lane-label{color:#8a7030}
+.lane-personal .lane-label{color:var(--rose)}
+.lane-loading{font-size:11px;font-family:'Playfair Display',serif;font-style:italic;color:var(--text-faint);padding:8px 0}
+.task-row{display:flex;align-items:flex-start;gap:7px;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,0.05);font-size:12px}
+.task-row:last-of-type{border-bottom:none}
+.task-row i{font-size:13px;margin-top:1px;flex-shrink:0;color:var(--text-faint)}
+.task-row-text{color:var(--text);line-height:1.4;flex:1}
+.task-row-text small{display:block;font-size:10px;color:var(--text-soft);margin-top:1px;font-family:'Playfair Display',serif;font-style:italic}
+.task-tag{font-size:9px;padding:1px 6px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+.lane-content .task-tag{background:#e8d898;color:#6a5010}
+.lane-personal .task-tag{background:#f0ccd0;color:#7a3040}
+.task-row.from-map{background:rgba(196,164,90,0.08);border-radius:6px;padding:6px 7px;border-bottom:none;margin-bottom:3px}
+.map-tag{font-size:9px;padding:1px 6px;border-radius:20px;background:rgba(196,164,90,0.2);color:#8a7030;border:0.5px solid rgba(196,164,90,0.4);white-space:nowrap;flex-shrink:0}
+.lane-add{margin-top:8px;font-size:11px;font-family:'Playfair Display',serif;font-style:italic;cursor:pointer;display:flex;align-items:center;gap:5px;background:none;border:none;padding:0}
+.lane-content .lane-add{color:#b8a060}
+.lane-personal .lane-add{color:#b47b84}
+.lane-add:hover{opacity:0.7}
+
+/* BRAIN DUMP */
+.dump-input-row{display:flex;gap:8px;margin-bottom:8px}
+.dump-input{flex:1;background:var(--bg);border:0.5px solid var(--border-soft);border-radius:8px;padding:9px 12px;font-size:13px;color:var(--text);font-family:'Inter',system-ui,sans-serif;outline:none;transition:border-color 0.15s}
+.dump-input:focus{border-color:var(--rose)}
+.dump-input::placeholder{color:var(--text-faint);font-style:italic;font-family:'Playfair Display',serif}
+.dump-lane-btns{display:flex;gap:6px}
+.dump-lane-btn{padding:8px 14px;border-radius:8px;font-size:11px;letter-spacing:0.04em;cursor:pointer;border:0.5px solid transparent;transition:all 0.15s}
+.dump-btn-content{background:var(--amber-bg);border-color:#dfd0a0;color:#8a7030}
+.dump-btn-content:hover,.dump-btn-content.active{background:var(--amber);border-color:var(--amber);color:var(--espresso)}
+.dump-btn-personal{background:var(--rose-bg);border-color:#e8c4c8;color:var(--rose)}
+.dump-btn-personal:hover,.dump-btn-personal.active{background:var(--rose);border-color:var(--rose);color:#fdf0f4}
+.dump-queue{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.dump-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;background:var(--bg);border:0.5px solid var(--border-soft)}
+.dump-item-text{flex:1;font-size:12px;color:var(--text)}
+.dump-item-lane{font-size:9px;padding:2px 7px;border-radius:20px}
+.dump-lane-content{background:#e8d898;color:#6a5010}
+.dump-lane-personal{background:#f0ccd0;color:#7a3040}
+.dump-item-project{font-size:11px;color:var(--text-soft)}
+.dump-item-remove{background:none;border:none;cursor:pointer;color:var(--text-faint);font-size:14px;padding:2px;display:flex;align-items:center}
+.dump-item-remove:hover{color:var(--rose)}
+.project-select{background:var(--bg);border:0.5px solid var(--border-soft);border-radius:6px;padding:4px 8px;font-size:11px;color:var(--text);outline:none;cursor:pointer}
+.project-select:focus{border-color:var(--rose)}
+
+/* WORD SECTION */
+.word-input{width:100%;background:var(--bg);border:0.5px solid var(--border-soft);border-radius:8px;padding:12px 16px;font-size:18px;font-family:'Playfair Display',serif;color:var(--espresso);outline:none;text-align:center;transition:border-color 0.15s;letter-spacing:0.04em}
+.word-input:focus{border-color:var(--rose)}
+.word-input::placeholder{color:var(--text-faint);font-size:14px}
+
+/* BUTTONS */
+.btn-primary{background:var(--navy);color:var(--amber);border:none;border-radius:8px;padding:11px 22px;font-size:12px;letter-spacing:0.06em;cursor:pointer;font-family:'Inter',system-ui,sans-serif;display:inline-flex;align-items:center;gap:7px;transition:opacity 0.15s}
+.btn-primary:hover{opacity:0.88}
+.btn-primary i{font-size:14px}
+.btn-ghost{background:transparent;color:var(--text-soft);border:0.5px solid var(--border-soft);border-radius:8px;padding:10px 18px;font-size:12px;cursor:pointer;font-family:'Inter',system-ui,sans-serif;margin-right:8px;transition:border-color 0.15s}
+.btn-ghost:hover{border-color:var(--text-soft)}
+.btn-send{background:var(--rose);color:#fdf0f4;border:none;border-radius:8px;padding:10px 18px;font-size:12px;letter-spacing:0.04em;cursor:pointer;font-family:'Inter',system-ui,sans-serif;display:inline-flex;align-items:center;gap:6px;margin-top:14px;transition:opacity 0.15s}
+.btn-send:hover{opacity:0.88}
+.btn-send i{font-size:13px}
+.btn-row{margin-top:18px;display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+
+/* COMPLETE STATE */
+.complete-card{background:var(--navy);border-radius:12px;padding:28px 24px;text-align:center;margin-top:8px}
+.complete-icon{font-size:32px;color:var(--amber);margin-bottom:12px}
+.complete-title{font-family:'Playfair Display',serif;font-size:20px;color:#f6e6e3;margin-bottom:6px}
+.complete-sub{font-family:'Playfair Display',serif;font-style:italic;font-size:13px;color:#7a8a9e;margin-bottom:20px}
+.complete-links{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.complete-link{background:rgba(255,255,255,0.07);border:0.5px solid rgba(255,255,255,0.12);border-radius:8px;padding:10px 18px;font-size:12px;color:var(--cream);text-decoration:none;display:flex;align-items:center;gap:6px;transition:background 0.15s}
+.complete-link:hover{background:rgba(255,255,255,0.12)}
+.complete-link i{font-size:14px;color:var(--amber)}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:var(--cream);padding:11px 18px;border-radius:8px;font-size:12px;display:flex;align-items:center;gap:8px;opacity:0;transition:opacity 0.3s;pointer-events:none;z-index:999}
+.toast.show{opacity:1}
+.toast i{color:var(--amber);font-size:14px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-logo">MORNING<em> </em>POUR</span>
+  <div class="topbar-sep"></div>
+  <span class="topbar-sub">sunday planning</span>
+  <div class="topbar-spacer"></div>
+  <a href="index.html" class="topbar-link"><i class="ti ti-arrow-left" aria-hidden="true"></i> back</a>
+</div>
+
+<div class="hero">
+  <div class="hero-eyebrow">☕ weekly ritual</div>
+  <div class="hero-title">the <em>sunday pour</em></div>
+  <div class="hero-sub" id="heroSub">not a productivity system — a ritual. sit down with your second cup.</div>
+</div>
+
+<div class="steps-row">
+  <div class="step-tab active" data-step="1" onclick="goToStep(1)">
+    <div class="step-num" id="snum1">1</div> clear the cup
+  </div>
+  <div class="step-tab" data-step="2" onclick="goToStep(2)">
+    <div class="step-num" id="snum2">2</div> look at the week
+  </div>
+  <div class="step-tab" data-step="3" onclick="goToStep(3)">
+    <div class="step-num" id="snum3">3</div> the pour-over
+  </div>
+  <div class="step-tab" data-step="4" onclick="goToStep(4)">
+    <div class="step-num" id="snum4">4</div> brain dump
+  </div>
+  <div class="step-tab" data-step="5" onclick="goToStep(5)">
+    <div class="step-num" id="snum5">5</div> one word
+  </div>
+</div>
+
+<!-- STEP 1: CLEAR THE CUP -->
+<div class="step-panel active" id="step1">
+  <div class="section-label">step 1 — clear the cup</div>
+  <div class="card">
+    <div class="card-title">what are you carrying in from last week?</div>
+    <div class="card-desc">unfinished, unresolved, or just sitting on you. get it out before you plan.</div>
+    <textarea id="carrying" rows="4" placeholder="the thing that didn't get done, the conversation still open, whatever's taking up space..."></textarea>
+  </div>
+  <div class="card">
+    <div class="card-title">what do you want to release?</div>
+    <div class="card-desc">not everything from last week needs to come with you. what are you choosing to let go?</div>
+    <textarea id="release" rows="3" placeholder="it doesn't have to be done this week. it can wait. it can go..."></textarea>
+  </div>
+  <div class="card">
+    <div class="card-title">the week's one thing</div>
+    <div class="card-desc">if this week had one thing that would make it feel like it mattered — what is it?</div>
+    <textarea id="onething" rows="2" placeholder="one concrete thing, not a to-do list..."></textarea>
+  </div>
+  <div class="btn-row">
+    <button class="btn-primary" onclick="goToStep(2)"><i class="ti ti-arrow-right"></i> look at the week</button>
+  </div>
+</div>
+
+<!-- STEP 2: LOOK AT THE WEEK -->
+<div class="step-panel" id="step2">
+  <div class="section-label">step 2 — look at the week</div>
+
+  <div class="card">
+    <div class="card-header">
+      <div>
+        <div class="card-title">school days</div>
+        <div class="card-desc" style="margin-bottom:0">toggle on during the school year. off for summer and breaks.</div>
+      </div>
+      <label class="toggle" style="margin-top:4px">
+        <div class="toggle-track" id="schoolToggle"><div class="toggle-thumb"></div></div>
+        <span class="toggle-label" id="schoolLabel">off — summer</span>
+      </label>
+    </div>
+    <div id="schoolDays" class="section-hidden" style="margin-top:14px">
+      <div class="day-grid">
+        <div class="day-pill" onclick="toggleDay(this,'mon')"><span class="day-pill-name">mon</span><span class="day-pill-tag">home</span></div>
+        <div class="day-pill" onclick="toggleDay(this,'tue')"><span class="day-pill-name">tue</span><span class="day-pill-tag">home</span></div>
+        <div class="day-pill" onclick="toggleDay(this,'wed')"><span class="day-pill-name">wed</span><span class="day-pill-tag">home</span></div>
+        <div class="day-pill" onclick="toggleDay(this,'thu')"><span class="day-pill-name">thu</span><span class="day-pill-tag">home</span></div>
+        <div class="day-pill" onclick="toggleDay(this,'fri')"><span class="day-pill-name">fri</span><span class="day-pill-tag">home</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">appointments or commitments</div>
+    <div class="card-desc">anything that shapes the container before you fill it.</div>
+    <textarea id="commitments" rows="3" placeholder="dentist tuesday 2pm, call thursday morning, vinny home wednesday..."></textarea>
+  </div>
+
+  <div class="card">
+    <div class="card-title">energy forecast</div>
+    <div class="card-desc">honest read — not aspirational.</div>
+    <div class="energy-row">
+      <div class="energy-chip" onclick="pickEnergy(this)"><i class="ti ti-coffee-off"></i> mostly low</div>
+      <div class="energy-chip" onclick="pickEnergy(this)"><i class="ti ti-coffee"></i> mixed</div>
+      <div class="energy-chip" onclick="pickEnergy(this)"><i class="ti ti-sun"></i> mostly good</div>
+      <div class="energy-chip" onclick="pickEnergy(this)"><i class="ti ti-wave-sine"></i> unpredictable</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">anything else to factor in</div>
+    <div class="card-desc">low demand week? something to protect? something coming that needs space?</div>
+    <textarea id="factors" rows="2" placeholder="low demand week — space to build..."></textarea>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-ghost" onclick="goToStep(1)">← back</button>
+    <button class="btn-primary" onclick="goToStep(3)"><i class="ti ti-arrow-right"></i> the pour-over</button>
+  </div>
+</div>
+
+<!-- STEP 3: THE POUR-OVER -->
+<div class="step-panel" id="step3">
+  <div class="section-label">step 3 — the pour-over</div>
+
+  <div class="milestones-row" id="milestonesRow"></div>
+
+  <div class="map-banner" id="mapBanner">
+    <div class="map-banner-label">from your content map</div>
+    <div class="map-banner-title" id="mapBannerTitle">loading this week...</div>
+    <div class="map-week-items" id="mapItems"></div>
+    <a href="content-maps/july-2026-content-map.html" class="map-view-link" id="mapViewLink">view full map →</a>
+  </div>
+
+  <div class="pour-divider">
+    <div class="pour-divider-line"></div>
+    <div class="pour-divider-text">what actually fits this week</div>
+    <div class="pour-divider-line"></div>
+  </div>
+
+  <div class="task-lanes">
+    <div class="lane lane-content">
+      <div class="lane-header">
+        <div class="lane-dot" style="background:var(--amber)"></div>
+        <span class="lane-label">content & build · RO</span>
+      </div>
+      <div id="roTasksContainer"><div class="lane-loading">loading tasks from asana...</div></div>
+      <button class="lane-add" onclick="addManualTask('ro')"><i class="ti ti-plus"></i> add a task</button>
+    </div>
+    <div class="lane lane-personal">
+      <div class="lane-header">
+        <div class="lane-dot" style="background:var(--rose)"></div>
+        <span class="lane-label">personal & mom life</span>
+      </div>
+      <div id="personalTasksContainer"><div class="lane-loading">loading tasks from asana...</div></div>
+      <button class="lane-add" onclick="addManualTask('personal')"><i class="ti ti-plus"></i> add a task</button>
+    </div>
+  </div>
+
+  <div class="pour-divider" style="margin-top:20px">
+    <div class="pour-divider-line"></div>
+    <div class="pour-divider-text">send to asana?</div>
+    <div class="pour-divider-line"></div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn-ghost" onclick="goToStep(2)">← back</button>
+    <button class="btn-primary" onclick="goToStep(4)"><i class="ti ti-arrow-right"></i> brain dump</button>
+  </div>
+</div>
+
+<!-- STEP 4: BRAIN DUMP -->
+<div class="step-panel" id="step4">
+  <div class="section-label">step 4 — brain dump</div>
+  <div class="card">
+    <div class="card-title">anything still rattling around?</div>
+    <div class="card-desc">capture it, tag it, send it to asana. clear the decks before the week starts.</div>
+    <div class="dump-input-row">
+      <input class="dump-input" id="dumpInput" placeholder="type a task or idea..." onkeydown="if(event.key==='Enter')addDumpItem()">
+    </div>
+    <div class="dump-lane-btns">
+      <button class="dump-lane-btn dump-btn-content" id="dumpBtnContent" onclick="setDumpLane('ro')">
+        <i class="ti ti-circle-dot"></i> content & build
+      </button>
+      <button class="dump-lane-btn dump-btn-personal" id="dumpBtnPersonal" onclick="setDumpLane('personal')">
+        <i class="ti ti-heart"></i> personal & mom life
+      </button>
+    </div>
+    <div id="dumpProjectRow" style="margin-top:10px;display:none">
+      <select class="project-select" id="dumpProject"></select>
+    </div>
+    <button class="btn-send" onclick="addDumpItem()"><i class="ti ti-plus"></i> add to queue</button>
+    <div class="dump-queue" id="dumpQueue"></div>
+  </div>
+  <div id="dumpSendRow" style="display:none" class="btn-row">
+    <button class="btn-ghost" onclick="goToStep(3)">← back</button>
+    <button class="btn-primary" onclick="sendDumpToAsana()"><i class="ti ti-brand-asana"></i> send all to asana</button>
+  </div>
+  <div id="dumpNoSend" class="btn-row">
+    <button class="btn-ghost" onclick="goToStep(3)">← back</button>
+    <button class="btn-primary" onclick="goToStep(5)"><i class="ti ti-arrow-right"></i> one word</button>
+  </div>
+</div>
+
+<!-- STEP 5: ONE WORD -->
+<div class="step-panel" id="step5">
+  <div class="section-label">step 5 — one word</div>
+  <div class="card">
+    <div class="card-title">what's the word for this week?</div>
+    <div class="card-desc">not a goal. not a theme. one word that'll orient you when things get loud.</div>
+    <input class="word-input" id="weekWord" placeholder="steady. spacious. focused. present." maxlength="30">
+  </div>
+  <div class="btn-row">
+    <button class="btn-ghost" onclick="goToStep(4)">← back</button>
+    <button class="btn-primary" onclick="completePlan()"><i class="ti ti-check"></i> the week is poured</button>
+  </div>
+  <div id="completeCard" style="display:none">
+    <div class="complete-card">
+      <div class="complete-icon"><i class="ti ti-coffee"></i></div>
+      <div class="complete-title" id="completeTitle">the week is poured.</div>
+      <div class="complete-sub" id="completeSub">you know what matters. now go make the coffee.</div>
+      <div class="complete-links">
+        <a href="pour.html" class="complete-link"><i class="ti ti-clock-hour-4"></i> open time blocker</a>
+        <a href="office.html" class="complete-link"><i class="ti ti-layout-dashboard"></i> back office</a>
+        <a href="content-maps/july-2026-content-map.html" class="complete-link"><i class="ti ti-map-2"></i> content map</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><i class="ti ti-check"></i> <span id="toastMsg">saved</span></div>
+
+<script>
+const RO_PROJECTS = [
+  {id:'1215878061150136',label:'Tools'},
+  {id:'1215878061161504',label:'Copy & Assets'},
+  {id:'1215878207772169',label:'RO Content'},
+  {id:'1215878381563758',label:'Content Calendar'},
+  {id:'1215878246123374',label:'Brain Dump'},
+  {id:'1215878061167051',label:'Weekly Priorities'},
+  {id:'1215878045466897',label:'Launches'},
+];
+const PERSONAL_PROJECTS = [
+  {id:'1215878109661034',label:'On the Burner'},
+  {id:'1215878245861407',label:'Daily Rhythms'},
+  {id:'1215878245923516',label:'Home & People'},
+  {id:'1215878061255928',label:'School'},
+  {id:'1215878207872980',label:'Long Steep'},
+];
+
+const CONTENT_MAPS = {
+  july: {
+    month: 'July 2026', file: 'content-maps/july-2026-content-map.html',
+    milestones: [
+      {label:'July milestone',val:'First paid sale',sub:'After the Call or Before Monday'},
+      {label:'July milestone',val:'5 free users',sub:'Draft & Sips (1 already in ✓)'},
+      {label:'Notes rhythm',val:'5+ per week',sub:'Tue / Wed / Thu core · Mon & Sat bonus'},
+    ],
+    weeks: [
+      {weekOf:'2026-06-29',items:[
+        {date:'2026-06-29',type:'batch',text:'batch write',angle:null},
+        {date:'2026-07-01',type:'post',text:'life / identity essay',angle:'publishes tuesday 7am'},
+        {date:'2026-07-01',type:'note',text:'notes days — tue / wed / thu',angle:'5+ this week'},
+      ]},
+      {weekOf:'2026-07-06',items:[
+        {date:'2026-07-06',type:'batch',text:'batch write',angle:null},
+        {date:'2026-07-08',type:'tool',text:'After the Call — tool post',angle:'publishes tuesday 7am'},
+        {date:'2026-07-08',type:'note',text:'notes days — tue / wed / thu',angle:null},
+      ]},
+      {weekOf:'2026-07-13',items:[
+        {date:'2026-07-13',type:'batch',text:'batch write',angle:null},
+        {date:'2026-07-15',type:'tool',text:'Draft & Sips — tool post',angle:'publishes tuesday 7am'},
+        {date:'2026-07-15',type:'note',text:'notes days — tue / wed / thu',angle:null},
+      ]},
+      {weekOf:'2026-07-20',items:[
+        {date:'2026-07-20',type:'batch',text:'batch write',angle:null},
+        {date:'2026-07-22',type:'post',text:'business honesty post',angle:'publishes tuesday 7am'},
+        {date:'2026-07-22',type:'note',text:'notes days — tue / wed / thu',angle:null},
+      ]},
+      {weekOf:'2026-07-27',items:[
+        {date:'2026-07-27',type:'batch',text:'batch write',angle:null},
+        {date:'2026-07-29',type:'tool',text:'Before Monday — tool post',angle:'publishes tuesday 7am'},
+        {date:'2026-07-29',type:'note',text:'notes days — tue / wed / thu',angle:null},
+      ]},
+    ]
+  },
+  august: {
+    month: 'August 2026', file: 'content-maps/august-2026-content-map.html',
+    milestones: [
+      {label:'August milestone',val:'7 users total',sub:'Deepen + convert from July'},
+      {label:'Angle this month',val:'Practical & specific',sub:'What it actually does, step by step'},
+      {label:'Notes rhythm',val:'5+ per week',sub:'Tue / Wed / Thu core · Mon & Sat bonus'},
+    ],
+    weeks: [
+      {weekOf:'2026-07-27',items:[
+        {date:'2026-07-27',type:'batch',text:'batch write',angle:null},
+        {date:'2026-07-29',type:'flex',text:'flex post',angle:'life essay or build honesty'},
+        {date:'2026-07-29',type:'note',text:'notes days — tue / wed / thu',angle:null},
+      ]},
+      {weekOf:'2026-08-03',items:[
+        {date:'2026-08-03',type:'batch',text:'batch write',angle:null},
+        {date:'2026-08-05',type:'post',text:'life / body essay',angle:'summer winding down, back to school'},
+        {date:'2026-08-05',type:'note',text:'notes days — tue / wed / thu',angle:null},
+      ]},
+      {weekOf:'2026-08-10',items:[
+        {date:'2026-08-10',type:'batch',text:'batch write',angle:null},
+        {date:'2026-08-12',type:'tool',text:'After the Call #2',angle:'practical walkthrough, step by step'},
+        {date:'2026-08-12',type:'note',text:'notes days — tue / wed / thu',angle:null},
+      ]},
+      {weekOf:'2026-08-17',items:[
+        {date:'2026-08-17',type:'batch',text:'batch write',angle:null},
+        {date:'2026-08-19',type:'tool',text:'Draft & Sips #2',angle:'real use case — something you used it for'},
+        {date:'2026-08-19',type:'note',text:'notes days — tue / wed / thu',angle:null},
+      ]},
+      {weekOf:'2026-08-24',items:[
+        {date:'2026-08-24',type:'batch',text:'batch write',angle:null},
+        {date:'2026-08-26',type:'tool',text:'Before Monday #2',angle:'practical walkthrough — what a session looks like'},
+        {date:'2026-08-26',type:'note',text:'notes days — tue / wed / thu',angle:null},
+      ]},
+    ]
+  },
+  september: {
+    month: 'September 2026', file: 'content-maps/september-2026-content-map.html',
+    milestones: [
+      {label:'Q3 milestone',val:'10 users total',sub:'Close the quarter Sep 30'},
+      {label:'Angle this month',val:'Personal & direct',sub:'More intimate, written to her'},
+      {label:'Learn by Q3 end',val:'Which tool resonates',sub:'After the Call · Draft & Sips · Before Monday'},
+    ],
+    weeks: [
+      {weekOf:'2026-08-31',items:[
+        {date:'2026-08-31',type:'batch',text:'batch write',angle:null},
+        {date:'2026-09-02',type:'post',text:'life / identity essay',angle:'September reset · new season · fresh page'},
+        {date:'2026-09-02',type:'note',text:'notes days — tue / wed / thu',angle:null},
+      ]},
+      {weekOf:'2026-09-07',items:[
+        {date:'2026-09-07',type:'batch',text:'batch write',angle:null},
+        {date:'2026-09-09',type:'tool',text:'After the Call #3',angle:'the "why I made this" version · trust-building'},
+        {date:'2026-09-09',type:'note',text:'notes days — tue / wed / thu',angle:null},
+      ]},
+      {weekOf:'2026-09-14',items:[
+        {date:'2026-09-14',type:'batch',text:'batch write',angle:null},
+        {date:'2026-09-16',type:'tool',text:'Draft & Sips #3',angle:'social proof · what someone else did with it'},
+        {date:'2026-09-16',type:'note',text:'notes days — tue / wed / thu',angle:null},
+      ]},
+      {weekOf:'2026-09-21',items:[
+        {date:'2026-09-21',type:'batch',text:'batch write',angle:null},
+        {date:'2026-09-23',type:'tool',text:'Before Monday #3',angle:'written to her · midlife · reheated coffee · Sunday dread'},
+        {date:'2026-09-23',type:'note',text:'notes days — tue / wed / thu',angle:null},
+      ]},
+      {weekOf:'2026-09-28',items:[
+        {date:'2026-09-28',type:'batch',text:'batch write',angle:null},
+        {date:'2026-09-30',type:'flex',text:'optional quarter wrap',angle:'what happened · what you learned · what\'s next'},
+      ]},
+    ]
+  }
+};
+
+let currentStep = 1;
+let dumpLane = null;
+let dumpQueue = [];
+let roTasks = [];
+let personalTasks = [];
+let weekMapItems = [];
+
+function getMonthKey() {
+  const m = new Date().getMonth();
+  if (m === 6) return 'july';
+  if (m === 7) return 'august';
+  if (m === 8) return 'september';
+  return 'july';
+}
+
+function getThisWeek() {
+  const today = new Date();
+  const day = today.getDay();
+  const sunday = new Date(today);
+  sunday.setDate(today.getDate() - day);
+  return sunday.toISOString().split('T')[0];
+}
+
+function loadMapBanner() {
+  const key = getMonthKey();
+  const map = CONTENT_MAPS[key];
+  if (!map) return;
+  const weekOf = getThisWeek();
+  const week = map.weeks.find(w => w.weekOf === weekOf) || map.weeks[0];
+  document.getElementById('mapBannerTitle').textContent = 'this week · ' + map.month;
+  document.getElementById('mapViewLink').href = map.file;
+  document.getElementById('mapViewLink').textContent = 'view full ' + key + ' map →';
+  const container = document.getElementById('mapItems');
+  container.innerHTML = '';
+  weekMapItems = week.items;
+  const dotMap = {batch:'dot-batch',post:'dot-post',tool:'dot-tool',note:'dot-note',flex:'dot-flex'};
+  week.items.forEach((item, i) => {
+    const d = new Date(item.date);
+    const dateStr = d.toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'});
+    const alreadyAdded = item.type === 'batch' || item.type === 'note';
+    const el = document.createElement('div');
+    el.className = 'map-item';
+    el.innerHTML = `
+      <div class="map-item-dot ${dotMap[item.type]||'dot-batch'}"></div>
+      <div class="map-item-date">${dateStr}</div>
+      <div style="flex:1">
+        <div class="map-item-text">${item.text}</div>
+        ${item.angle ? `<div class="map-item-angle">${item.angle}</div>` : ''}
+      </div>
+      ${alreadyAdded
+        ? `<span class="map-item-badge badge-added">↓ in lane</span>`
+        : `<span class="map-item-badge badge-add" id="mapbadge${i}" onclick="addMapItemToLane(${i})">+ add to lane</span>`
+      }
+    `;
+    container.appendChild(el);
+    if (alreadyAdded) {
+      addMapTaskToLane(item, true);
+    }
+  });
+  const mRow = document.getElementById('milestonesRow');
+  mRow.innerHTML = map.milestones.map(m => `
+    <div class="milestone">
+      <div class="milestone-label">${m.label}</div>
+      <div class="milestone-val">${m.val}</div>
+      <div class="milestone-sub">${m.sub}</div>
+    </div>
+  `).join('');
+}
+
+function addMapItemToLane(i) {
+  const item = weekMapItems[i];
+  const badge = document.getElementById('mapbadge'+i);
+  if (badge) { badge.className = 'map-item-badge badge-added'; badge.textContent = '↓ in lane'; }
+  addMapTaskToLane(item, false);
+}
+
+function addMapTaskToLane(item, silent) {
+  const container = document.getElementById('roTasksContainer');
+  const el = document.createElement('div');
+  el.className = 'task-row from-map';
+  el.innerHTML = `
+    <i class="ti ti-grip-vertical" aria-hidden="true"></i>
+    <span class="task-row-text">${item.text}${item.angle ? `<small>${item.angle}</small>` : ''}</span>
+    <span class="map-tag">map</span>
+  `;
+  const loadingEl = container.querySelector('.lane-loading');
+  if (loadingEl) loadingEl.remove();
+  container.insertBefore(el, container.firstChild);
+}
+
+async function loadTasks() {
+  try {
+    const [roRes, personalRes] = await Promise.all([
+      fetch('/.netlify/functions/asana-proxy?view=ro_tasks').then(r=>r.json()),
+      fetch('/.netlify/functions/asana-proxy?view=personal_tasks').then(r=>r.json())
+    ]);
+    roTasks = roRes.tasks || [];
+    personalTasks = personalRes.tasks || [];
+    renderTasks('roTasksContainer', roTasks, 'ro');
+    renderTasks('personalTasksContainer', personalTasks, 'personal');
+  } catch(e) {
+    document.getElementById('roTasksContainer').innerHTML = '<div class="lane-loading">could not load — check connection</div>';
+    document.getElementById('personalTasksContainer').innerHTML = '<div class="lane-loading">could not load — check connection</div>';
+  }
+}
+
+function renderTasks(containerId, tasks, lane) {
+  const container = document.getElementById(containerId);
+  const mapRows = container.querySelectorAll('.from-map');
+  container.innerHTML = '';
+  mapRows.forEach(r => container.appendChild(r));
+  if (!tasks.length) {
+    const empty = document.createElement('div');
+    empty.className = 'lane-loading';
+    empty.textContent = 'all clear ☕';
+    container.appendChild(empty);
+    return;
+  }
+  tasks.slice(0,8).forEach(task => {
+    const el = document.createElement('div');
+    el.className = 'task-row';
+    el.innerHTML = `
+      <i class="ti ti-grip-vertical" aria-hidden="true"></i>
+      <span class="task-row-text">${task.name}</span>
+      <span class="task-tag">${task.project}</span>
+    `;
+    container.appendChild(el);
+  });
+}
+
+function addManualTask(lane) {
+  const name = prompt('task name:');
+  if (!name) return;
+  const containerId = lane === 'ro' ? 'roTasksContainer' : 'personalTasksContainer';
+  const container = document.getElementById(containerId);
+  const el = document.createElement('div');
+  el.className = 'task-row';
+  el.innerHTML = `
+    <i class="ti ti-grip-vertical" aria-hidden="true"></i>
+    <span class="task-row-text">${name}</span>
+    <span class="task-tag">added</span>
+  `;
+  container.appendChild(el);
+}
+
+function goToStep(n) {
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.step-tab').forEach(t => {
+    const s = parseInt(t.dataset.step);
+    t.classList.remove('active','done');
+    if (s === n) t.classList.add('active');
+    else if (s < n) t.classList.add('done');
+    const num = document.getElementById('snum'+s);
+    if (s < n) { num.innerHTML = '<i class="ti ti-check" style="font-size:9px"></i>'; }
+    else if (s === n) { num.textContent = s; }
+    else { num.textContent = s; }
+  });
+  document.getElementById('step'+n).classList.add('active');
+  currentStep = n;
+  if (n === 3) { loadMapBanner(); loadTasks(); }
+  if (n === 4) { buildDumpProjectSelect(); }
+  window.scrollTo({top:0,behavior:'smooth'});
+  saveState();
+}
+
+const schoolToggle = document.getElementById('schoolToggle');
+const schoolLabel = document.getElementById('schoolLabel');
+const schoolDays = document.getElementById('schoolDays');
+let schoolOn = false;
+schoolToggle.addEventListener('click', () => {
+  schoolOn = !schoolOn;
+  schoolToggle.classList.toggle('on', schoolOn);
+  schoolLabel.classList.toggle('on', schoolOn);
+  schoolLabel.textContent = schoolOn ? 'on — school week' : 'off — summer';
+  schoolDays.classList.toggle('section-hidden', !schoolOn);
+});
+
+function toggleDay(el, day) {
+  el.classList.toggle('on');
+  const tag = el.querySelector('.day-pill-tag');
+  tag.textContent = el.classList.contains('on') ? 'school' : 'home';
+}
+
+function pickEnergy(el) {
+  document.querySelectorAll('.energy-chip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+}
+
+function setDumpLane(lane) {
+  dumpLane = lane;
+  document.getElementById('dumpBtnContent').classList.toggle('active', lane === 'ro');
+  document.getElementById('dumpBtnPersonal').classList.toggle('active', lane === 'personal');
+  const projectRow = document.getElementById('dumpProjectRow');
+  projectRow.style.display = 'block';
+  buildDumpProjectSelect();
+}
+
+function buildDumpProjectSelect() {
+  const sel = document.getElementById('dumpProject');
+  const projects = dumpLane === 'ro' ? RO_PROJECTS : PERSONAL_PROJECTS;
+  sel.innerHTML = projects.map(p => `<option value="${p.id}">${p.label}</option>`).join('');
+}
+
+function addDumpItem() {
+  const input = document.getElementById('dumpInput');
+  const name = input.value.trim();
+  if (!name) { input.focus(); return; }
+  if (!dumpLane) { showToast('pick a lane first'); return; }
+  const sel = document.getElementById('dumpProject');
+  const projectId = sel.value;
+  const projectLabel = sel.options[sel.selectedIndex]?.text || '';
+  dumpQueue.push({ name, lane: dumpLane, project_id: projectId, project: projectLabel });
+  input.value = '';
+  renderDumpQueue();
+  document.getElementById('dumpSendRow').style.display = 'flex';
+  document.getElementById('dumpNoSend').style.display = 'none';
+}
+
+function renderDumpQueue() {
+  const container = document.getElementById('dumpQueue');
+  container.innerHTML = dumpQueue.map((item,i) => `
+    <div class="dump-item">
+      <span class="dump-item-lane ${item.lane==='ro'?'dump-lane-content':'dump-lane-personal'}">${item.lane==='ro'?'RO':'personal'}</span>
+      <span class="dump-item-text">${item.name}</span>
+      <span class="dump-item-project">${item.project}</span>
+      <button class="dump-item-remove" onclick="removeDumpItem(${i})"><i class="ti ti-x"></i></button>
+    </div>
+  `).join('');
+}
+
+function removeDumpItem(i) {
+  dumpQueue.splice(i,1);
+  renderDumpQueue();
+  if (!dumpQueue.length) {
+    document.getElementById('dumpSendRow').style.display = 'none';
+    document.getElementById('dumpNoSend').style.display = 'flex';
+  }
+}
+
+async function sendDumpToAsana() {
+  if (!dumpQueue.length) return;
+  showToast('sending to asana...');
+  let sent = 0;
+  for (const item of dumpQueue) {
+    try {
+      await fetch('/.netlify/functions/asana-proxy?view=create_task', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ name: item.name, project_id: item.project_id })
+      });
+      sent++;
+    } catch(e) {}
+  }
+  dumpQueue = [];
+  renderDumpQueue();
+  showToast(`${sent} task${sent!==1?'s':''} sent to asana ☕`);
+  document.getElementById('dumpSendRow').style.display = 'none';
+  document.getElementById('dumpNoSend').style.display = 'flex';
+  setTimeout(() => goToStep(5), 800);
+}
+
+function completePlan() {
+  const word = document.getElementById('weekWord').value.trim();
+  const btn = document.querySelector('#step5 .btn-primary');
+  btn.style.display = 'none';
+  document.getElementById('completeCard').style.display = 'block';
+  if (word) {
+    document.getElementById('completeTitle').textContent = `the week is poured. ${word}.`;
+  }
+  saveState();
+  showToast('week poured ☕');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function saveState() {
+  const state = {
+    step: currentStep,
+    carrying: document.getElementById('carrying')?.value,
+    release: document.getElementById('release')?.value,
+    onething: document.getElementById('onething')?.value,
+    commitments: document.getElementById('commitments')?.value,
+    factors: document.getElementById('factors')?.value,
+    weekWord: document.getElementById('weekWord')?.value,
+    schoolOn,
+    saved: new Date().toISOString()
+  };
+  localStorage.setItem('mp_sunday_plan', JSON.stringify(state));
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem('mp_sunday_plan');
+    if (!raw) return;
+    const state = JSON.parse(raw);
+    const saved = new Date(state.saved);
+    const now = new Date();
+    const daysSince = (now - saved) / (1000*60*60*24);
+    if (daysSince > 7) { localStorage.removeItem('mp_sunday_plan'); return; }
+    if (state.carrying) document.getElementById('carrying').value = state.carrying;
+    if (state.release) document.getElementById('release').value = state.release;
+    if (state.onething) document.getElementById('onething').value = state.onething;
+    if (state.commitments) document.getElementById('commitments').value = state.commitments;
+    if (state.factors) document.getElementById('factors').value = state.factors;
+    if (state.weekWord) document.getElementById('weekWord').value = state.weekWord;
+  } catch(e) {}
+}
+
+document.querySelectorAll('textarea, input').forEach(el => {
+  el.addEventListener('input', saveState);
+});
+
+document.getElementById('dumpNoSend').style.display = 'flex';
+loadState();
+</script>
+</body>
+</html>
