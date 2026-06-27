@@ -251,7 +251,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--rose-bg);color:va
   </div>
 
   <!-- SAVE -->
-  <button class="btn-save" onclick="saveLog()"><i class="ti ti-check"></i> save today's log</button>
+  <button class="btn-save" id="saveBtn" onclick="handleSave()"><i class="ti ti-check"></i> save today's log</button>
 
   <!-- RECENT -->
   <div class="section">
@@ -377,34 +377,86 @@ function selectFlow(el, flow) {
 }
 
 // ── SAVE ──
-function saveLog() {
+async function saveLog() {
   const dateKey = today.toISOString().split('T')[0];
+  const movementType = document.getElementById('movementType').value;
+  const movementMins = document.getElementById('movementMins').value;
+  const sleepHours = document.getElementById('sleepHours').value;
+  const sleepQuality = document.getElementById('sleepQuality').value;
+  const energyNote = document.getElementById('energyNote').value;
+  const generalNote = document.getElementById('generalNote').value;
+  const cycleNote = document.getElementById('cycleNote').value;
+
   const log = {
     date: dateKey,
     mood: selectedMood,
-    movement: { type: document.getElementById('movementType').value, mins: document.getElementById('movementMins').value },
-    sleep: { hours: document.getElementById('sleepHours').value, quality: document.getElementById('sleepQuality').value },
+    movement: { type: movementType, mins: movementMins },
+    sleep: { hours: sleepHours, quality: sleepQuality },
     water: waterCount,
     symptoms: [...activeSymptoms],
-    energyNote: document.getElementById('energyNote').value,
-    notes: document.getElementById('generalNote').value,
+    energyNote,
+    notes: generalNote,
     cycle: {
       [activePerson]: {
         flow: selectedFlow,
         symptoms: [...cycleSymptoms],
-        note: document.getElementById('cycleNote').value
+        note: cycleNote
       }
     }
   };
 
-  // Remove existing log for today
+  // Save locally
   logs = logs.filter(l => l.date !== dateKey);
   logs.unshift(log);
-  // Keep last 30 days
   logs = logs.slice(0, 30);
   localStorage.setItem('mp_body_logs', JSON.stringify(logs));
   renderHistory();
-  showToast('logged ☕');
+
+  // Build Asana task notes
+  const moodIcon = { heavy:'☁️ heavy', okay:'🌥 okay', good:'🌤 good', great:'☀️ great' };
+  const dateLabel = today.toLocaleDateString('en-CA',{weekday:'long',month:'long',day:'numeric'});
+  
+  let notes = `body log · ${dateLabel}\n`;
+  notes += '─────────────────────────\n';
+  if (selectedMood) notes += `mood: ${moodIcon[selectedMood] || selectedMood}\n`;
+  if (sleepHours) notes += `sleep: ${sleepHours}hrs${sleepQuality ? ' · ' + sleepQuality + ' quality' : ''}\n`;
+  if (movementType) notes += `movement: ${movementType}${movementMins ? ' ' + movementMins + 'min' : ''}\n`;
+  if (waterCount) notes += `water: ${waterCount} glass${waterCount !== 1 ? 'es' : ''}\n`;
+  if (activeSymptoms.size) notes += `symptoms: ${[...activeSymptoms].join(', ')}\n`;
+  else notes += `symptoms: none\n`;
+  if (energyNote) notes += `energy: ${energyNote}\n`;
+  if (generalNote) notes += `notes: ${generalNote}\n`;
+  
+  // Cycle section
+  if (selectedFlow || cycleSymptoms.size || cycleNote) {
+    notes += `\ncycle · ${activePerson}:\n`;
+    if (selectedFlow) notes += `  flow: ${selectedFlow}\n`;
+    if (cycleSymptoms.size) notes += `  symptoms: ${[...cycleSymptoms].join(', ')}\n`;
+    if (cycleNote) notes += `  notes: ${cycleNote}\n`;
+  }
+
+  const taskName = `body log · ${today.toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric'})}`;
+
+  try {
+    const res = await fetch('/.netlify/functions/asana-proxy?view=create_task', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: taskName,
+        project_id: '1215878245861407',
+        notes: notes,
+        due_on: dateKey
+      })
+    });
+    const data = await res.json();
+    if (data.task) {
+      showToast('logged + saved to asana ☕');
+    } else {
+      showToast('logged locally · asana sync failed');
+    }
+  } catch(e) {
+    showToast('logged locally · check connection');
+  }
 }
 
 // ── HISTORY ──
@@ -441,6 +493,19 @@ function renderHistory() {
     `;
     container.appendChild(el);
   });
+}
+
+
+async function handleSave() {
+  const btn = document.getElementById('saveBtn');
+  btn.innerHTML = '<i class="ti ti-loader"></i> saving...';
+  btn.disabled = true;
+  try {
+    await saveLog();
+  } finally {
+    btn.innerHTML = '<i class="ti ti-check"></i> save today\'s log';
+    btn.disabled = false;
+  }
 }
 
 // ── TOAST ──
