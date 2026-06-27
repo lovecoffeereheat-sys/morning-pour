@@ -261,6 +261,57 @@ exports.handler = async (event) => {
       return { statusCode: 200, headers, body: JSON.stringify({ tasks }) };
     }
 
+
+    // ── PUBLISHING THIS WEEK ──
+    if (view === 'publishing_this_week') {
+      const today = new Date();
+      const day = today.getDay();
+      const sunday = new Date(today);
+      sunday.setDate(today.getDate() - day);
+      const saturday = new Date(sunday);
+      saturday.setDate(sunday.getDate() + 6);
+      const startStr = sunday.toISOString().split('T')[0];
+      const endStr = saturday.toISOString().split('T')[0];
+
+      const res = await asanaGet(
+        `/projects/1215878381563758/tasks?opt_fields=name,due_on,completed,notes&limit=100`
+      );
+      const tasks = (res.data || [])
+        .filter(t => !t.completed && t.due_on && t.due_on >= startStr && t.due_on <= endStr)
+        .map(t => ({
+          gid: t.gid,
+          name: t.name,
+          due_on: t.due_on,
+          project: 'Content Calendar',
+          project_id: '1215878381563758',
+          type: detectContentType(t.name)
+        }))
+        .sort((a,b) => a.due_on.localeCompare(b.due_on));
+      return { statusCode: 200, headers, body: JSON.stringify({ tasks }) };
+    }
+
+    // ── IN PROGRESS CONTENT ──
+    if (view === 'in_progress_content') {
+      const res = await asanaGet(
+        `/projects/1215878207772169/tasks?opt_fields=name,due_on,completed,notes,memberships.section.name&limit=100`
+      );
+      const tasks = (res.data || [])
+        .filter(t => !t.completed)
+        .map(t => {
+          const section = t.memberships?.[0]?.section?.name || '';
+          return {
+            gid: t.gid,
+            name: t.name,
+            due_on: t.due_on || null,
+            project: 'RO Content',
+            project_id: '1215878207772169',
+            section,
+            type: detectContentType(t.name)
+          };
+        });
+      return { statusCode: 200, headers, body: JSON.stringify({ tasks }) };
+    }
+
     // ── CREATE TASK ──
     if (view === 'create_task' && event.httpMethod === 'POST') {
       const body = JSON.parse(event.body || '{}');

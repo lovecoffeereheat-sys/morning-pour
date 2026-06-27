@@ -173,6 +173,11 @@ textarea:focus,input.text-input:focus{border-color:var(--rose)}
 .task-action-btn:hover{border-color:var(--rose);color:var(--rose)}
 .task-action-btn i{font-size:13px}
 
+
+.lane-sublabel{font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:#8a7030;margin:10px 0 5px;padding-top:8px;border-top:0.5px solid rgba(196,164,90,0.2);display:flex;align-items:center;gap:5px}
+.lane-sublabel i{font-size:11px}
+.lane-sublabel.first{border-top:none;margin-top:0;padding-top:0}
+.publishing-empty{font-size:11px;font-family:'Playfair Display',serif;font-style:italic;color:var(--text-faint);padding:4px 0}
 .lane-add{margin-top:6px;font-size:11px;font-family:'Playfair Display',serif;font-style:italic;cursor:pointer;display:flex;align-items:center;gap:5px;background:none;border:none;padding:4px 0}
 .lane-content .lane-add{color:#b8a060}
 .lane-personal .lane-add{color:#b47b84}
@@ -840,16 +845,92 @@ function addMapTaskToLane(item,silent){
 // ── ASANA TASKS ──
 async function loadTasks(){
   try{
-    const[roRes,personalRes]=await Promise.all([
-      fetch('/.netlify/functions/asana-proxy?view=ro_tasks').then(r=>r.json()),
+    const[publishingRes, inProgressRes, personalRes]=await Promise.all([
+      fetch('/.netlify/functions/asana-proxy?view=publishing_this_week').then(r=>r.json()),
+      fetch('/.netlify/functions/asana-proxy?view=in_progress_content').then(r=>r.json()),
       fetch('/.netlify/functions/asana-proxy?view=personal_tasks').then(r=>r.json())
     ]);
-    renderTasks('roTasksContainer',roRes.tasks||[],'ro');
+    renderContentLane(publishingRes.tasks||[], inProgressRes.tasks||[]);
     renderTasks('personalTasksContainer',personalRes.tasks||[],'personal');
   }catch(e){
     document.getElementById('roTasksContainer').innerHTML='<div class="lane-loading">could not load — check connection</div>';
     document.getElementById('personalTasksContainer').innerHTML='<div class="lane-loading">could not load — check connection</div>';
   }
+}
+
+function renderContentLane(publishing, inProgress) {
+  const container = document.getElementById('roTasksContainer');
+  // Keep any map rows already added
+  const mapRows = [...container.querySelectorAll('.from-map')];
+  container.innerHTML = '';
+  mapRows.forEach(r => container.appendChild(r));
+
+  // Publishing this week sublabel
+  const pubHead = document.createElement('div');
+  pubHead.className = 'lane-sublabel first';
+  pubHead.innerHTML = '<i class="ti ti-calendar-event"></i> publishing this week';
+  container.appendChild(pubHead);
+
+  if (!publishing.length) {
+    const empty = document.createElement('div');
+    empty.className = 'publishing-empty';
+    empty.textContent = 'nothing scheduled in content calendar this week';
+    container.appendChild(empty);
+  } else {
+    publishing.forEach(task => {
+      const el = makeTaskRow(task, 'ro');
+      container.appendChild(el.row);
+      container.appendChild(el.expand);
+    });
+  }
+
+  // In progress sublabel
+  const inpHead = document.createElement('div');
+  inpHead.className = 'lane-sublabel';
+  inpHead.innerHTML = '<i class="ti ti-pencil"></i> in progress';
+  container.appendChild(inpHead);
+
+  if (!inProgress.length) {
+    const empty = document.createElement('div');
+    empty.className = 'publishing-empty';
+    empty.textContent = 'nothing in RO Content ☕';
+    container.appendChild(empty);
+  } else {
+    inProgress.slice(0,8).forEach(task => {
+      const el = makeTaskRow(task, 'ro');
+      container.appendChild(el.row);
+      container.appendChild(el.expand);
+    });
+  }
+}
+
+function makeTaskRow(task, lane) {
+  const asanaUrl = `https://app.asana.com/0/${task.project_id}/${task.gid}`;
+  const rowId = 'task-' + task.gid;
+  const expandId = 'expand-' + task.gid;
+
+  const row = document.createElement('div');
+  row.className = 'task-row';
+  row.id = rowId;
+  row.innerHTML = `
+    <i class="ti ti-grip-vertical drag"></i>
+    <span class="task-row-text">${task.name}${task.due_on ? `<small>due ${task.due_on}</small>` : ''}</span>
+    <span class="task-tag">${task.project}</span>
+  `;
+  row.onclick = () => toggleTaskExpand(task.gid, asanaUrl, task.name, task.notes||'', task.due_on||'');
+
+  const expand = document.createElement('div');
+  expand.className = 'task-expand';
+  expand.id = expandId;
+  expand.innerHTML = `
+    <div class="task-expand-meta">${task.due_on ? 'due ' + task.due_on : 'no due date'} · ${task.project}</div>
+    <div class="task-expand-actions">
+      <button class="task-action-btn" onclick="copyTaskName('${escapeStr(task.name)}',event)"><i class="ti ti-clipboard"></i> copy name</button>
+      <button class="task-action-btn" onclick="openInAsana('${asanaUrl}',event)"><i class="ti ti-external-link"></i> open in asana</button>
+    </div>
+  `;
+
+  return { row, expand };
 }
 
 function renderTasks(containerId,tasks,lane){
