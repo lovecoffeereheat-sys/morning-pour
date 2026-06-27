@@ -134,6 +134,24 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--rose-bg);color:va
 .asana-note{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-soft);margin-bottom:14px;font-family:'Playfair Display',serif;font-style:italic}
 .asana-note i{font-size:14px;color:var(--amber)}
 
+
+/* MOBILE FRIENDLY */
+@media (max-width: 600px) {
+  .meal-grid{grid-template-columns:repeat(7,minmax(100px,1fr));overflow-x:auto;padding-bottom:8px}
+  .content{padding:14px 16px}
+  .hero{padding:20px 16px 16px}
+  .topbar{padding:0 16px}
+}
+
+/* COPY BTN */
+.grocery-copy-btn{background:var(--rose-bg);border:0.5px solid var(--border);border-radius:6px;padding:6px 12px;font-size:11px;color:var(--text-soft);cursor:pointer;font-family:'Inter',system-ui,sans-serif;display:flex;align-items:center;gap:5px;transition:all 0.15s;margin-left:6px}
+.grocery-copy-btn:hover{border-color:var(--rose);color:var(--rose)}
+
+/* GROCERY MOBILE */
+.grocery-item{padding:8px 0;min-height:36px}
+.grocery-check{width:22px;height:22px;border-radius:6px;flex-shrink:0}
+.grocery-item-name{font-size:13px}
+
 .toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:var(--cream);padding:11px 18px;border-radius:8px;font-size:12px;display:flex;align-items:center;gap:8px;opacity:0;transition:opacity 0.3s;pointer-events:none;z-index:999}
 .toast.show{opacity:1}
 .toast i{color:var(--amber);font-size:14px}
@@ -198,7 +216,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--rose-bg);color:va
       <i class="ti ti-shopping-cart" style="color:var(--rose);font-size:15px"></i>
       <span class="grocery-head-title">this week's list</span>
       <div class="grocery-head-spacer"></div>
-      <button class="grocery-gen-btn" onclick="generateGroceryList()"><i class="ti ti-refresh"></i> generate from meals</button>
+      <button class="grocery-copy-btn" onclick="copyGroceryList()"><i class="ti ti-copy"></i> copy</button><button class="grocery-gen-btn" onclick="generateGroceryList()"><i class="ti ti-refresh"></i> generate from meals</button>
     </div>
     <div class="grocery-body" id="groceryBody">
       <div class="grocery-empty">add meals to generate your grocery list</div>
@@ -587,6 +605,25 @@ document.addEventListener('keydown', e => {
     if (document.activeElement?.id !== 'mealIngredients') saveMeal();
   }
 });
+
+
+function copyGroceryList() {
+  const unchecked = groceryItems.filter(i => !i.checked);
+  if (!unchecked.length) { showToast('nothing on the list yet'); return; }
+  const text = unchecked.map(i => '• ' + i.name).join('\n');
+  navigator.clipboard.writeText(text)
+    .then(() => showToast('list copied ☕'))
+    .catch(() => {
+      // Fallback
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast('list copied ☕');
+    });
+}
 
 // ── TOAST ──
 function showToast(msg) {
