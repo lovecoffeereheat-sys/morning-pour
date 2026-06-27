@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>time blocker · morning pour</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☕</text></svg>">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Anton&display=swap">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --rose:#944e63;--rose-light:#f5d8e2;--rose-bg:#fdf0f2;
+  --amber:#c4a45a;--amber-bg:#f5f0e4;--amber-light:#f5e8d0;
+  --navy:#1e2433;--slate:#3d4a5c;
+  --espresso:#2c1810;--cream:#e8d5c4;
+  --bg:#f6e6e3;--card:#fdf5f3;--border:#e8cfc9;--border-soft:#ede6df;
+  --text:#2c1810;--text-soft:#9e7d68;--text-faint:#c4a898;
+  --gcal-personal:#b47b84;--gcal-ro:#c4a45a;
+  --slot-h:48px;
+}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column;overflow:hidden}
+
+/* TOPBAR */
+.topbar{background:var(--espresso);display:flex;align-items:center;padding:0 20px;height:52px;flex-shrink:0;gap:0;z-index:100}
+.topbar-logo{font-family:'Anton',sans-serif;font-size:13px;letter-spacing:0.1em;color:var(--cream)}
+.topbar-logo em{color:var(--rose);font-style:normal}
+.topbar-sep{width:1px;height:16px;background:#4a2c1a;margin:0 14px}
+.topbar-sub{font-family:'Playfair Display',serif;font-style:italic;font-size:13px;color:#7a5540}
+.topbar-date{font-family:'Playfair Display',serif;font-style:italic;font-size:12px;color:#5a3828;margin-left:10px}
+.topbar-spacer{flex:1}
+.topbar-btn{background:none;border:0.5px solid #3a1f12;border-radius:6px;padding:5px 12px;font-size:11px;color:#7a5540;cursor:pointer;font-family:'Inter',system-ui,sans-serif;transition:all 0.15s}
+.topbar-btn:hover{background:#3a1f12;color:var(--cream)}
+.topbar-link{font-size:11px;color:#5a3828;text-decoration:none;display:flex;align-items:center;gap:5px;margin-left:10px}
+.topbar-link:hover{color:var(--cream)}
+
+/* MAIN LAYOUT */
+.main{display:flex;flex:1;overflow:hidden}
+
+/* SIDEBAR */
+.sidebar{width:260px;flex-shrink:0;border-right:0.5px solid var(--border);display:flex;flex-direction:column;background:#faf7f4;overflow:hidden}
+.sidebar-head{padding:12px 14px 10px;border-bottom:0.5px solid var(--border);flex-shrink:0}
+.sidebar-head-title{font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint);margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
+.sidebar-search{width:100%;background:var(--bg);border:0.5px solid var(--border-soft);border-radius:6px;padding:6px 10px;font-size:12px;color:var(--text);outline:none;font-family:'Inter',system-ui,sans-serif}
+.sidebar-search::placeholder{color:var(--text-faint);font-style:italic;font-family:'Playfair Display',serif}
+.sidebar-search:focus{border-color:var(--rose)}
+.sidebar-tabs{display:flex;border-bottom:0.5px solid var(--border);flex-shrink:0}
+.sidebar-tab{flex:1;padding:8px 6px;font-size:10px;letter-spacing:0.05em;text-align:center;cursor:pointer;color:var(--text-faint);border-bottom:2px solid transparent;transition:all 0.15s}
+.sidebar-tab.active{color:var(--text);border-bottom-color:var(--rose)}
+.sidebar-tasks{flex:1;overflow-y:auto}
+.sidebar-lane-head{padding:8px 14px 5px;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-faint);border-bottom:0.5px solid var(--border-soft);display:flex;align-items:center;gap:6px;position:sticky;top:0;background:#faf7f4;z-index:1}
+.sidebar-lane-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.task-item{display:flex;align-items:flex-start;gap:8px;padding:9px 14px;border-bottom:0.5px solid var(--border-soft);cursor:grab;transition:background 0.12s;user-select:none}
+.task-item:hover{background:var(--bg)}
+.task-item:active{cursor:grabbing;opacity:0.7}
+.task-item-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.task-item-body{flex:1;min-width:0}
+.task-item-name{font-size:12px;color:var(--text);line-height:1.35;word-break:break-word}
+.task-item-project{font-size:10px;color:var(--text-faint);margin-top:1px;font-family:'Playfair Display',serif;font-style:italic}
+.task-item.scheduled{opacity:0.4;text-decoration:line-through}
+.sidebar-empty{font-family:'Playfair Display',serif;font-style:italic;font-size:12px;color:var(--text-faint);padding:14px;text-align:center}
+.sidebar-loading{font-family:'Playfair Display',serif;font-style:italic;font-size:11px;color:var(--text-faint);padding:12px 14px}
+
+/* CALENDAR */
+.calendar{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.cal-head{padding:10px 16px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0;background:var(--card)}
+.cal-today-label{font-family:'Playfair Display',serif;font-size:14px;color:var(--espresso)}
+.cal-today-label em{font-style:italic;color:var(--rose)}
+.cal-spacer{flex:1}
+.cal-legend{display:flex;align-items:center;gap:10px}
+.legend-item{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text-soft)}
+.legend-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.cal-body{flex:1;overflow-y:auto;position:relative}
+.time-grid{display:grid;grid-template-columns:52px 1fr;position:relative;min-height:100%}
+.time-labels{display:flex;flex-direction:column}
+.time-label{height:var(--slot-h);display:flex;align-items:flex-start;justify-content:flex-end;padding-right:10px;padding-top:3px;font-family:'Playfair Display',serif;font-style:italic;font-size:10px;color:var(--text-faint);flex-shrink:0}
+.slots-col{position:relative;border-left:0.5px solid var(--border-soft)}
+.time-slot{height:var(--slot-h);border-bottom:0.5px solid var(--border-soft);position:relative;transition:background 0.1s}
+.time-slot:hover{background:rgba(148,78,99,0.04)}
+.time-slot.half-hour{border-bottom:0.5px dashed rgba(232,207,201,0.5)}
+.time-slot.drag-over{background:rgba(148,78,99,0.08)}
+.current-time{position:absolute;left:0;right:0;height:2px;background:var(--rose);z-index:20;pointer-events:none}
+.current-time::before{content:'';position:absolute;left:-4px;top:-3px;width:8px;height:8px;border-radius:50%;background:var(--rose)}
+
+/* BLOCKS */
+.block{position:absolute;left:4px;right:4px;border-radius:7px;padding:6px 9px;cursor:pointer;z-index:10;overflow:hidden;transition:opacity 0.15s,box-shadow 0.15s;min-height:24px}
+.block:hover{box-shadow:0 2px 12px rgba(44,24,16,0.12)}
+.block-ro{background:#f5f0e4;border-left:3px solid var(--amber)}
+.block-ro .block-title{color:#5c3a08}
+.block-ro .block-time{color:#9e7828}
+.block-personal{background:#fdf0f2;border-left:3px solid var(--rose)}
+.block-personal .block-title{color:#5c2338}
+.block-personal .block-time{color:#7a3050}
+.block-manual{background:#f0f2f5;border-left:3px solid var(--slate)}
+.block-manual .block-title{color:#2c3440}
+.block-manual .block-time{color:#5a6878}
+.block-gcal{background:#fdf5f3;border-left:3px solid var(--text-faint);opacity:0.85}
+.block-gcal .block-title{color:var(--text-soft)}
+.block-gcal .block-time{color:var(--text-faint)}
+.block-gcal-ro{border-left-color:var(--gcal-ro)}
+.block-gcal-personal{border-left-color:var(--gcal-personal)}
+.block-title{font-size:12px;font-weight:500;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.block-time{font-size:10px;font-family:'Playfair Display',serif;font-style:italic;margin-top:1px;opacity:0.8}
+.block-tag{display:inline-block;font-size:9px;letter-spacing:0.04em;padding:1px 6px;border-radius:20px;margin-top:3px}
+.block-tag-ro{background:rgba(196,164,90,0.2);color:#8a6010}
+.block-tag-personal{background:rgba(148,78,99,0.15);color:#7a2038}
+.block-resize{position:absolute;bottom:0;left:0;right:0;height:6px;cursor:ns-resize;opacity:0}
+.block:hover .block-resize{opacity:1;background:rgba(0,0,0,0.1);border-radius:0 0 7px 7px}
+
+/* BLOCK EDITOR */
+.block-editor{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--card);border:0.5px solid var(--border);border-radius:12px;padding:20px;width:300px;z-index:200;box-shadow:0 8px 32px rgba(44,24,16,0.15)}
+.block-editor-overlay{position:fixed;inset:0;background:rgba(44,24,16,0.2);z-index:199}
+.block-editor-title{font-family:'Playfair Display',serif;font-size:15px;color:var(--espresso);margin-bottom:14px}
+.be-label{font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint);margin-bottom:5px;margin-top:10px;display:block}
+.be-input{width:100%;background:var(--bg);border:0.5px solid var(--border-soft);border-radius:7px;padding:8px 11px;font-size:13px;color:var(--text);font-family:'Inter',system-ui,sans-serif;outline:none;transition:border-color 0.15s}
+.be-input:focus{border-color:var(--rose)}
+.be-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.be-select{width:100%;background:var(--bg);border:0.5px solid var(--border-soft);border-radius:7px;padding:8px 11px;font-size:12px;color:var(--text);outline:none;cursor:pointer}
+.be-select:focus{border-color:var(--rose)}
+.be-actions{display:flex;gap:8px;margin-top:16px}
+.be-btn-save{flex:1;background:var(--navy);color:var(--amber);border:none;border-radius:7px;padding:9px;font-size:12px;cursor:pointer;font-family:'Inter',system-ui,sans-serif;letter-spacing:0.05em}
+.be-btn-save:hover{opacity:0.88}
+.be-btn-delete{background:var(--rose-light);color:var(--rose);border:none;border-radius:7px;padding:9px 14px;font-size:12px;cursor:pointer;font-family:'Inter',system-ui,sans-serif}
+.be-btn-cancel{background:none;border:0.5px solid var(--border);border-radius:7px;padding:9px 14px;font-size:12px;color:var(--text-soft);cursor:pointer;font-family:'Inter',system-ui,sans-serif}
+
+/* NEW BLOCK PREVIEW */
+.block-preview{position:absolute;left:4px;right:4px;border-radius:7px;background:rgba(148,78,99,0.12);border:1px dashed var(--rose);pointer-events:none;z-index:15}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:var(--cream);padding:11px 18px;border-radius:8px;font-size:12px;display:flex;align-items:center;gap:8px;opacity:0;transition:opacity 0.3s;pointer-events:none;z-index:999}
+.toast.show{opacity:1}
+.toast i{color:var(--amber);font-size:14px}
+
+/* SCROLLBAR */
+.cal-body::-webkit-scrollbar,.sidebar-tasks::-webkit-scrollbar{width:4px}
+.cal-body::-webkit-scrollbar-track,.sidebar-tasks::-webkit-scrollbar-track{background:transparent}
+.cal-body::-webkit-scrollbar-thumb,.sidebar-tasks::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-logo">MORNING<em> </em>POUR</span>
+  <div class="topbar-sep"></div>
+  <span class="topbar-sub">time blocker</span>
+  <span class="topbar-date" id="topbarDate"></span>
+  <div class="topbar-spacer"></div>
+  <button class="topbar-btn" onclick="addManualBlock()"><i class="ti ti-plus"></i> add block</button>
+  <a href="index.html" class="topbar-link"><i class="ti ti-layout-dashboard"></i></a>
+  <a href="sunday.html" class="topbar-link"><i class="ti ti-coffee"></i></a>
+</div>
+
+<div class="main">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-head">
+      <div class="sidebar-head-title">
+        <span>on the burner</span>
+        <span id="taskCount" style="color:var(--text-faint);font-size:10px"></span>
+      </div>
+      <input class="sidebar-search" id="sidebarSearch" placeholder="search tasks..." oninput="filterTasks()">
+    </div>
+    <div class="sidebar-tabs">
+      <div class="sidebar-tab active" id="tabAll" onclick="switchTab('all')">all</div>
+      <div class="sidebar-tab" id="tabRo" onclick="switchTab('ro')">RO</div>
+      <div class="sidebar-tab" id="tabPersonal" onclick="switchTab('personal')">personal</div>
+    </div>
+    <div class="sidebar-tasks" id="sidebarTasks">
+      <div class="sidebar-loading">loading from asana...</div>
+    </div>
+  </div>
+
+  <!-- CALENDAR -->
+  <div class="calendar">
+    <div class="cal-head">
+      <div class="cal-today-label" id="calTodayLabel"></div>
+      <div class="cal-spacer"></div>
+      <div class="cal-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div> RO</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--rose)"></div> personal</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--text-faint)"></div> calendar</div>
+      </div>
+    </div>
+    <div class="cal-body" id="calBody">
+      <div class="time-grid">
+        <div class="time-labels" id="timeLabels"></div>
+        <div class="slots-col" id="slotsCol">
+          <div id="timeSlots"></div>
+          <div id="blocksLayer" style="position:absolute;top:0;left:0;right:0;pointer-events:none"></div>
+          <div class="current-time" id="currentTimeLine" style="display:none"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BLOCK EDITOR -->
+<div class="block-editor-overlay" id="editorOverlay" style="display:none" onclick="closeEditor()"></div>
+<div class="block-editor" id="blockEditor" style="display:none">
+  <div class="block-editor-title" id="editorTitle">edit block</div>
+  <span class="be-label">title</span>
+  <input class="be-input" id="beTitle" placeholder="what's this block for?">
+  <div class="be-row">
+    <div>
+      <span class="be-label">start</span>
+      <input class="be-input" id="beStart" type="time">
+    </div>
+    <div>
+      <span class="be-label">end</span>
+      <input class="be-input" id="beEnd" type="time">
+    </div>
+  </div>
+  <span class="be-label">type</span>
+  <select class="be-select" id="beType">
+    <option value="ro">RO · content & build</option>
+    <option value="personal">personal · mom life</option>
+    <option value="manual">other</option>
+  </select>
+  <div class="be-actions">
+    <button class="be-btn-save" onclick="saveBlock()"><i class="ti ti-check"></i> save</button>
+    <button class="be-btn-cancel" onclick="closeEditor()">cancel</button>
+    <button class="be-btn-delete" id="beDelete" onclick="deleteBlock()" style="display:none"><i class="ti ti-trash"></i></button>
+  </div>
+</div>
+
+<div class="toast" id="toast"><i class="ti ti-check"></i><span id="toastMsg">saved</span></div>
+
+<script>
+const START_HOUR = 6;
+const END_HOUR = 19;
+const SLOT_H = 48;
+const MINS_PER_SLOT = 30;
+const SLOTS_PER_HOUR = 60 / MINS_PER_SLOT;
+const TOTAL_SLOTS = (END_HOUR - START_HOUR) * SLOTS_PER_HOUR;
+
+const RO_PROJECTS = [
+  {id:'1215878061150136',label:'Tools'},
+  {id:'1215878061161504',label:'Copy & Assets'},
+  {id:'1215878207772169',label:'RO Content'},
+  {id:'1215878381563758',label:'Content Calendar'},
+  {id:'1215878246123374',label:'Brain Dump'},
+  {id:'1215878061167051',label:'Weekly Priorities'},
+  {id:'1215878045466897',label:'Launches'},
+];
+const PERSONAL_PROJECTS = [
+  {id:'1215878109661034',label:'On the Burner'},
+  {id:'1215878245923516',label:'Home & People'},
+  {id:'1215878061255928',label:'School'},
+  {id:'1215878207872980',label:'Long Steep'},
+];
+
+let blocks = [];
+let roTasks = [];
+let personalTasks = [];
+let activeTab = 'all';
+let editingBlockId = null;
+let isDragging = false;
+let dragTask = null;
+let dragStartSlot = null;
+let previewEl = null;
+let isDrawing = false;
+let drawStartSlot = null;
+
+// ── INIT ──
+const today = new Date();
+const dateStr = today.toLocaleDateString('en-CA',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+const dateKey = today.toISOString().split('T')[0];
+document.getElementById('topbarDate').textContent = '· ' + today.toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'});
+document.getElementById('calTodayLabel').innerHTML = `today · <em>${today.toLocaleDateString('en-CA',{weekday:'long',month:'long',day:'numeric'})}</em>`;
+
+// ── BUILD GRID ──
+function buildGrid(){
+  const labels = document.getElementById('timeLabels');
+  const slots = document.getElementById('timeSlots');
+  labels.innerHTML = '';
+  slots.innerHTML = '';
+  for(let h = START_HOUR; h < END_HOUR; h++){
+    for(let m = 0; m < 60; m += MINS_PER_SLOT){
+      const label = document.createElement('div');
+      label.className = 'time-label';
+      if(m === 0){
+        const ampm = h < 12 ? 'am' : 'pm';
+        const display = h > 12 ? h-12 : h;
+        label.textContent = `${display} ${ampm}`;
+      }
+      labels.appendChild(label);
+
+      const slot = document.createElement('div');
+      slot.className = `time-slot${m === 30 ? ' half-hour' : ''}`;
+      slot.dataset.hour = h;
+      slot.dataset.min = m;
+      slot.dataset.slot = ((h - START_HOUR) * SLOTS_PER_HOUR) + (m/MINS_PER_SLOT);
+      slot.addEventListener('mousedown', onSlotMouseDown);
+      slot.addEventListener('dragover', onSlotDragOver);
+      slot.addEventListener('drop', onSlotDrop);
+      slot.addEventListener('dragenter', e => { e.preventDefault(); slot.classList.add('drag-over'); });
+      slot.addEventListener('dragleave', () => slot.classList.remove('drag-over'));
+      slots.appendChild(slot);
+    }
+  }
+}
+
+// ── CURRENT TIME LINE ──
+function updateCurrentTime(){
+  const line = document.getElementById('currentTimeLine');
+  const now = new Date();
+  const h = now.getHours();
+  const m = now.getMinutes();
+  if(h < START_HOUR || h >= END_HOUR){ line.style.display='none'; return; }
+  const totalMins = (h - START_HOUR) * 60 + m;
+  const top = (totalMins / MINS_PER_SLOT) * SLOT_H;
+  line.style.display = 'block';
+  line.style.top = top + 'px';
+}
+
+// ── TIME HELPERS ──
+function minsToTime(mins){ const h=Math.floor(mins/60),m=mins%60; return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`; }
+function timeToMins(t){ const[h,m]=t.split(':').map(Number); return h*60+m; }
+function slotToMins(slot){ return (START_HOUR*60) + (slot * MINS_PER_SLOT); }
+function minsToSlot(mins){ return (mins - START_HOUR*60) / MINS_PER_SLOT; }
+function formatTime(t){ const[h,m]=t.split(':').map(Number); const ampm=h<12?'am':'pm'; const d=h>12?h-12:h===0?12:h; return `${d}${m?':'+String(m).padStart(2,'0'):''}${ampm}`; }
+
+// ── DRAW TO CREATE BLOCK ──
+function onSlotMouseDown(e){
+  if(e.button !== 0) return;
+  const slot = parseInt(e.currentTarget.dataset.slot);
+  isDrawing = true;
+  drawStartSlot = slot;
+  previewEl = document.createElement('div');
+  previewEl.className = 'block-preview';
+  positionBlockEl(previewEl, slot, slot+2);
+  document.getElementById('slotsCol').appendChild(previewEl);
+
+  const onMove = (ev) => {
+    if(!isDrawing) return;
+    const rect = document.getElementById('slotsCol').getBoundingClientRect();
+    const y = ev.clientY - rect.top;
+    const endSlot = Math.min(Math.round(y / SLOT_H), TOTAL_SLOTS);
+    const s = Math.min(drawStartSlot, endSlot);
+    const en = Math.max(drawStartSlot + 1, endSlot);
+    positionBlockEl(previewEl, s, en);
+  };
+
+  const onUp = (ev) => {
+    if(!isDrawing){ document.removeEventListener('mousemove', onMove); document.removeEventListener('mouseup', onUp); return; }
+    isDrawing = false;
+    const rect = document.getElementById('slotsCol').getBoundingClientRect();
+    const y = ev.clientY - rect.top;
+    const endSlot = Math.min(Math.round(y / SLOT_H), TOTAL_SLOTS);
+    const startSlot = Math.min(drawStartSlot, endSlot);
+    const finalEnd = Math.max(drawStartSlot + 2, endSlot);
+    if(previewEl) previewEl.remove();
+    previewEl = null;
+    const startMins = slotToMins(startSlot);
+    const endMins = slotToMins(finalEnd);
+    openEditor(null, minsToTime(startMins), minsToTime(endMins));
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onUp);
+  };
+
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onUp);
+  e.preventDefault();
+}
+
+// ── DRAG FROM SIDEBAR ──
+function onSlotDragOver(e){ e.preventDefault(); }
+function onSlotDrop(e){
+  e.preventDefault();
+  document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('drag-over'));
+  if(!dragTask) return;
+  const slot = parseInt(e.currentTarget.dataset.slot);
+  const startMins = slotToMins(slot);
+  const endMins = startMins + 60;
+  const id = 'b' + Date.now();
+  blocks.push({
+    id, title: dragTask.name,
+    start: minsToTime(startMins), end: minsToTime(endMins),
+    type: dragTask.lane || 'ro',
+    project: dragTask.project,
+    asanaGid: dragTask.gid,
+    asanaUrl: dragTask.asanaUrl
+  });
+  markTaskScheduled(dragTask.gid);
+  saveBlocks();
+  renderBlocks();
+  showToast('block added ☕');
+  dragTask = null;
+}
+
+// ── RENDER BLOCKS ──
+function positionBlockEl(el, startSlot, endSlot){
+  const top = startSlot * SLOT_H;
+  const height = (endSlot - startSlot) * SLOT_H;
+  el.style.top = top + 'px';
+  el.style.height = Math.max(height, 24) + 'px';
+}
+
+function renderBlocks(){
+  const layer = document.getElementById('blocksLayer');
+  layer.innerHTML = '';
+  layer.style.pointerEvents = 'auto';
+  const totalH = TOTAL_SLOTS * SLOT_H;
+  layer.style.height = totalH + 'px';
+  layer.style.position = 'absolute';
+  layer.style.top = '0';
+  layer.style.left = '0';
+  layer.style.right = '0';
+
+  blocks.forEach(block => {
+    const startMins = timeToMins(block.start);
+    const endMins = timeToMins(block.end);
+    if(startMins >= END_HOUR*60 || endMins <= START_HOUR*60) return;
+    const clampStart = Math.max(startMins, START_HOUR*60);
+    const clampEnd = Math.min(endMins, END_HOUR*60);
+    const startSlot = minsToSlot(clampStart);
+    const endSlot = minsToSlot(clampEnd);
+
+    const el = document.createElement('div');
+    el.className = `block block-${block.type}`;
+    positionBlockEl(el, startSlot, endSlot);
+
+    const duration = endMins - startMins;
+    el.innerHTML = `
+      <div class="block-title">${block.title}</div>
+      ${duration > 30 ? `<div class="block-time">${formatTime(block.start)} – ${formatTime(block.end)}</div>` : ''}
+      ${block.project && duration > 45 ? `<span class="block-tag block-tag-${block.type}">${block.project}</span>` : ''}
+      <div class="block-resize"></div>
+    `;
+
+    el.addEventListener('click', (e) => {
+      if(e.target.classList.contains('block-resize')) return;
+      openEditor(block.id, block.start, block.end, block.title, block.type);
+    });
+
+    // Resize
+    const resizeHandle = el.querySelector('.block-resize');
+    resizeHandle.addEventListener('mousedown', (e) => {
+      e.stopPropagation();
+      const startY = e.clientY;
+      const startH = parseFloat(el.style.height);
+      const onMove = (mv) => {
+        const diff = mv.clientY - startY;
+        const newH = Math.max(SLOT_H, startH + diff);
+        const snapped = Math.round(newH / SLOT_H) * SLOT_H;
+        el.style.height = snapped + 'px';
+      };
+      const onUp = () => {
+        const newEndSlot = minsToSlot(clampStart) + (parseFloat(el.style.height) / SLOT_H);
+        const newEndMins = slotToMins(newEndSlot);
+        block.end = minsToTime(Math.min(newEndMins, END_HOUR*60));
+        saveBlocks();
+        renderBlocks();
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+      };
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+
+    layer.appendChild(el);
+  });
+}
+
+// ── BLOCK EDITOR ──
+let editorBlock = null;
+function openEditor(id, start, end, title='', type='ro'){
+  editorBlock = id;
+  document.getElementById('editorTitle').textContent = id ? 'edit block' : 'new block';
+  document.getElementById('beTitle').value = title;
+  document.getElementById('beStart').value = start;
+  document.getElementById('beEnd').value = end;
+  document.getElementById('beType').value = type;
+  document.getElementById('beDelete').style.display = id ? 'block' : 'none';
+  document.getElementById('blockEditor').style.display = 'block';
+  document.getElementById('editorOverlay').style.display = 'block';
+  setTimeout(() => document.getElementById('beTitle').focus(), 50);
+}
+
+function closeEditor(){
+  document.getElementById('blockEditor').style.display = 'none';
+  document.getElementById('editorOverlay').style.display = 'none';
+  editorBlock = null;
+}
+
+function saveBlock(){
+  const title = document.getElementById('beTitle').value.trim() || 'block';
+  const start = document.getElementById('beStart').value;
+  const end = document.getElementById('beEnd').value;
+  const type = document.getElementById('beType').value;
+  if(!start || !end){ showToast('set a start and end time'); return; }
+  if(timeToMins(end) <= timeToMins(start)){ showToast('end must be after start'); return; }
+
+  if(editorBlock){
+    const b = blocks.find(b => b.id === editorBlock);
+    if(b){ b.title=title; b.start=start; b.end=end; b.type=type; }
+  } else {
+    blocks.push({id:'b'+Date.now(), title, start, end, type});
+  }
+  saveBlocks();
+  renderBlocks();
+  closeEditor();
+  showToast('block saved ☕');
+}
+
+function addManualBlock(){
+  const now = new Date();
+  const h = now.getHours();
+  const m = now.getMinutes() < 30 ? 0 : 30;
+  const startMins = Math.max(h*60+m, START_HOUR*60);
+  openEditor(null, minsToTime(startMins), minsToTime(startMins+60));
+}
+
+function deleteBlock(){
+  if(!editorBlock) return;
+  blocks = blocks.filter(b => b.id !== editorBlock);
+  saveBlocks();
+  renderBlocks();
+  closeEditor();
+  showToast('block removed');
+}
+
+// ── PERSIST ──
+function saveBlocks(){
+  const data = {};
+  data[dateKey] = blocks;
+  const all = JSON.parse(localStorage.getItem('mp_blocks') || '{}');
+  all[dateKey] = blocks;
+  // keep last 14 days
+  const keys = Object.keys(all).sort().reverse().slice(0, 14);
+  const trimmed = {};
+  keys.forEach(k => trimmed[k] = all[k]);
+  localStorage.setItem('mp_blocks', JSON.stringify(trimmed));
+}
+
+function loadBlocks(){
+  const all = JSON.parse(localStorage.getItem('mp_blocks') || '{}');
+  blocks = all[dateKey] || [];
+}
+
+// ── ASANA TASKS ──
+async function loadTasks(){
+  try{
+    const [roRes, personalRes] = await Promise.all([
+      fetch('/.netlify/functions/asana-proxy?view=ro_tasks').then(r=>r.json()),
+      fetch('/.netlify/functions/asana-proxy?view=personal_tasks').then(r=>r.json())
+    ]);
+    roTasks = (roRes.tasks||[]).map(t=>({...t, lane:'ro',
+      asanaUrl:`https://app.asana.com/0/${t.project_id}/${t.gid}`}));
+    personalTasks = (personalRes.tasks||[]).map(t=>({...t, lane:'personal',
+      asanaUrl:`https://app.asana.com/0/${t.project_id}/${t.gid}`}));
+    renderSidebar();
+    updateTaskCount();
+  } catch(e){
+    document.getElementById('sidebarTasks').innerHTML = '<div class="sidebar-empty">could not load tasks</div>';
+  }
+}
+
+function switchTab(tab){
+  activeTab = tab;
+  document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab'+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add('active');
+  renderSidebar();
+}
+
+function filterTasks(){ renderSidebar(); }
+
+function renderSidebar(){
+  const q = document.getElementById('sidebarSearch').value.toLowerCase();
+  const container = document.getElementById('sidebarTasks');
+  container.innerHTML = '';
+
+  const scheduledGids = new Set(blocks.filter(b=>b.asanaGid).map(b=>b.asanaGid));
+
+  const renderLane = (tasks, label, color, lane) => {
+    if(activeTab !== 'all' && activeTab !== lane) return;
+    const filtered = tasks.filter(t => !q || t.name.toLowerCase().includes(q));
+    if(!filtered.length) return;
+    const head = document.createElement('div');
+    head.className = 'sidebar-lane-head';
+    head.innerHTML = `<div class="sidebar-lane-dot" style="background:${color}"></div>${label}`;
+    container.appendChild(head);
+    filtered.forEach(task => {
+      const el = document.createElement('div');
+      el.className = `task-item${scheduledGids.has(task.gid)?' scheduled':''}`;
+      el.draggable = true;
+      el.innerHTML = `
+        <div class="task-item-dot" style="background:${color}"></div>
+        <div class="task-item-body">
+          <div class="task-item-name">${task.name}</div>
+          <div class="task-item-project">${task.project}</div>
+        </div>
+      `;
+      el.addEventListener('dragstart', () => { dragTask = task; el.style.opacity='0.5'; });
+      el.addEventListener('dragend', () => { el.style.opacity='1'; dragTask = null; });
+      el.addEventListener('click', () => {
+        const now = new Date();
+        const h = now.getHours();
+        const m = now.getMinutes() < 30 ? 0 : 30;
+        const startMins = Math.max(h*60+m, START_HOUR*60);
+        openEditor(null, minsToTime(startMins), minsToTime(startMins+60), task.name, task.lane);
+      });
+      container.appendChild(el);
+    });
+  };
+
+  renderLane(roTasks, 'content & build · RO', 'var(--amber)', 'ro');
+  renderLane(personalTasks, 'personal & mom life', 'var(--rose)', 'personal');
+
+  if(!container.children.length){
+    container.innerHTML = '<div class="sidebar-empty">no tasks found ☕</div>';
+  }
+}
+
+function markTaskScheduled(gid){
+  document.querySelectorAll('.task-item').forEach(el => {
+    const nameEl = el.querySelector('.task-item-name');
+    const task = [...roTasks,...personalTasks].find(t=>t.gid===gid);
+    if(task && nameEl && nameEl.textContent === task.name){
+      el.classList.add('scheduled');
+    }
+  });
+}
+
+function updateTaskCount(){
+  const total = roTasks.length + personalTasks.length;
+  document.getElementById('taskCount').textContent = total ? `${total} tasks` : '';
+}
+
+// ── TOAST ──
+function showToast(msg){
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2500);
+}
+
+// ── SCROLL TO CURRENT TIME ──
+function scrollToCurrent(){
+  const now = new Date();
+  const h = now.getHours();
+  const m = now.getMinutes();
+  if(h < START_HOUR || h >= END_HOUR) return;
+  const totalMins = (h - START_HOUR) * 60 + m;
+  const top = (totalMins / MINS_PER_SLOT) * SLOT_H;
+  const calBody = document.getElementById('calBody');
+  calBody.scrollTop = Math.max(0, top - 120);
+}
+
+// ── KEYBOARD ──
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape') closeEditor();
+  if(e.key === 'Enter' && document.getElementById('blockEditor').style.display === 'block'){
+    if(document.activeElement !== document.getElementById('beTitle')) saveBlock();
+  }
+});
+
+// ── START ──
+buildGrid();
+loadBlocks();
+renderBlocks();
+updateCurrentTime();
+setInterval(updateCurrentTime, 60000);
+scrollToCurrent();
+loadTasks();
+</script>
+</body>
+</html>
