@@ -74,6 +74,12 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--rose-bg);color:va
 .water-drop.filled{opacity:1}
 .water-count{font-size:12px;color:var(--text-soft);margin-left:4px;font-family:'Playfair Display',serif;font-style:italic}
 
+
+/* COFFEE */
+.coffee-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.coffee-cup{font-size:22px;cursor:pointer;opacity:0.3;transition:opacity 0.15s;user-select:none}
+.coffee-cup.filled{opacity:1}
+.coffee-count{font-size:12px;color:var(--text-soft);margin-left:4px;font-family:'Playfair Display',serif;font-style:italic}
 /* SYMPTOMS */
 .symptom-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .symptom-chip{padding:7px 10px;border-radius:8px;border:0.5px solid var(--border-soft);background:var(--rose-bg);cursor:pointer;font-size:11px;color:var(--text-soft);text-align:center;transition:all 0.15s}
@@ -196,6 +202,13 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--rose-bg);color:va
         </div>
       </div>
       <div class="tracker-row">
+        <span class="tracker-label">coffee</span>
+        <div class="tracker-control" style="flex-direction:column;align-items:flex-start;gap:6px">
+          <div class="coffee-row" id="coffeeRow"></div>
+          <span class="coffee-count" id="coffeeCount">0 cups</span>
+        </div>
+      </div>
+      <div class="tracker-row">
         <span class="tracker-label">energy note</span>
         <input class="tracker-note" id="energyNote" placeholder="low by 2pm · steady all day · running on fumes...">
       </div>
@@ -280,6 +293,7 @@ const WELLNESS_SYMPTOMS = ['headache','fatigue','nausea','back pain','joint pain
 
 let selectedMood = null;
 let waterCount = 0;
+let coffeeCount = 0;
 let activeSymptoms = new Set();
 let cycleSymptoms = new Set();
 let selectedFlow = null;
@@ -291,6 +305,7 @@ const today = new Date();
 document.getElementById('dayLabel').textContent = today.toLocaleDateString('en-CA',{weekday:'long',month:'long',day:'numeric'});
 
 buildWater();
+buildCoffee();
 buildSymptoms();
 buildCycleSymptoms();
 loadLogs();
@@ -323,6 +338,26 @@ function setWater(n) {
 }
 
 // ── SYMPTOMS ──
+
+function buildCoffee() {
+  const row = document.getElementById('coffeeRow');
+  row.innerHTML = '';
+  for (let i = 1; i <= 6; i++) {
+    const cup = document.createElement('span');
+    cup.className = `coffee-cup${i <= coffeeCount ? ' filled' : ''}`;
+    cup.textContent = '☕';
+    cup.onclick = () => setCoffee(i);
+    row.appendChild(cup);
+  }
+  const labels = ['0 cups','1 cup','2 cups','3 cups','4 cups','5 cups','6 cups'];
+  document.getElementById('coffeeCount').textContent = labels[coffeeCount] || coffeeCount + ' cups';
+}
+
+function setCoffee(n) {
+  coffeeCount = coffeeCount === n ? n - 1 : n;
+  buildCoffee();
+}
+
 function buildSymptoms() {
   const grid = document.getElementById('symptomGrid');
   grid.innerHTML = '';
@@ -393,6 +428,7 @@ async function saveLog() {
     movement: { type: movementType, mins: movementMins },
     sleep: { hours: sleepHours, quality: sleepQuality },
     water: waterCount,
+    coffee: coffeeCount,
     symptoms: [...activeSymptoms],
     energyNote,
     notes: generalNote,
@@ -422,6 +458,7 @@ async function saveLog() {
   if (sleepHours) notes += `sleep: ${sleepHours}hrs${sleepQuality ? ' · ' + sleepQuality + ' quality' : ''}\n`;
   if (movementType) notes += `movement: ${movementType}${movementMins ? ' ' + movementMins + 'min' : ''}\n`;
   if (waterCount) notes += `water: ${waterCount} glass${waterCount !== 1 ? 'es' : ''}\n`;
+  if (coffeeCount) notes += `coffee: ${coffeeCount} cup${coffeeCount !== 1 ? 's' : ''} ☕\n`;
   if (activeSymptoms.size) notes += `symptoms: ${[...activeSymptoms].join(', ')}\n`;
   else notes += `symptoms: none\n`;
   if (energyNote) notes += `energy: ${energyNote}\n`;
@@ -483,6 +520,7 @@ function renderHistory() {
     if (log.movement?.type) details.push(log.movement.type + (log.movement.mins ? ' ' + log.movement.mins + 'min' : ''));
     if (log.sleep?.hours) details.push(log.sleep.hours + 'hrs sleep');
     if (log.water) details.push(log.water + ' 💧');
+    if (log.coffee) details.push(log.coffee + ' ☕');
     if (log.symptoms?.length) details.push(log.symptoms.slice(0,2).join(', '));
     const el = document.createElement('div');
     el.className = 'history-row';
@@ -529,6 +567,7 @@ if (existingLog) {
   if (existingLog.energyNote) document.getElementById('energyNote').value = existingLog.energyNote;
   if (existingLog.notes) document.getElementById('generalNote').value = existingLog.notes;
   if (existingLog.symptoms) { existingLog.symptoms.forEach(s => activeSymptoms.add(s)); buildSymptoms(); }
+  if (existingLog.coffee) { coffeeCount = existingLog.coffee; buildCoffee(); }
 }
 </script>
 </body>
