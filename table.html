@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>the table · morning pour</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍽</text></svg>">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Anton&display=swap">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --rose:#944e63;--rose-mid:#b47b84;--rose-soft:#caa6a6;
+  --rose-warm:#d6a39a;--rose-bg:#f6e6e3;--card:#fdf5f3;
+  --navy:#16042d;--espresso:#2c1810;--cream:#e8d5c4;
+  --amber:#c4a45a;--amber-bg:#f5f0e4;
+  --slate:#3d4a5c;--border:#e8cfc9;--border-soft:#ede6df;
+  --text:#2c1810;--text-soft:#9e7d68;--text-faint:#c4a898;
+}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--rose-bg);color:var(--text);min-height:100vh}
+
+.topbar{background:var(--espresso);display:flex;align-items:center;padding:0 24px;height:52px;position:sticky;top:0;z-index:100}
+.topbar-logo{font-family:'Anton',sans-serif;font-size:13px;letter-spacing:0.1em;color:var(--cream)}
+.topbar-logo em{color:var(--rose);font-style:normal}
+.topbar-sep{width:1px;height:16px;background:#4a2c1a;margin:0 14px}
+.topbar-sub{font-family:'Playfair Display',serif;font-style:italic;font-size:13px;color:#7a5540}
+.topbar-spacer{flex:1}
+.topbar-link{font-size:11px;color:#5a3828;text-decoration:none;display:flex;align-items:center;gap:5px;margin-left:10px}
+.topbar-link:hover{color:var(--cream)}
+.topbar-asana{font-size:11px;color:var(--amber);text-decoration:none;display:flex;align-items:center;gap:5px;border:0.5px solid #4a2c1a;border-radius:6px;padding:4px 10px}
+.topbar-asana:hover{border-color:var(--amber)}
+
+.hero{padding:28px 24px 20px;border-bottom:0.5px solid var(--border);position:relative;overflow:hidden}
+.hero-eyebrow{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--rose);margin-bottom:6px}
+.hero-title{font-family:'Playfair Display',serif;font-size:24px;color:var(--espresso);line-height:1.2;margin-bottom:4px}
+.hero-title em{font-style:italic;color:var(--rose)}
+.hero-sub{font-family:'Playfair Display',serif;font-style:italic;font-size:12px;color:var(--text-soft)}
+.week-badge{display:inline-flex;align-items:center;gap:6px;background:var(--navy);color:var(--amber);border-radius:20px;padding:4px 12px;font-size:11px;letter-spacing:0.06em;margin-top:8px}
+
+.content{padding:20px 24px;max-width:960px}
+
+/* WEEK NAV */
+.week-nav{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.week-nav-btn{background:none;border:0.5px solid var(--border);border-radius:6px;padding:6px 12px;font-size:12px;color:var(--text-soft);cursor:pointer;transition:all 0.15s;font-family:'Inter',system-ui,sans-serif}
+.week-nav-btn:hover{border-color:var(--rose);color:var(--rose)}
+.week-nav-label{font-family:'Playfair Display',serif;font-style:italic;font-size:13px;color:var(--text-soft);flex:1;text-align:center}
+.week-nav-today{background:var(--navy);color:var(--amber);border:none;border-radius:6px;padding:6px 12px;font-size:11px;cursor:pointer;font-family:'Inter',system-ui,sans-serif;letter-spacing:0.05em}
+
+/* MEAL GRID */
+.meal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:20px}
+.day-col{display:flex;flex-direction:column;gap:6px}
+.day-head{text-align:center;padding:8px 4px 6px}
+.day-name{font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint);margin-bottom:2px}
+.day-date{font-size:12px;font-weight:500;color:var(--text)}
+.day-date.today{color:var(--rose);font-weight:700}
+.meal-slot{background:var(--card);border:0.5px solid var(--border);border-radius:8px;padding:8px;min-height:70px;cursor:pointer;transition:all 0.15s;position:relative}
+.meal-slot:hover{border-color:var(--rose);box-shadow:0 2px 8px rgba(148,78,99,0.1)}
+.meal-slot.has-meal{border-color:var(--border)}
+.meal-slot.empty{border-style:dashed;background:rgba(253,245,243,0.5)}
+.meal-type-label{font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint);margin-bottom:4px}
+.meal-name{font-size:11px;color:var(--text);line-height:1.3;font-weight:500}
+.meal-who{font-size:9px;color:var(--text-faint);margin-top:3px;font-family:'Playfair Display',serif;font-style:italic}
+.meal-photo{width:100%;height:50px;object-fit:cover;border-radius:5px;margin-bottom:5px}
+.meal-add{display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-faint);font-size:11px;gap:4px;font-family:'Playfair Display',serif;font-style:italic}
+.meal-add i{font-size:14px}
+.meal-slot-type{display:flex;flex-direction:column;gap:4px}
+
+/* MEAL TYPE TABS */
+.meal-type-tabs{display:flex;gap:4px;margin-bottom:12px}
+.meal-type-tab{flex:1;text-align:center;padding:7px;border-radius:7px;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;border:0.5px solid var(--border);color:var(--text-faint);background:var(--card);transition:all 0.15s}
+.meal-type-tab.active{background:var(--navy);color:var(--amber);border-color:var(--navy)}
+
+/* GROCERY LIST */
+.grocery-section{background:var(--card);border:0.5px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px}
+.grocery-head{padding:12px 16px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;gap:8px}
+.grocery-head-title{font-family:'Playfair Display',serif;font-size:14px;color:var(--espresso)}
+.grocery-head-spacer{flex:1}
+.grocery-gen-btn{background:var(--navy);color:var(--amber);border:none;border-radius:6px;padding:6px 12px;font-size:11px;cursor:pointer;font-family:'Inter',system-ui,sans-serif;display:flex;align-items:center;gap:5px;transition:opacity 0.15s}
+.grocery-gen-btn:hover{opacity:0.88}
+.grocery-body{padding:14px 16px}
+.grocery-cat{margin-bottom:12px}
+.grocery-cat-head{font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-faint);margin-bottom:6px;padding-bottom:4px;border-bottom:0.5px solid var(--border-soft)}
+.grocery-item{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:0.5px solid var(--border-soft)}
+.grocery-item:last-child{border-bottom:none}
+.grocery-check{width:16px;height:16px;border:1.5px solid var(--border);border-radius:4px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.15s}
+.grocery-check.checked{background:var(--rose);border-color:var(--rose)}
+.grocery-check.checked i{color:#fff;font-size:10px}
+.grocery-item-name{font-size:12px;color:var(--text);flex:1}
+.grocery-item-name.checked{text-decoration:line-through;color:var(--text-faint)}
+.grocery-add-row{display:flex;gap:8px;margin-top:10px}
+.grocery-add-input{flex:1;background:var(--rose-bg);border:0.5px solid var(--border-soft);border-radius:7px;padding:8px 11px;font-size:12px;color:var(--text);font-family:'Inter',system-ui,sans-serif;outline:none;transition:border-color 0.15s}
+.grocery-add-input:focus{border-color:var(--rose)}
+.grocery-add-input::placeholder{color:var(--text-faint);font-style:italic;font-family:'Playfair Display',serif}
+.grocery-add-btn{background:var(--rose);color:#fdf0f4;border:none;border-radius:7px;padding:8px 14px;font-size:12px;cursor:pointer;font-family:'Inter',system-ui,sans-serif;transition:opacity 0.15s}
+.grocery-add-btn:hover{opacity:0.88}
+.grocery-empty{font-family:'Playfair Display',serif;font-style:italic;font-size:12px;color:var(--text-faint);padding:8px 0;text-align:center}
+
+/* MEAL MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(44,24,16,0.25);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{background:var(--card);border-radius:14px;padding:22px;width:100%;max-width:420px;box-shadow:0 8px 32px rgba(44,24,16,0.15);max-height:90vh;overflow-y:auto}
+.modal-title{font-family:'Playfair Display',serif;font-size:16px;color:var(--espresso);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.modal-close{background:none;border:none;cursor:pointer;color:var(--text-faint);font-size:18px;padding:2px;display:flex;align-items:center}
+.modal-close:hover{color:var(--rose)}
+.m-label{font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint);margin-bottom:5px;margin-top:12px;display:block}
+.m-input{width:100%;background:var(--rose-bg);border:0.5px solid var(--border-soft);border-radius:8px;padding:9px 12px;font-size:13px;color:var(--text);font-family:'Inter',system-ui,sans-serif;outline:none;transition:border-color 0.15s}
+.m-input:focus{border-color:var(--rose)}
+.m-input::placeholder{color:var(--text-faint);font-style:italic;font-family:'Playfair Display',serif}
+.m-select{width:100%;background:var(--rose-bg);border:0.5px solid var(--border-soft);border-radius:8px;padding:9px 12px;font-size:12px;color:var(--text);outline:none;cursor:pointer}
+.m-select:focus{border-color:var(--rose)}
+.m-textarea{width:100%;background:var(--rose-bg);border:0.5px solid var(--border-soft);border-radius:8px;padding:9px 12px;font-size:12px;color:var(--text);font-family:'Inter',system-ui,sans-serif;outline:none;resize:none;line-height:1.6;transition:border-color 0.15s}
+.m-textarea:focus{border-color:var(--rose)}
+.m-textarea::placeholder{color:var(--text-faint);font-style:italic;font-family:'Playfair Display',serif}
+.m-photo-preview{width:100%;height:120px;object-fit:cover;border-radius:8px;margin-top:6px;display:none}
+.modal-actions{display:flex;gap:8px;margin-top:18px}
+.m-btn-save{flex:1;background:var(--navy);color:var(--amber);border:none;border-radius:8px;padding:11px;font-size:12px;letter-spacing:0.05em;cursor:pointer;font-family:'Inter',system-ui,sans-serif;transition:opacity 0.15s}
+.m-btn-save:hover{opacity:0.88}
+.m-btn-cancel{background:none;border:0.5px solid var(--border);border-radius:8px;padding:10px 16px;font-size:12px;color:var(--text-soft);cursor:pointer;font-family:'Inter',system-ui,sans-serif}
+.m-btn-delete{background:var(--rose-bg);border:none;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--rose);cursor:pointer;font-family:'Inter',system-ui,sans-serif}
+
+/* MEAL LIBRARY */
+.library-section{background:var(--card);border:0.5px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:14px}
+.library-head{padding:12px 16px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;gap:8px}
+.library-head-title{font-family:'Playfair Display',serif;font-size:14px;color:var(--espresso)}
+.library-asana-link{font-size:11px;color:var(--amber);text-decoration:none;margin-left:auto;display:flex;align-items:center;gap:4px}
+.library-body{padding:14px 16px}
+.library-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.library-card{background:var(--rose-bg);border:0.5px solid var(--border-soft);border-radius:8px;padding:10px;cursor:pointer;transition:all 0.15s}
+.library-card:hover{border-color:var(--rose);transform:translateY(-1px)}
+.library-card-name{font-size:12px;color:var(--text);font-weight:500;margin-bottom:3px}
+.library-card-meta{font-size:10px;color:var(--text-faint);font-family:'Playfair Display',serif;font-style:italic}
+.library-empty{font-family:'Playfair Display',serif;font-style:italic;font-size:12px;color:var(--text-faint);padding:8px 0}
+
+.asana-note{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-soft);margin-bottom:14px;font-family:'Playfair Display',serif;font-style:italic}
+.asana-note i{font-size:14px;color:var(--amber)}
+
+.toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:var(--cream);padding:11px 18px;border-radius:8px;font-size:12px;display:flex;align-items:center;gap:8px;opacity:0;transition:opacity 0.3s;pointer-events:none;z-index:999}
+.toast.show{opacity:1}
+.toast i{color:var(--amber);font-size:14px}
+
+.section-divider{display:flex;align-items:center;gap:10px;margin:20px 0 14px}
+.section-divider-line{flex:1;height:0.5px;background:var(--border)}
+.section-divider-text{font-family:'Playfair Display',serif;font-style:italic;font-size:11px;color:var(--text-faint)}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-logo">MORNING<em> </em>POUR</span>
+  <div class="topbar-sep"></div>
+  <span class="topbar-sub">the table</span>
+  <div class="topbar-spacer"></div>
+  <a href="https://app.asana.com/0/1216083714707277" target="_blank" class="topbar-asana"><i class="ti ti-brand-asana"></i> open in asana</a>
+  <a href="index.html" class="topbar-link"><i class="ti ti-layout-dashboard"></i></a>
+</div>
+
+<div class="hero">
+  <div class="hero-eyebrow">🍽 the other pot · meals</div>
+  <div class="hero-title">the <em>table</em></div>
+  <div class="hero-sub">what's for dinner. and breakfast. and lunch.</div>
+  <div class="week-badge"><i class="ti ti-calendar"></i> <span id="weekLabel">this week</span></div>
+</div>
+
+<div class="content">
+
+  <div class="week-nav">
+    <button class="week-nav-btn" onclick="changeWeek(-1)"><i class="ti ti-chevron-left"></i></button>
+    <span class="week-nav-label" id="weekNavLabel"></span>
+    <button class="week-nav-today" onclick="goToToday()">today</button>
+    <button class="week-nav-btn" onclick="changeWeek(1)"><i class="ti ti-chevron-right"></i></button>
+  </div>
+
+  <div class="asana-note">
+    <i class="ti ti-brand-asana"></i>
+    meals pulled from The Table project in Asana · add photos and ingredients directly in Asana tasks
+  </div>
+
+  <!-- MEAL TYPE TABS -->
+  <div class="meal-type-tabs">
+    <div class="meal-type-tab active" onclick="setMealView('all')">all meals</div>
+    <div class="meal-type-tab" onclick="setMealView('breakfast')">breakfast</div>
+    <div class="meal-type-tab" onclick="setMealView('lunch')">lunch</div>
+    <div class="meal-type-tab" onclick="setMealView('dinner')">dinner</div>
+  </div>
+
+  <!-- MEAL GRID -->
+  <div class="meal-grid" id="mealGrid"></div>
+
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <div class="section-divider-text">grocery list</div>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <!-- GROCERY LIST -->
+  <div class="grocery-section">
+    <div class="grocery-head">
+      <i class="ti ti-shopping-cart" style="color:var(--rose);font-size:15px"></i>
+      <span class="grocery-head-title">this week's list</span>
+      <div class="grocery-head-spacer"></div>
+      <button class="grocery-gen-btn" onclick="generateGroceryList()"><i class="ti ti-refresh"></i> generate from meals</button>
+    </div>
+    <div class="grocery-body" id="groceryBody">
+      <div class="grocery-empty">add meals to generate your grocery list</div>
+    </div>
+  </div>
+
+  <div class="section-divider">
+    <div class="section-divider-line"></div>
+    <div class="section-divider-text">meal library</div>
+    <div class="section-divider-line"></div>
+  </div>
+
+  <!-- MEAL LIBRARY -->
+  <div class="library-section">
+    <div class="library-head">
+      <i class="ti ti-book" style="color:var(--amber);font-size:15px"></i>
+      <span class="library-head-title">saved meals</span>
+      <a href="https://app.asana.com/0/1216083714707277" target="_blank" class="library-asana-link"><i class="ti ti-external-link"></i> add in asana</a>
+    </div>
+    <div class="library-body">
+      <div class="library-grid" id="libraryGrid">
+        <div class="library-empty">meals you add to the Meal Library section in Asana will appear here</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- MEAL MODAL -->
+<div class="modal-overlay" id="modalOverlay" style="display:none" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <div class="modal-title">
+      <span id="modalTitle">add a meal</span>
+      <button class="modal-close" onclick="closeModal()"><i class="ti ti-x"></i></button>
+    </div>
+    <span class="m-label">meal name</span>
+    <input class="m-input" id="mealName" placeholder="spaghetti bolognese, sheet pan chicken...">
+    <span class="m-label">type</span>
+    <select class="m-select" id="mealType">
+      <option value="Breakfast">Breakfast</option>
+      <option value="Lunch">Lunch</option>
+      <option value="Dinner" selected>Dinner</option>
+      <option value="Snack">Snack</option>
+    </select>
+    <span class="m-label">for</span>
+    <select class="m-select" id="mealWho">
+      <option value="Everyone">Everyone</option>
+      <option value="Grace">Grace</option>
+      <option value="Kids">Kids</option>
+    </select>
+    <span class="m-label">ingredients (one per line — used for grocery list)</span>
+    <textarea class="m-textarea" id="mealIngredients" rows="4" placeholder="chicken thighs&#10;garlic&#10;olive oil&#10;cherry tomatoes"></textarea>
+    <span class="m-label">recipe link or notes</span>
+    <input class="m-input" id="mealNotes" placeholder="https://... or quick notes">
+    <div class="modal-actions">
+      <button class="m-btn-save" onclick="saveMeal()"><i class="ti ti-check"></i> save meal</button>
+      <button class="m-btn-cancel" onclick="closeModal()">cancel</button>
+      <button class="m-btn-delete" id="mealDeleteBtn" style="display:none" onclick="deleteMeal()"><i class="ti ti-trash"></i></button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><i class="ti ti-check"></i><span id="toastMsg">saved</span></div>
+
+<script>
+const ASANA_PROJECT_ID = '1216083714707277';
+const SECTION_IDS = {
+  'Sunday':      '1216083705409099',
+  'Monday':      '1216083797741482',
+  'Tuesday':     '1216083797745637',
+  'Wednesday':   '1216083705428624',
+  'Thursday':    '1216083797773443',
+  'Friday':      '1216083990735569',
+  'Saturday':    '1216083990723784',
+  'Meal Library':'1216084070715634',
+};
+const DAYS = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const MEAL_TYPES = ['Breakfast','Lunch','Dinner','Snack'];
+
+let weekOffset = 0;
+let mealView = 'all';
+let meals = {}; // { 'Sunday': [{name, type, who, ingredients, notes, id}] }
+let groceryItems = [];
+let libraryMeals = [];
+let editingMeal = null;
+let editingDay = null;
+
+// ── WEEK HELPERS ──
+function getWeekDates(offset = 0) {
+  const today = new Date();
+  const day = today.getDay();
+  const sunday = new Date(today);
+  sunday.setDate(today.getDate() - day + (offset * 7));
+  return DAYS.map((_, i) => {
+    const d = new Date(sunday);
+    d.setDate(sunday.getDate() + i);
+    return d;
+  });
+}
+
+function isToday(date) {
+  const t = new Date();
+  return date.toDateString() === t.toDateString();
+}
+
+function updateWeekLabel() {
+  const dates = getWeekDates(weekOffset);
+  const start = dates[0].toLocaleDateString('en-CA',{month:'short',day:'numeric'});
+  const end = dates[6].toLocaleDateString('en-CA',{month:'short',day:'numeric'});
+  document.getElementById('weekNavLabel').textContent = `${start} – ${end}`;
+  document.getElementById('weekLabel').textContent = weekOffset === 0 ? 'this week' : weekOffset === 1 ? 'next week' : weekOffset === -1 ? 'last week' : `week of ${start}`;
+}
+
+function changeWeek(dir) { weekOffset += dir; updateWeekLabel(); renderGrid(); }
+function goToToday() { weekOffset = 0; updateWeekLabel(); renderGrid(); }
+
+// ── LOAD FROM STORAGE ──
+function loadMeals() {
+  try {
+    const stored = localStorage.getItem('mp_table_meals');
+    if (stored) meals = JSON.parse(stored);
+    const storedGrocery = localStorage.getItem('mp_table_grocery');
+    if (storedGrocery) groceryItems = JSON.parse(storedGrocery);
+    const storedLibrary = localStorage.getItem('mp_table_library');
+    if (storedLibrary) libraryMeals = JSON.parse(storedLibrary);
+  } catch(e) {}
+}
+
+function saveMeals() {
+  localStorage.setItem('mp_table_meals', JSON.stringify(meals));
+}
+
+// ── RENDER GRID ──
+function renderGrid() {
+  const dates = getWeekDates(weekOffset);
+  const grid = document.getElementById('mealGrid');
+  grid.innerHTML = '';
+
+  DAYS.forEach((day, i) => {
+    const date = dates[i];
+    const col = document.createElement('div');
+    col.className = 'day-col';
+
+    // Day header
+    const head = document.createElement('div');
+    head.className = 'day-head';
+    head.innerHTML = `
+      <div class="day-name">${day.slice(0,3)}</div>
+      <div class="day-date${isToday(date) ? ' today' : ''}">${date.getDate()}</div>
+    `;
+    col.appendChild(head);
+
+    // Meal slots
+    const typesToShow = mealView === 'all' ? MEAL_TYPES : [mealView.charAt(0).toUpperCase() + mealView.slice(1)];
+
+    typesToShow.forEach(type => {
+      const dayMeals = (meals[day] || []).filter(m => m.type === type);
+      const slot = document.createElement('div');
+      slot.className = `meal-slot${dayMeals.length ? ' has-meal' : ' empty'}`;
+
+      if (dayMeals.length) {
+        const meal = dayMeals[0];
+        slot.innerHTML = `
+          <div class="meal-type-label">${type}</div>
+          <div class="meal-name">${meal.name}</div>
+          ${meal.who !== 'Everyone' ? `<div class="meal-who">for ${meal.who}</div>` : ''}
+        `;
+        slot.onclick = () => openModal(day, type, meal);
+      } else {
+        slot.innerHTML = `<div class="meal-add"><i class="ti ti-plus"></i>${type}</div>`;
+        slot.onclick = () => openModal(day, type, null);
+      }
+
+      col.appendChild(slot);
+    });
+
+    grid.appendChild(col);
+  });
+}
+
+// ── MODAL ──
+function openModal(day, type, meal) {
+  editingDay = day;
+  editingMeal = meal;
+  document.getElementById('modalTitle').textContent = meal ? `edit ${day} ${type.toLowerCase()}` : `add ${day} ${type.toLowerCase()}`;
+  document.getElementById('mealName').value = meal?.name || '';
+  document.getElementById('mealType').value = type;
+  document.getElementById('mealWho').value = meal?.who || 'Everyone';
+  document.getElementById('mealIngredients').value = meal?.ingredients || '';
+  document.getElementById('mealNotes').value = meal?.notes || '';
+  document.getElementById('mealDeleteBtn').style.display = meal ? 'block' : 'none';
+  document.getElementById('modalOverlay').style.display = 'flex';
+  setTimeout(() => document.getElementById('mealName').focus(), 50);
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').style.display = 'none';
+  editingMeal = null;
+  editingDay = null;
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+
+function saveMeal() {
+  const name = document.getElementById('mealName').value.trim();
+  if (!name) { showToast('add a meal name first'); return; }
+  const type = document.getElementById('mealType').value;
+  const who = document.getElementById('mealWho').value;
+  const ingredients = document.getElementById('mealIngredients').value.trim();
+  const notes = document.getElementById('mealNotes').value.trim();
+  const day = editingDay;
+
+  if (!meals[day]) meals[day] = [];
+
+  // Remove existing meal of same type
+  meals[day] = meals[day].filter(m => m.type !== type);
+
+  meals[day].push({ name, type, who, ingredients, notes, id: Date.now() });
+  saveMeals();
+  renderGrid();
+  renderLibrary();
+  closeModal();
+  showToast(`${name} added to ${day} ☕`);
+}
+
+function deleteMeal() {
+  const type = document.getElementById('mealType').value;
+  if (editingDay && meals[editingDay]) {
+    meals[editingDay] = meals[editingDay].filter(m => m.type !== type);
+    saveMeals();
+    renderGrid();
+  }
+  closeModal();
+  showToast('meal removed');
+}
+
+// ── MEAL VIEW ──
+function setMealView(view) {
+  mealView = view;
+  document.querySelectorAll('.meal-type-tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  renderGrid();
+}
+
+// ── GROCERY LIST ──
+function generateGroceryList() {
+  const allIngredients = [];
+  Object.values(meals).forEach(dayMeals => {
+    dayMeals.forEach(meal => {
+      if (meal.ingredients) {
+        meal.ingredients.split('\n').forEach(ing => {
+          const trimmed = ing.trim();
+          if (trimmed) allIngredients.push({ name: trimmed, meal: meal.name, checked: false });
+        });
+      }
+    });
+  });
+
+  // Merge with existing manual items
+  const manualItems = groceryItems.filter(item => item.manual);
+  groceryItems = [...allIngredients, ...manualItems];
+  localStorage.setItem('mp_table_grocery', JSON.stringify(groceryItems));
+  renderGrocery();
+  showToast(`${allIngredients.length} ingredients pulled from this week's meals ☕`);
+}
+
+function renderGrocery() {
+  const container = document.getElementById('groceryBody');
+  container.innerHTML = '';
+
+  if (!groceryItems.length) {
+    container.innerHTML = '<div class="grocery-empty">add meals first then generate your list</div>';
+    return;
+  }
+
+  // Split into meal-sourced and manual
+  const fromMeals = groceryItems.filter(i => !i.manual);
+  const manual = groceryItems.filter(i => i.manual);
+
+  if (fromMeals.length) {
+    const cat = document.createElement('div');
+    cat.className = 'grocery-cat';
+    cat.innerHTML = '<div class="grocery-cat-head">from this week\'s meals</div>';
+    fromMeals.forEach((item, idx) => {
+      const globalIdx = groceryItems.indexOf(item);
+      cat.appendChild(makeGroceryItem(item, globalIdx));
+    });
+    container.appendChild(cat);
+  }
+
+  if (manual.length) {
+    const cat = document.createElement('div');
+    cat.className = 'grocery-cat';
+    cat.innerHTML = '<div class="grocery-cat-head">added manually</div>';
+    manual.forEach((item) => {
+      const globalIdx = groceryItems.indexOf(item);
+      cat.appendChild(makeGroceryItem(item, globalIdx));
+    });
+    container.appendChild(cat);
+  }
+
+  // Add input
+  const addRow = document.createElement('div');
+  addRow.className = 'grocery-add-row';
+  addRow.innerHTML = `
+    <input class="grocery-add-input" id="groceryAddInput" placeholder="add an item..." onkeydown="if(event.key==='Enter')addGroceryItem()">
+    <button class="grocery-add-btn" onclick="addGroceryItem()">+ add</button>
+  `;
+  container.appendChild(addRow);
+}
+
+function makeGroceryItem(item, idx) {
+  const el = document.createElement('div');
+  el.className = 'grocery-item';
+  el.innerHTML = `
+    <div class="grocery-check${item.checked ? ' checked' : ''}" onclick="toggleGrocery(${idx})">
+      ${item.checked ? '<i class="ti ti-check"></i>' : ''}
+    </div>
+    <span class="grocery-item-name${item.checked ? ' checked' : ''}">${item.name}</span>
+    ${item.meal ? `<span style="font-size:10px;color:var(--text-faint);font-style:italic">${item.meal}</span>` : ''}
+  `;
+  return el;
+}
+
+function toggleGrocery(idx) {
+  groceryItems[idx].checked = !groceryItems[idx].checked;
+  localStorage.setItem('mp_table_grocery', JSON.stringify(groceryItems));
+  renderGrocery();
+}
+
+function addGroceryItem() {
+  const input = document.getElementById('groceryAddInput');
+  const name = input?.value?.trim();
+  if (!name) return;
+  groceryItems.push({ name, manual: true, checked: false });
+  localStorage.setItem('mp_table_grocery', JSON.stringify(groceryItems));
+  renderGrocery();
+  input.value = '';
+}
+
+// ── MEAL LIBRARY ──
+function renderLibrary() {
+  const grid = document.getElementById('libraryGrid');
+  // Collect unique meals from all days
+  const allMeals = [];
+  const seen = new Set();
+  Object.entries(meals).forEach(([day, dayMeals]) => {
+    dayMeals.forEach(meal => {
+      if (!seen.has(meal.name.toLowerCase())) {
+        seen.add(meal.name.toLowerCase());
+        allMeals.push({...meal, day});
+      }
+    });
+  });
+
+  if (!allMeals.length) {
+    grid.innerHTML = '<div class="library-empty">meals you\'ve added will appear here — tap any to reuse</div>';
+    return;
+  }
+
+  grid.innerHTML = '';
+  allMeals.forEach(meal => {
+    const card = document.createElement('div');
+    card.className = 'library-card';
+    card.innerHTML = `
+      <div class="library-card-name">${meal.name}</div>
+      <div class="library-card-meta">${meal.type} · ${meal.who}</div>
+    `;
+    card.onclick = () => {
+      document.getElementById('mealName').value = meal.name;
+      document.getElementById('mealType').value = meal.type;
+      document.getElementById('mealWho').value = meal.who;
+      document.getElementById('mealIngredients').value = meal.ingredients || '';
+      document.getElementById('mealNotes').value = meal.notes || '';
+    };
+    grid.appendChild(card);
+  });
+}
+
+// ── KEYBOARD ──
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+  if (e.key === 'Enter' && document.getElementById('modalOverlay').style.display === 'flex') {
+    if (document.activeElement?.id !== 'mealIngredients') saveMeal();
+  }
+});
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ── INIT ──
+loadMeals();
+updateWeekLabel();
+renderGrid();
+renderGrocery();
+renderLibrary();
+</script>
+</body>
+</html>
