@@ -412,6 +412,27 @@ function selectFlow(el, flow) {
 }
 
 // ── SAVE ──
+
+const DAILY_RHYTHMS_SECTIONS = {
+  thisWeek:  '1216084072957509',
+  lastWeek:  '1216084068730191',
+  archive:   '1216084068734142',
+};
+
+function getSectionForDate(dateKey) {
+  const today = new Date();
+  const logDate = new Date(dateKey + 'T12:00:00');
+  const todayStart = new Date(today);
+  todayStart.setDate(today.getDate() - today.getDay()); // Sunday
+  todayStart.setHours(0,0,0,0);
+  const lastWeekStart = new Date(todayStart);
+  lastWeekStart.setDate(todayStart.getDate() - 7);
+
+  if (logDate >= todayStart) return DAILY_RHYTHMS_SECTIONS.thisWeek;
+  if (logDate >= lastWeekStart) return DAILY_RHYTHMS_SECTIONS.lastWeek;
+  return DAILY_RHYTHMS_SECTIONS.archive;
+}
+
 async function saveLog() {
   const dateKey = today.toISOString().split('T')[0];
   const movementType = document.getElementById('movementType').value;

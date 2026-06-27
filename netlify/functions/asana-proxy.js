@@ -268,12 +268,14 @@ exports.handler = async (event) => {
       if (!name || !project_id) {
         return { statusCode: 400, headers, body: JSON.stringify({ error: 'name and project_id required' }) };
       }
+      const { section_id } = body;
       const taskData = {
         data: {
           name,
           projects: [project_id],
           ...(due_on && { due_on }),
-          ...(notes && { notes })
+          ...(notes && { notes }),
+          ...(section_id && { memberships: [{ project: project_id, section: section_id }] })
         }
       };
       const result = await asanaPost('/tasks', taskData);
