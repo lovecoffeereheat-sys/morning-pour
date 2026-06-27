@@ -493,7 +493,7 @@ async function saveLog() {
     if (cycleNote) notes += `  notes: ${cycleNote}\n`;
   }
 
-  const taskName = `body log · ${today.toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric'})}`;
+  const taskName = `reheated · ${today.toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric'})}`;
 
   try {
     const res = await fetch('/.netlify/functions/asana-proxy?view=create_task', {
