@@ -107,6 +107,17 @@ async function getTasksForProject(projectId, label) {
   }
 }
 
+
+function detectContentType(name) {
+  const lower = name.toLowerCase();
+  if (lower.includes('batch')) return 'batch';
+  if (lower.includes('tool') || lower.includes('after the call') || 
+      lower.includes('before monday') || lower.includes('draft & sips') ||
+      lower.includes('draft and sips')) return 'tool';
+  if (lower.includes('note')) return 'note';
+  return 'post';
+}
+
 exports.handler = async (event) => {
   const headers = {
     'Access-Control-Allow-Origin': '*',
@@ -229,6 +240,25 @@ exports.handler = async (event) => {
           personal: filterWeek(personalResults)
         })
       };
+    }
+
+
+    // ── CONTENT CALENDAR ──
+    if (view === 'content_calendar') {
+      const res = await asanaGet(
+        `/projects/1215878381563758/tasks?opt_fields=name,due_on,completed,notes&limit=100`
+      );
+      const tasks = (res.data || [])
+        .filter(t => !t.completed && t.due_on)
+        .map(t => ({
+          gid: t.gid,
+          name: t.name,
+          due_on: t.due_on,
+          notes: t.notes || '',
+          type: detectContentType(t.name)
+        }))
+        .sort((a,b) => a.due_on.localeCompare(b.due_on));
+      return { statusCode: 200, headers, body: JSON.stringify({ tasks }) };
     }
 
     // ── CREATE TASK ──

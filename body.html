@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>the body · morning pour</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Anton&display=swap">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --rose:#944e63;--rose-mid:#b47b84;--rose-soft:#caa6a6;
+  --rose-warm:#d6a39a;--rose-bg:#f6e6e3;--card:#fdf5f3;
+  --navy:#16042d;--espresso:#2c1810;--cream:#e8d5c4;
+  --amber:#c4a45a;--border:#e8cfc9;--border-soft:#ede6df;
+  --text:#2c1810;--text-soft:#9e7d68;--text-faint:#c4a898;
+}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--rose-bg);color:var(--text);min-height:100vh}
+
+.topbar{background:var(--espresso);display:flex;align-items:center;padding:0 24px;height:52px;position:sticky;top:0;z-index:100}
+.topbar-logo{font-family:'Anton',sans-serif;font-size:13px;letter-spacing:0.1em;color:var(--cream)}
+.topbar-logo em{color:var(--rose);font-style:normal}
+.topbar-sep{width:1px;height:16px;background:#4a2c1a;margin:0 14px}
+.topbar-sub{font-family:'Playfair Display',serif;font-style:italic;font-size:13px;color:#7a5540}
+.topbar-spacer{flex:1}
+.topbar-link{font-size:11px;color:#5a3828;text-decoration:none;display:flex;align-items:center;gap:5px;margin-left:10px}
+.topbar-link:hover{color:var(--cream)}
+
+.hero{padding:28px 24px 20px;border-bottom:0.5px solid var(--border)}
+.hero-eyebrow{font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--rose);margin-bottom:6px}
+.hero-title{font-family:'Playfair Display',serif;font-size:24px;color:var(--espresso);line-height:1.2;margin-bottom:4px}
+.hero-title em{font-style:italic;color:var(--rose)}
+.hero-sub{font-family:'Playfair Display',serif;font-style:italic;font-size:12px;color:var(--text-soft)}
+.day-badge{display:inline-flex;align-items:center;gap:6px;background:var(--navy);color:var(--amber);border-radius:20px;padding:4px 12px;font-size:11px;letter-spacing:0.06em;margin-top:8px}
+
+.content{padding:20px 24px;max-width:680px;display:flex;flex-direction:column;gap:14px}
+
+.section{background:var(--card);border:0.5px solid var(--border);border-radius:10px;overflow:hidden}
+.section-head{padding:12px 16px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;gap:8px}
+.section-head-icon{font-size:15px}
+.section-head-title{font-family:'Playfair Display',serif;font-size:14px;color:var(--espresso)}
+.section-head-sub{font-size:11px;color:var(--text-faint);margin-left:auto;font-family:'Playfair Display',serif;font-style:italic}
+.section-body{padding:16px}
+
+/* MOOD */
+.mood-row{display:flex;gap:8px;flex-wrap:wrap}
+.mood-chip{flex:1;min-width:80px;padding:10px 8px;border-radius:10px;border:0.5px solid var(--border-soft);background:var(--rose-bg);cursor:pointer;text-align:center;transition:all 0.15s}
+.mood-chip:hover{border-color:var(--rose)}
+.mood-chip.selected{border-width:2px}
+.mood-chip-icon{font-size:20px;margin-bottom:4px}
+.mood-chip-label{font-size:10px;letter-spacing:0.05em;color:var(--text-soft)}
+.mood-heavy.selected{background:#f0dedd;border-color:var(--rose-soft)}
+.mood-okay.selected{background:#f5e8d0;border-color:var(--amber)}
+.mood-good.selected{background:#e8f0e8;border-color:#4caf50}
+.mood-great.selected{background:#f5d8e2;border-color:var(--rose)}
+
+/* TRACKERS */
+.tracker-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:0.5px solid var(--border-soft)}
+.tracker-row:last-child{border-bottom:none}
+.tracker-label{font-size:12px;color:var(--text);width:100px;flex-shrink:0}
+.tracker-control{flex:1;display:flex;align-items:center;gap:8px}
+.tracker-input{background:var(--rose-bg);border:0.5px solid var(--border-soft);border-radius:7px;padding:7px 11px;font-size:13px;color:var(--text);font-family:'Inter',system-ui,sans-serif;outline:none;width:80px;transition:border-color 0.15s}
+.tracker-input:focus{border-color:var(--rose)}
+.tracker-unit{font-size:11px;color:var(--text-faint)}
+.tracker-note{flex:1;background:var(--rose-bg);border:0.5px solid var(--border-soft);border-radius:7px;padding:7px 11px;font-size:12px;color:var(--text);font-family:'Inter',system-ui,sans-serif;outline:none;transition:border-color 0.15s}
+.tracker-note:focus{border-color:var(--rose)}
+.tracker-note::placeholder{color:var(--text-faint);font-style:italic;font-family:'Playfair Display',serif}
+
+/* WATER */
+.water-row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.water-drop{font-size:22px;cursor:pointer;opacity:0.3;transition:opacity 0.15s;user-select:none}
+.water-drop.filled{opacity:1}
+.water-count{font-size:12px;color:var(--text-soft);margin-left:4px;font-family:'Playfair Display',serif;font-style:italic}
+
+/* SYMPTOMS */
+.symptom-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.symptom-chip{padding:7px 10px;border-radius:8px;border:0.5px solid var(--border-soft);background:var(--rose-bg);cursor:pointer;font-size:11px;color:var(--text-soft);text-align:center;transition:all 0.15s}
+.symptom-chip:hover{border-color:var(--rose)}
+.symptom-chip.active{background:var(--rose-mid);border-color:var(--rose-mid);color:#fff}
+
+/* PERIOD TRACKER */
+.person-tabs{display:flex;border-bottom:0.5px solid var(--border);margin-bottom:14px}
+.person-tab{flex:1;padding:9px;text-align:center;font-size:11px;letter-spacing:0.05em;cursor:pointer;color:var(--text-faint);border-bottom:2px solid transparent;transition:all 0.15s}
+.person-tab.active{color:var(--espresso);border-bottom-color:var(--rose)}
+
+.flow-row{display:flex;gap:6px;flex-wrap:wrap}
+.flow-chip{padding:7px 14px;border-radius:20px;border:0.5px solid var(--border-soft);background:var(--rose-bg);cursor:pointer;font-size:11px;color:var(--text-soft);transition:all 0.15s}
+.flow-chip:hover{border-color:var(--rose)}
+.flow-chip.active{background:var(--rose);border-color:var(--rose);color:#fff}
+
+/* SAVE */
+.btn-save{background:var(--navy);color:var(--amber);border:none;border-radius:8px;padding:12px;font-size:12px;letter-spacing:0.06em;cursor:pointer;font-family:'Inter',system-ui,sans-serif;width:100%;display:flex;align-items:center;justify-content:center;gap:7px;transition:opacity 0.15s}
+.btn-save:hover{opacity:0.88}
+.btn-save i{font-size:14px}
+
+/* HISTORY */
+.history-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--border-soft);font-size:12px}
+.history-row:last-child{border-bottom:none}
+.history-date{color:var(--text-soft);width:80px;flex-shrink:0;font-family:'Playfair Display',serif;font-style:italic}
+.history-mood{font-size:16px}
+.history-details{flex:1;color:var(--text);font-size:11px}
+.history-empty{font-family:'Playfair Display',serif;font-style:italic;font-size:12px;color:var(--text-faint);padding:8px 0;text-align:center}
+
+.sheets-link{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;background:var(--card);border:0.5px solid var(--border);border-radius:10px;text-decoration:none;font-size:12px;color:var(--text-soft);transition:border-color 0.15s;font-family:'Playfair Display',serif;font-style:italic}
+.sheets-link:hover{border-color:var(--rose);color:var(--rose)}
+
+.toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:var(--cream);padding:11px 18px;border-radius:8px;font-size:12px;display:flex;align-items:center;gap:8px;opacity:0;transition:opacity 0.3s;pointer-events:none;z-index:999}
+.toast.show{opacity:1}
+.toast i{color:var(--amber);font-size:14px}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-logo">MORNING<em> </em>POUR</span>
+  <div class="topbar-sep"></div>
+  <span class="topbar-sub">the body</span>
+  <div class="topbar-spacer"></div>
+  <a href="index.html" class="topbar-link"><i class="ti ti-layout-dashboard"></i></a>
+</div>
+
+<div class="hero">
+  <div class="hero-eyebrow">🌿 the other pot · wellness</div>
+  <div class="hero-title">the <em>body</em></div>
+  <div class="hero-sub">how you actually are. not how you planned to be.</div>
+  <div class="day-badge"><i class="ti ti-calendar"></i> <span id="dayLabel"></span></div>
+</div>
+
+<div class="content">
+
+  <!-- MOOD -->
+  <div class="section">
+    <div class="section-head">
+      <i class="section-head-icon ti ti-heart" style="color:var(--rose)"></i>
+      <span class="section-head-title">mood</span>
+      <span class="section-head-sub">honest read</span>
+    </div>
+    <div class="section-body">
+      <div class="mood-row">
+        <div class="mood-chip mood-heavy" onclick="selectMood('heavy')">
+          <div class="mood-chip-icon">☁️</div>
+          <div class="mood-chip-label">heavy</div>
+        </div>
+        <div class="mood-chip mood-okay" onclick="selectMood('okay')">
+          <div class="mood-chip-icon">🌥</div>
+          <div class="mood-chip-label">okay</div>
+        </div>
+        <div class="mood-chip mood-good" onclick="selectMood('good')">
+          <div class="mood-chip-icon">🌤</div>
+          <div class="mood-chip-label">good</div>
+        </div>
+        <div class="mood-chip mood-great" onclick="selectMood('great')">
+          <div class="mood-chip-icon">☀️</div>
+          <div class="mood-chip-label">great</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAILY LOG -->
+  <div class="section">
+    <div class="section-head">
+      <i class="section-head-icon ti ti-clipboard" style="color:var(--amber)"></i>
+      <span class="section-head-title">today's log</span>
+    </div>
+    <div class="section-body">
+      <div class="tracker-row">
+        <span class="tracker-label">movement</span>
+        <div class="tracker-control">
+          <input class="tracker-input" id="movementType" placeholder="walk, yoga...">
+          <input class="tracker-input" id="movementMins" type="number" placeholder="mins" min="0">
+          <span class="tracker-unit">min</span>
+        </div>
+      </div>
+      <div class="tracker-row">
+        <span class="tracker-label">sleep</span>
+        <div class="tracker-control">
+          <input class="tracker-input" id="sleepHours" type="number" placeholder="hrs" min="0" max="24" step="0.5">
+          <span class="tracker-unit">hrs</span>
+          <select class="tracker-input" id="sleepQuality" style="width:100px">
+            <option value="">quality</option>
+            <option value="poor">poor</option>
+            <option value="fair">fair</option>
+            <option value="good">good</option>
+            <option value="great">great</option>
+          </select>
+        </div>
+      </div>
+      <div class="tracker-row">
+        <span class="tracker-label">water</span>
+        <div class="tracker-control" style="flex-direction:column;align-items:flex-start;gap:6px">
+          <div class="water-row" id="waterRow"></div>
+          <span class="water-count" id="waterCount">0 glasses</span>
+        </div>
+      </div>
+      <div class="tracker-row">
+        <span class="tracker-label">energy note</span>
+        <input class="tracker-note" id="energyNote" placeholder="low by 2pm · steady all day · running on fumes...">
+      </div>
+      <div class="tracker-row">
+        <span class="tracker-label">notes</span>
+        <input class="tracker-note" id="generalNote" placeholder="anything else worth noting...">
+      </div>
+    </div>
+  </div>
+
+  <!-- SYMPTOMS -->
+  <div class="section">
+    <div class="section-head">
+      <i class="section-head-icon ti ti-stethoscope" style="color:var(--rose-mid)"></i>
+      <span class="section-head-title">symptoms</span>
+      <span class="section-head-sub">tap anything present</span>
+    </div>
+    <div class="section-body">
+      <div class="symptom-grid" id="symptomGrid"></div>
+    </div>
+  </div>
+
+  <!-- PERIOD TRACKER -->
+  <div class="section">
+    <div class="section-head">
+      <i class="section-head-icon ti ti-moon" style="color:var(--rose)"></i>
+      <span class="section-head-title">cycle</span>
+    </div>
+    <div class="section-body">
+      <div class="person-tabs">
+        <div class="person-tab active" onclick="switchPerson('grace')">grace</div>
+        <div class="person-tab" onclick="switchPerson('naliyah')">naliyah</div>
+        <div class="person-tab" onclick="switchPerson('emma')">emma</div>
+      </div>
+      <div style="margin-bottom:12px">
+        <div style="font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint);margin-bottom:8px">flow</div>
+        <div class="flow-row" id="flowRow">
+          <div class="flow-chip" onclick="selectFlow(this,'none')">none</div>
+          <div class="flow-chip" onclick="selectFlow(this,'spotting')">spotting</div>
+          <div class="flow-chip" onclick="selectFlow(this,'light')">light</div>
+          <div class="flow-chip" onclick="selectFlow(this,'medium')">medium</div>
+          <div class="flow-chip" onclick="selectFlow(this,'heavy')">heavy</div>
+        </div>
+      </div>
+      <div id="graceSymptoms">
+        <div style="font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint);margin-bottom:8px">symptoms</div>
+        <div class="symptom-grid" id="cycleSymptomGrid"></div>
+      </div>
+      <div style="margin-top:12px">
+        <input class="tracker-note" id="cycleNote" placeholder="cycle day, notes, anything worth tracking...">
+      </div>
+    </div>
+  </div>
+
+  <!-- SAVE -->
+  <button class="btn-save" onclick="saveLog()"><i class="ti ti-check"></i> save today's log</button>
+
+  <!-- RECENT -->
+  <div class="section">
+    <div class="section-head">
+      <i class="section-head-icon ti ti-history" style="color:var(--text-faint)"></i>
+      <span class="section-head-title">recent</span>
+      <span class="section-head-sub">last 7 days</span>
+    </div>
+    <div class="section-body" id="historyBody">
+      <div class="history-empty">log saved — history will appear here</div>
+    </div>
+  </div>
+
+  <a href="https://docs.google.com/spreadsheets/d/1owdAEX5y1x7nOAQbPIX_WWZufylUAbFf" target="_blank" class="sheets-link">
+    <i class="ti ti-external-link"></i> open full tracker in google sheets
+  </a>
+
+</div>
+
+<div class="toast" id="toast"><i class="ti ti-check"></i><span id="toastMsg">saved</span></div>
+
+<script>
+const GRACE_SYMPTOMS = ['cramps','bloating','fatigue','hot flash','brain fog','insomnia','anxiety','perimenopause','headache','tender'];
+const KIDS_SYMPTOMS = ['cramps','bloating','fatigue','headache','mood swings','tender'];
+const WELLNESS_SYMPTOMS = ['headache','fatigue','nausea','back pain','joint pain','bloating','brain fog','anxiety','low energy','poor sleep'];
+
+let selectedMood = null;
+let waterCount = 0;
+let activeSymptoms = new Set();
+let cycleSymptoms = new Set();
+let selectedFlow = null;
+let activePerson = 'grace';
+let logs = [];
+
+// ── INIT ──
+const today = new Date();
+document.getElementById('dayLabel').textContent = today.toLocaleDateString('en-CA',{weekday:'long',month:'long',day:'numeric'});
+
+buildWater();
+buildSymptoms();
+buildCycleSymptoms();
+loadLogs();
+renderHistory();
+
+// ── MOOD ──
+function selectMood(mood) {
+  selectedMood = mood;
+  document.querySelectorAll('.mood-chip').forEach(c => c.classList.remove('selected'));
+  document.querySelector(`.mood-${mood}`).classList.add('selected');
+}
+
+// ── WATER ──
+function buildWater() {
+  const row = document.getElementById('waterRow');
+  row.innerHTML = '';
+  for (let i = 1; i <= 8; i++) {
+    const drop = document.createElement('span');
+    drop.className = `water-drop${i <= waterCount ? ' filled' : ''}`;
+    drop.textContent = '💧';
+    drop.onclick = () => setWater(i);
+    row.appendChild(drop);
+  }
+  document.getElementById('waterCount').textContent = `${waterCount} glass${waterCount !== 1 ? 'es' : ''}`;
+}
+
+function setWater(n) {
+  waterCount = waterCount === n ? n - 1 : n;
+  buildWater();
+}
+
+// ── SYMPTOMS ──
+function buildSymptoms() {
+  const grid = document.getElementById('symptomGrid');
+  grid.innerHTML = '';
+  WELLNESS_SYMPTOMS.forEach(s => {
+    const chip = document.createElement('div');
+    chip.className = `symptom-chip${activeSymptoms.has(s) ? ' active' : ''}`;
+    chip.textContent = s;
+    chip.onclick = () => {
+      if (activeSymptoms.has(s)) activeSymptoms.delete(s);
+      else activeSymptoms.add(s);
+      chip.classList.toggle('active');
+    };
+    grid.appendChild(chip);
+  });
+}
+
+function buildCycleSymptoms() {
+  const grid = document.getElementById('cycleSymptomGrid');
+  grid.innerHTML = '';
+  const symptoms = activePerson === 'grace' ? GRACE_SYMPTOMS : KIDS_SYMPTOMS;
+  symptoms.forEach(s => {
+    const chip = document.createElement('div');
+    chip.className = `symptom-chip${cycleSymptoms.has(s) ? ' active' : ''}`;
+    chip.textContent = s;
+    chip.onclick = () => {
+      if (cycleSymptoms.has(s)) cycleSymptoms.delete(s);
+      else cycleSymptoms.add(s);
+      chip.classList.toggle('active');
+    };
+    grid.appendChild(chip);
+  });
+}
+
+// ── PERSON TABS ──
+function switchPerson(person) {
+  activePerson = person;
+  cycleSymptoms.clear();
+  selectedFlow = null;
+  document.querySelectorAll('.person-tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('.flow-chip').forEach(c => c.classList.remove('active'));
+  document.getElementById('cycleNote').value = '';
+  document.getElementById('graceSymptoms').style.display = person === 'grace' ? 'block' : 'block';
+  buildCycleSymptoms();
+}
+
+// ── FLOW ──
+function selectFlow(el, flow) {
+  selectedFlow = flow;
+  document.querySelectorAll('.flow-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ── SAVE ──
+function saveLog() {
+  const dateKey = today.toISOString().split('T')[0];
+  const log = {
+    date: dateKey,
+    mood: selectedMood,
+    movement: { type: document.getElementById('movementType').value, mins: document.getElementById('movementMins').value },
+    sleep: { hours: document.getElementById('sleepHours').value, quality: document.getElementById('sleepQuality').value },
+    water: waterCount,
+    symptoms: [...activeSymptoms],
+    energyNote: document.getElementById('energyNote').value,
+    notes: document.getElementById('generalNote').value,
+    cycle: {
+      [activePerson]: {
+        flow: selectedFlow,
+        symptoms: [...cycleSymptoms],
+        note: document.getElementById('cycleNote').value
+      }
+    }
+  };
+
+  // Remove existing log for today
+  logs = logs.filter(l => l.date !== dateKey);
+  logs.unshift(log);
+  // Keep last 30 days
+  logs = logs.slice(0, 30);
+  localStorage.setItem('mp_body_logs', JSON.stringify(logs));
+  renderHistory();
+  showToast('logged ☕');
+}
+
+// ── HISTORY ──
+function loadLogs() {
+  try {
+    const stored = localStorage.getItem('mp_body_logs');
+    if (stored) logs = JSON.parse(stored);
+  } catch(e) {}
+}
+
+function renderHistory() {
+  const container = document.getElementById('historyBody');
+  const recent = logs.slice(0, 7);
+  if (!recent.length) {
+    container.innerHTML = '<div class="history-empty">your logged days will appear here</div>';
+    return;
+  }
+  container.innerHTML = '';
+  const moodIcon = { heavy:'☁️', okay:'🌥', good:'🌤', great:'☀️' };
+  recent.forEach(log => {
+    const d = new Date(log.date + 'T12:00:00');
+    const dateStr = d.toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'});
+    const details = [];
+    if (log.movement?.type) details.push(log.movement.type + (log.movement.mins ? ' ' + log.movement.mins + 'min' : ''));
+    if (log.sleep?.hours) details.push(log.sleep.hours + 'hrs sleep');
+    if (log.water) details.push(log.water + ' 💧');
+    if (log.symptoms?.length) details.push(log.symptoms.slice(0,2).join(', '));
+    const el = document.createElement('div');
+    el.className = 'history-row';
+    el.innerHTML = `
+      <span class="history-date">${dateStr}</span>
+      <span class="history-mood">${moodIcon[log.mood] || '·'}</span>
+      <span class="history-details">${details.join(' · ') || 'logged'}</span>
+    `;
+    container.appendChild(el);
+  });
+}
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// Load today's existing log if any
+const todayKey = today.toISOString().split('T')[0];
+const existingLog = logs.find(l => l.date === todayKey);
+if (existingLog) {
+  if (existingLog.mood) selectMood(existingLog.mood);
+  if (existingLog.water) { waterCount = existingLog.water; buildWater(); }
+  if (existingLog.movement?.type) document.getElementById('movementType').value = existingLog.movement.type;
+  if (existingLog.movement?.mins) document.getElementById('movementMins').value = existingLog.movement.mins;
+  if (existingLog.sleep?.hours) document.getElementById('sleepHours').value = existingLog.sleep.hours;
+  if (existingLog.sleep?.quality) document.getElementById('sleepQuality').value = existingLog.sleep.quality;
+  if (existingLog.energyNote) document.getElementById('energyNote').value = existingLog.energyNote;
+  if (existingLog.notes) document.getElementById('generalNote').value = existingLog.notes;
+  if (existingLog.symptoms) { existingLog.symptoms.forEach(s => activeSymptoms.add(s)); buildSymptoms(); }
+}
+</script>
+</body>
+</html>

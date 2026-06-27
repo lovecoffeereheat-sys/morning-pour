@@ -769,27 +769,57 @@ function addGCalEvent(){
 function getMonthKey(){const m=new Date().getMonth();if(m===6)return'july';if(m===7)return'august';if(m===8)return'september';return'july';}
 function getThisWeek(){const today=new Date();const day=today.getDay();const sunday=new Date(today);sunday.setDate(today.getDate()-day);return sunday.toISOString().split('T')[0];}
 
-function loadMapBanner(){
-  const key=getMonthKey();const map=CONTENT_MAPS[key];if(!map)return;
-  const weekOf=getThisWeek();
-  const week=map.weeks.find(w=>w.weekOf===weekOf)||map.weeks[0];
-  document.getElementById('mapBannerTitle').textContent='this week · '+map.month;
-  document.getElementById('mapViewLink').href=map.file;
+async function loadMapBanner(){
+  const key=getMonthKey();
+  const map=CONTENT_MAPS[key];
+  const monthNames={july:'July 2026',august:'August 2026',september:'September 2026'};
+  const mapFiles={july:'content-maps/july-2026-content-map.html',august:'content-maps/august-2026-content-map.html',september:'content-maps/september-2026-content-map.html'};
+  document.getElementById('mapBannerTitle').textContent='this week · '+(monthNames[key]||'');
+  document.getElementById('mapViewLink').href=mapFiles[key]||'#';
   document.getElementById('mapViewLink').textContent='view full '+key+' map →';
-  const container=document.getElementById('mapItems');container.innerHTML='';
-  weekMapItems=week.items;
-  const dotMap={batch:'dot-batch',post:'dot-post',tool:'dot-tool',note:'dot-note',flex:'dot-flex'};
-  week.items.forEach((item,i)=>{
-    const d=new Date(item.date);
-    const dateStr=d.toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'});
-    const auto=item.type==='batch'||item.type==='note';
-    const el=document.createElement('div');el.className='map-item';
-    el.innerHTML=`<div class="map-item-dot ${dotMap[item.type]||'dot-batch'}"></div><div class="map-item-date">${dateStr}</div><div style="flex:1"><div class="map-item-text">${item.text}</div>${item.angle?`<div class="map-item-angle">${item.angle}</div>`:''}</div>${auto?`<span class="map-item-badge badge-added">↓ in lane</span>`:`<span class="map-item-badge badge-add" id="mapbadge${i}" onclick="addMapItemToLane(${i})">+ add to lane</span>`}`;
-    container.appendChild(el);
-    if(auto)addMapTaskToLane(item,true);
-  });
-  const mRow=document.getElementById('milestonesRow');
-  mRow.innerHTML=map.milestones.map(m=>`<div class="milestone"><div class="milestone-label">${m.label}</div><div class="milestone-val">${m.val}</div><div class="milestone-sub">${m.sub}</div></div>`).join('');
+  const container=document.getElementById('mapItems');
+  container.innerHTML='<div style="color:#7a8a9e;font-style:italic;font-size:12px;padding:8px 0">loading from asana...</div>';
+
+  // Load milestones from hardcoded data (these don't change)
+  if(map){
+    const mRow=document.getElementById('milestonesRow');
+    mRow.innerHTML=map.milestones.map(m=>`<div class="milestone"><div class="milestone-label">${m.label}</div><div class="milestone-val">${m.val}</div><div class="milestone-sub">${m.sub}</div></div>`).join('');
+  }
+
+  try {
+    const res=await fetch('/.netlify/functions/asana-proxy?view=content_calendar');
+    const data=await res.json();
+    const today=new Date();
+    const weekStart=new Date(today);
+    weekStart.setDate(today.getDate()-today.getDay());
+    const weekEnd=new Date(weekStart);
+    weekEnd.setDate(weekStart.getDate()+6);
+    const startStr=weekStart.toISOString().split('T')[0];
+    const endStr=weekEnd.toISOString().split('T')[0];
+
+    const weekTasks=(data.tasks||[]).filter(t=>t.due_on>=startStr&&t.due_on<=endStr);
+    weekMapItems=weekTasks.map(t=>({
+      date:t.due_on, type:t.type, text:t.name, angle:null
+    }));
+
+    container.innerHTML='';
+    const dotMap={batch:'dot-batch',post:'dot-post',tool:'dot-tool',note:'dot-note'};
+
+    if(!weekTasks.length){
+      container.innerHTML='<div style="color:#7a8a9e;font-style:italic;font-size:12px;padding:8px 0">no content scheduled this week in asana · add tasks with this week's dates</div>';
+      return;
+    }
+
+    weekTasks.forEach((task,i)=>{
+      const d=new Date(task.due_on+'T12:00:00');
+      const dateStr=d.toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'});
+      const el=document.createElement('div');el.className='map-item';
+      el.innerHTML=`<div class="map-item-dot ${dotMap[task.type]||'dot-post'}"></div><div class="map-item-date">${dateStr}</div><div style="flex:1"><div class="map-item-text">${task.name}</div></div><span class="map-item-badge badge-add" id="mapbadge${i}" onclick="addMapItemToLane(${i})">+ add to lane</span>`;
+      container.appendChild(el);
+    });
+  } catch(e) {
+    container.innerHTML='<div style="color:#7a8a9e;font-style:italic;font-size:12px;padding:8px 0">could not load from asana — check connection</div>';
+  }
 }
 
 function addMapItemToLane(i){

@@ -7,261 +7,51 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☕</text></svg>">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Inter:wght@400;500;600&display=swap');
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'Inter', sans-serif;
-    background: #f6e6e3;
-    color: #1e2433;
-    padding: 2.5rem;
-    max-width: 1000px;
-    margin: 0 auto;
-  }
-
-  header {
-    border-bottom: 1.5px solid #1e2433;
-    padding-bottom: 1.25rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .brand {
-    font-family: 'Playfair Display', serif;
-    font-size: 13px;
-    font-weight: 400;
-    color: #944e63;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-  }
-
-  h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 28px;
-    font-weight: 700;
-    color: #1e2433;
-    line-height: 1.2;
-    margin-bottom: 4px;
-  }
-
-  .sub {
-    font-size: 13px;
-    color: #3d4a5c;
-  }
-
-  .milestones {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-bottom: 1.5rem;
-  }
-
-  .milestone-card {
-    background: #1e2433;
-    border-radius: 8px;
-    padding: 12px 14px;
-  }
-
-  .milestone-card .m-label {
-    font-size: 10px;
-    font-weight: 600;
-    color: #c4a45a;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    margin-bottom: 4px;
-  }
-
-  .milestone-card .m-val {
-    font-family: 'Playfair Display', serif;
-    font-size: 15px;
-    color: #f6e6e3;
-    margin-bottom: 2px;
-  }
-
-  .milestone-card .m-sub {
-    font-size: 11px;
-    color: #b47b84;
-  }
-
-  .legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 14px;
-    margin-bottom: 1.25rem;
-    align-items: center;
-  }
-
-  .legend-title {
-    font-size: 11px;
-    font-weight: 600;
-    color: #3d4a5c;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-right: 4px;
-  }
-
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    color: #1e2433;
-  }
-
-  .legend-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 3px;
-    flex-shrink: 0;
-  }
-
-  .dot-batch { background: #3d4a5c; }
-  .dot-post  { background: #944e63; }
-  .dot-tool  { background: #c4a45a; }
-  .dot-note  { background: #b47b84; }
-
-  .calendar {
-    border: 1px solid #1e2433;
-    border-radius: 10px;
-    overflow: hidden;
-  }
-
-  .cal-header {
-    display: grid;
-    grid-template-columns: 70px repeat(7, 1fr);
-    background: #1e2433;
-  }
-
-  .cal-header div {
-    font-size: 11px;
-    font-weight: 600;
-    color: #c4a45a;
-    text-align: center;
-    padding: 8px 4px;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
-
-  .cal-header div:first-child {
-    color: #b47b84;
-    font-size: 10px;
-  }
-
-  .week {
-    display: grid;
-    grid-template-columns: 70px repeat(7, 1fr);
-    border-top: 0.5px solid rgba(44,24,16,0.2);
-  }
-
+  body { font-family: 'Inter', sans-serif; background: #f6e6e3; color: #1e2433; padding: 2.5rem; max-width: 1000px; margin: 0 auto; }
+  header { border-bottom: 1.5px solid #1e2433; padding-bottom: 1.25rem; margin-bottom: 1.5rem; }
+  .brand { font-family: 'Playfair Display', serif; font-size: 13px; color: #944e63; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+  h1 { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: #1e2433; line-height: 1.2; margin-bottom: 4px; }
+  .sub { font-size: 13px; color: #3d4a5c; }
+  .milestones { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.5rem; }
+  .milestone-card { background: #1e2433; border-radius: 8px; padding: 12px 14px; }
+  .milestone-card .m-label { font-size: 10px; font-weight: 600; color: #c4a45a; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px; }
+  .milestone-card .m-val { font-family: 'Playfair Display', serif; font-size: 15px; color: #f6e6e3; margin-bottom: 2px; }
+  .milestone-card .m-sub { font-size: 11px; color: #b47b84; }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 1.25rem; align-items: center; }
+  .legend-title { font-size: 11px; font-weight: 600; color: #3d4a5c; text-transform: uppercase; letter-spacing: 0.06em; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #1e2433; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+  .dot-batch { background: #3d4a5c; } .dot-post { background: #944e63; } .dot-tool { background: #c4a45a; } .dot-note { background: #b47b84; }
+  .calendar { border: 1px solid #1e2433; border-radius: 10px; overflow: hidden; }
+  .cal-header { display: grid; grid-template-columns: 70px repeat(7, 1fr); background: #1e2433; }
+  .cal-header div { font-size: 11px; font-weight: 600; color: #c4a45a; text-align: center; padding: 8px 4px; letter-spacing: 0.05em; text-transform: uppercase; }
+  .cal-header div:first-child { color: #b47b84; font-size: 10px; }
+  .week { display: grid; grid-template-columns: 70px repeat(7, 1fr); border-top: 0.5px solid rgba(44,24,16,0.2); }
   .week:nth-child(odd) { background: rgba(255,255,255,0.3); }
   .week:nth-child(even) { background: rgba(255,255,255,0.15); }
-
-  .week-label {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 10px 10px 10px 6px;
-    font-size: 10px;
-    font-weight: 600;
-    color: #944e63;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border-right: 0.5px solid rgba(44,24,16,0.15);
-  }
-
-  .day-cell {
-    padding: 8px 4px;
-    border-right: 0.5px solid rgba(44,24,16,0.1);
-    min-height: 72px;
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-  }
-
+  .week-label { display: flex; align-items: center; justify-content: flex-end; padding: 10px; font-size: 10px; font-weight: 600; color: #944e63; text-transform: uppercase; letter-spacing: 0.05em; border-right: 0.5px solid rgba(44,24,16,0.15); }
+  .day-cell { padding: 8px 4px; border-right: 0.5px solid rgba(44,24,16,0.1); min-height: 72px; display: flex; flex-direction: column; gap: 3px; }
   .day-cell:last-child { border-right: none; }
-
-  .date {
-    font-size: 11px;
-    color: #3d4a5c;
-    font-weight: 500;
-    margin-bottom: 2px;
-    text-align: center;
-  }
-
+  .date { font-size: 11px; color: #3d4a5c; font-weight: 500; margin-bottom: 2px; text-align: center; }
   .date.prev { color: #b47b84; opacity: 0.5; }
-
-  .pill {
-    border-radius: 4px;
-    padding: 3px 5px;
-    font-size: 9.5px;
-    font-weight: 500;
-    line-height: 1.4;
-    text-align: center;
-  }
-
+  .pill { border-radius: 4px; padding: 3px 5px; font-size: 9.5px; font-weight: 500; line-height: 1.4; text-align: center; cursor: pointer; }
   .pill-batch { background: #3d4a5c; color: #f6e6e3; }
-  .pill-post  { background: #944e63; color: #f6e6e3; }
-  .pill-tool  { background: #c4a45a; color: #1e2433; }
-  .pill-note  { background: rgba(180,123,132,0.25); color: #944e63; border: 0.5px solid #b47b84; }
-
-  footer {
-    margin-top: 1.25rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .footer-note {
-    font-size: 11px;
-    color: #3d4a5c;
-  }
-
-  .guardrails {
-    margin-top: 1.25rem;
-    border: 0.5px solid rgba(44,24,16,0.25);
-    border-radius: 8px;
-    padding: 12px 16px;
-    background: rgba(255,255,255,0.4);
-  }
-
-  .guardrails-title {
-    font-size: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    color: #944e63;
-    margin-bottom: 8px;
-  }
-
-  .guardrails-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px 20px;
-  }
-
-  .guardrail-item {
-    font-size: 11px;
-    color: #1e2433;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-
-  .guardrail-item::before {
-    content: '';
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: #c4a45a;
-    flex-shrink: 0;
-  }
-
-  @media print {
-    body { padding: 1.5rem; background: #f6e6e3 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .calendar { page-break-inside: avoid; }
-  }
+  .pill-post { background: #944e63; color: #f6e6e3; }
+  .pill-tool { background: #c4a45a; color: #1e2433; }
+  .pill-note { background: rgba(180,123,132,0.25); color: #944e63; border: 0.5px solid #b47b84; }
+  .loading { text-align: center; padding: 40px; font-family: 'Playfair Display', serif; font-style: italic; color: #9e7d68; }
+  .asana-badge { display: inline-flex; align-items: center; gap: 6px; background: #1e2433; color: #c4a45a; border-radius: 20px; padding: 4px 12px; font-size: 11px; margin-bottom: 1rem; text-decoration: none; }
+  .month-nav { display: flex; gap: 8px; margin-bottom: 1.5rem; }
+  .month-pill { font-size: 11px; padding: 5px 14px; border-radius: 20px; border: 0.5px solid #1e2433; color: #3d4a5c; text-decoration: none; cursor: pointer; }
+  .month-pill.active { background: #1e2433; color: #c4a45a; }
+  .guardrails { margin-top: 1.25rem; border: 0.5px solid rgba(44,24,16,0.25); border-radius: 8px; padding: 12px 16px; background: rgba(255,255,255,0.4); }
+  .guardrails-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: #944e63; margin-bottom: 8px; }
+  .guardrails-list { display: flex; flex-wrap: wrap; gap: 6px 20px; }
+  .guardrail-item { font-size: 11px; color: #1e2433; display: flex; align-items: center; gap: 5px; }
+  .guardrail-item::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: #c4a45a; flex-shrink: 0; }
+  footer { margin-top: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .footer-note { font-size: 11px; color: #3d4a5c; }
 </style>
 </head>
 <body>
@@ -272,22 +62,18 @@
   <div class="sub">Season: Growing &nbsp;·&nbsp; North Star: 10 users by September 30 &nbsp;·&nbsp; Posts publish Tuesday 7–8am CDT</div>
 </header>
 
+<a href="https://app.asana.com/0/1215878381563758" target="_blank" class="asana-badge">☕ live from asana · content calendar</a>
+
+<div class="month-nav">
+  <span class="month-pill active">July</span>
+  <a class="month-pill" href="august-2026-content-map.html">August</a>
+  <a class="month-pill" href="september-2026-content-map.html">September</a>
+</div>
+
 <div class="milestones">
-  <div class="milestone-card">
-    <div class="m-label">July milestone</div>
-    <div class="m-val">First paid sale</div>
-    <div class="m-sub">After the Call or Before Monday</div>
-  </div>
-  <div class="milestone-card">
-    <div class="m-label">July milestone</div>
-    <div class="m-val">5 free users</div>
-    <div class="m-sub">Draft & Sips (1 already in ✓)</div>
-  </div>
-  <div class="milestone-card">
-    <div class="m-label">Notes rhythm</div>
-    <div class="m-val">5+ per week</div>
-    <div class="m-sub">Tue / Wed / Thu core · Mon & Sat bonus</div>
-  </div>
+  <div class="milestone-card"><div class="m-label">July milestone</div><div class="m-val">First paid sale</div><div class="m-sub">After the Call or Before Monday</div></div>
+  <div class="milestone-card"><div class="m-label">July milestone</div><div class="m-val">5 free users</div><div class="m-sub">Draft & Sips (1 already in ✓)</div></div>
+  <div class="milestone-card"><div class="m-label">Notes rhythm</div><div class="m-val">5+ per week</div><div class="m-sub">Tue / Wed / Thu core · Mon & Sat bonus</div></div>
 </div>
 
 <div class="legend">
@@ -298,166 +84,8 @@
   <div class="legend-item"><div class="legend-dot dot-note"></div> Notes day</div>
 </div>
 
-<div class="calendar">
-
-  <div class="cal-header">
-    <div></div>
-    <div>Sun</div>
-    <div>Mon</div>
-    <div>Tue</div>
-    <div>Wed</div>
-    <div>Thu</div>
-    <div>Fri</div>
-    <div>Sat</div>
-  </div>
-
-  <div class="week">
-    <div class="week-label">Wk 1</div>
-    <div class="day-cell">
-      <div class="date prev">29</div>
-      <div class="pill pill-batch">batch write</div>
-    </div>
-    <div class="day-cell">
-      <div class="date prev">30</div>
-      <div class="pill pill-note">notes</div>
-    </div>
-    <div class="day-cell">
-      <div class="date">1</div>
-      <div class="pill pill-post">life / identity essay</div>
-      <div class="pill pill-note">notes</div>
-    </div>
-    <div class="day-cell">
-      <div class="date">2</div>
-      <div class="pill pill-note">notes</div>
-    </div>
-    <div class="day-cell">
-      <div class="date">3</div>
-      <div class="pill pill-note">notes</div>
-    </div>
-    <div class="day-cell"><div class="date">4</div></div>
-    <div class="day-cell">
-      <div class="date">5</div>
-      <div class="pill pill-note">notes</div>
-    </div>
-  </div>
-
-  <div class="week">
-    <div class="week-label">Wk 2</div>
-    <div class="day-cell">
-      <div class="date">6</div>
-      <div class="pill pill-batch">batch write</div>
-    </div>
-    <div class="day-cell">
-      <div class="date">7</div>
-      <div class="pill pill-note">notes</div>
-    </div>
-    <div class="day-cell">
-      <div class="date">8</div>
-      <div class="pill pill-tool">tool: After the Call</div>
-      <div class="pill pill-note">notes</div>
-    </div>
-    <div class="day-cell">
-      <div class="date">9</div>
-      <div class="pill pill-note">notes</div>
-    </div>
-    <div class="day-cell">
-      <div class="date">10</div>
-      <div class="pill pill-note">notes</div>
-    </div>
-    <div class="day-cell"><div class="date">11</div></div>
-    <div class="day-cell">
-      <div class="date">12</div>
-      <div class="pill pill-note">notes</div>
-    </div>
-  </div>
-
-  <div class="week">
-    <div class="week-label">Wk 3</div>
-    <div class="day-cell">
-      <div class="date">13</div>
-      <div class="pill pill-batch">batch write</div>
-    </div>
-    <div class="day-cell">
-      <div class="date">14</div>
-      <div class="pill pill-note">notes</div>
-    </div>
-    <div class="day-cell">
-      <div class="date">15</div>
-      <div class="pill pill-tool">tool: Draft & Sips</div>
-      <div class="pill pill-note">notes</div>
-    </div>
-    <div class="day-cell">
-      <div class="date">16</div>
-      <div class="pill pill-note">notes</div>
-    </div>
-    <div class="day-cell">
-      <div class="date">17</div>
-      <div class="pill pill-note">notes</div>
-    </div>
-    <div class="day-cell"><div class="date">18</div></div>
-    <div class="day-cell">
-      <div class="date">19</div>
-      <div class="pill pill-note">notes</div>
-    </div>
-  </div>
-
-  <div class="week">
-    <div class="week-label">Wk 4</div>
-    <div class="day-cell">
-      <div class="date">20</div>
-      <div class="pill pill-batch">batch write</div>
-    </div>
-    <div class="day-cell">
-      <div class="date">21</div>
-      <div class="pill pill-note">notes</div>
-    </div>
-    <div class="day-cell">
-      <div class="date">22</div>
-      <div class="pill pill-post">business honesty post</div>
-      <div class="pill pill-note">notes</div>
-    </div>
-    <div class="day-cell">
-      <div class="date">23</div>
-      <div class="pill pill-note">notes</div>
-    </div>
-    <div class="day-cell">
-      <div class="date">24</div>
-      <div class="pill pill-note">notes</div>
-    </div>
-    <div class="day-cell"><div class="date">25</div></div>
-    <div class="day-cell">
-      <div class="date">26</div>
-      <div class="pill pill-note">notes</div>
-    </div>
-  </div>
-
-  <div class="week">
-    <div class="week-label">Wk 5</div>
-    <div class="day-cell">
-      <div class="date">27</div>
-      <div class="pill pill-batch">batch write</div>
-    </div>
-    <div class="day-cell">
-      <div class="date">28</div>
-      <div class="pill pill-note">notes</div>
-    </div>
-    <div class="day-cell">
-      <div class="date">29</div>
-      <div class="pill pill-tool">tool: Before Monday</div>
-      <div class="pill pill-note">notes</div>
-    </div>
-    <div class="day-cell">
-      <div class="date">30</div>
-      <div class="pill pill-note">notes</div>
-    </div>
-    <div class="day-cell">
-      <div class="date">31</div>
-      <div class="pill pill-note">notes</div>
-    </div>
-    <div class="day-cell"></div>
-    <div class="day-cell"></div>
-  </div>
-
+<div class="calendar" id="calendar">
+  <div class="loading">loading from asana...</div>
 </div>
 
 <div class="guardrails">
@@ -476,5 +104,82 @@
   <div class="footer-note">Reheated, Obviously · reheatedobviously.substack.com</div>
 </footer>
 
+<script>
+const MONTH = 6; // July = 6 (0-indexed)
+const YEAR = 2026;
+
+async function loadCalendar() {
+  try {
+    const res = await fetch('/.netlify/functions/asana-proxy?view=content_calendar');
+    const data = await res.json();
+    const tasks = (data.tasks || []).filter(t => {
+      const d = new Date(t.due_on);
+      return d.getMonth() === MONTH && d.getFullYear() === YEAR;
+    });
+    renderCalendar(tasks);
+  } catch(e) {
+    renderCalendar([]);
+  }
+}
+
+function renderCalendar(tasks) {
+  const cal = document.getElementById('calendar');
+
+  // Build task map by date
+  const taskMap = {};
+  tasks.forEach(t => {
+    if (!taskMap[t.due_on]) taskMap[t.due_on] = [];
+    taskMap[t.due_on].push(t);
+  });
+
+  // Build weeks for July 2026
+  // July 1 = Wednesday
+  const weeks = [
+    { label: 'Wk 1', start: new Date(2026, 5, 28) }, // Jun 28 (Sun)
+    { label: 'Wk 2', start: new Date(2026, 6, 5) },
+    { label: 'Wk 3', start: new Date(2026, 6, 12) },
+    { label: 'Wk 4', start: new Date(2026, 6, 19) },
+    { label: 'Wk 5', start: new Date(2026, 6, 26) },
+  ];
+
+  let html = `
+    <div class="cal-header">
+      <div></div><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+    </div>
+  `;
+
+  weeks.forEach(week => {
+    html += `<div class="week"><div class="week-label">${week.label}</div>`;
+    for (let d = 0; d < 7; d++) {
+      const date = new Date(week.start);
+      date.setDate(week.start.getDate() + d);
+      const dateStr = date.toISOString().split('T')[0];
+      const isPrev = date.getMonth() !== MONTH;
+      const dayTasks = taskMap[dateStr] || [];
+
+      html += `<div class="day-cell">`;
+      html += `<div class="date${isPrev ? ' prev' : ''}">${date.getDate()}</div>`;
+      dayTasks.forEach(t => {
+        const cls = `pill-${t.type}`;
+        html += `<div class="pill ${cls}" title="${t.name}">${truncate(t.name, 20)}</div>`;
+      });
+      html += `</div>`;
+    }
+    html += `</div>`;
+  });
+
+  cal.innerHTML = html;
+
+  if (!tasks.length) {
+    cal.innerHTML += '<div class="loading">no tasks found in Content Calendar for July — add tasks in Asana with July due dates</div>';
+  }
+}
+
+function truncate(str, n) {
+  return str.length > n ? str.slice(0, n) + '…' : str;
+}
+
+loadCalendar();
+</script>
 </body>
 </html>
