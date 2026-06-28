@@ -157,7 +157,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
   <div class="sidebar">
     <div class="sidebar-head">
       <div class="sidebar-head-title">
-        <span>on the burner</span>
+        <span>my tasks</span>
         <span id="taskCount" style="color:var(--text-faint);font-size:10px"></span>
       </div>
       <input class="sidebar-search" id="sidebarSearch" placeholder="search tasks..." oninput="filterTasks()">
@@ -540,19 +540,32 @@ function loadBlocks(){
 // ── ASANA TASKS ──
 async function loadTasks(){
   try{
-    const [roRes, personalRes] = await Promise.all([
-      fetch('/.netlify/functions/asana-proxy?view=ro_tasks').then(r=>r.json()),
-      fetch('/.netlify/functions/asana-proxy?view=personal_tasks').then(r=>r.json())
-    ]);
-    roTasks = (roRes.tasks||[]).map(t=>({...t, lane:'ro',
-      asanaUrl:`https://app.asana.com/0/${t.project_id}/${t.gid}`}));
-    personalTasks = (personalRes.tasks||[]).map(t=>({...t, lane:'personal',
-      asanaUrl:`https://app.asana.com/0/${t.project_id}/${t.gid}`}));
+    const res = await fetch('/.netlify/functions/asana-proxy?view=my_tasks').then(r=>r.json());
+    const all = (res.tasks||[]).map(t=>({
+      ...t,
+      lane: guessLane(t),
+      asanaUrl:`https://app.asana.com/0/${t.project_id}/${t.gid}`
+    }));
+    roTasks = all.filter(t => t.lane === 'ro');
+    personalTasks = all.filter(t => t.lane === 'personal');
     renderSidebar();
     updateTaskCount();
   } catch(e){
     document.getElementById('sidebarTasks').innerHTML = '<div class="sidebar-empty">could not load tasks</div>';
   }
+}
+
+function guessLane(task) {
+  const section = (task.project || '').toLowerCase();
+  const name = (task.name || '').toLowerCase();
+  // Personal indicators
+  if (section.includes('home') || section.includes('school') ||
+      section.includes('personal') || section.includes('family') ||
+      section.includes('burner') || section.includes('body') ||
+      name.includes('kids') || name.includes('naliyah') || name.includes('emma')) {
+    return 'personal';
+  }
+  return 'ro';
 }
 
 function switchTab(tab){

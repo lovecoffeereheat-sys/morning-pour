@@ -181,6 +181,33 @@ exports.handler = async (event) => {
       return { statusCode: 200, headers, body: JSON.stringify({ tasks }) };
     }
 
+
+    // ── MY TASKS ──
+    if (view === 'my_tasks') {
+      const res = await asanaGet(
+        `/projects/1214131354603805/tasks?opt_fields=name,due_on,completed,memberships.section.name&limit=100`
+      );
+      const tasks = (res.data || [])
+        .filter(t => !t.completed)
+        .map(t => {
+          const section = t.memberships?.[0]?.section?.name || '';
+          return {
+            gid: t.gid,
+            name: t.name,
+            due_on: t.due_on || null,
+            project: section || 'My Tasks',
+            project_id: '1214131354603805'
+          };
+        })
+        .sort((a,b) => {
+          if (!a.due_on && !b.due_on) return 0;
+          if (!a.due_on) return 1;
+          if (!b.due_on) return -1;
+          return a.due_on.localeCompare(b.due_on);
+        });
+      return { statusCode: 200, headers, body: JSON.stringify({ tasks }) };
+    }
+
     // ── RO TASKS (content lane) ──
     if (view === 'ro_tasks') {
       const results = await Promise.all(
