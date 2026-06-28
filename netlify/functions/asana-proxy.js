@@ -21,19 +21,15 @@ const PROJECTS = {
 const RO_PROJECTS = [
   { id: PROJECTS.tool_builds,      label: 'Tools' },
   { id: PROJECTS.copy_assets,      label: 'Copy & Assets' },
-  { id: PROJECTS.ro_content,       label: 'RO Content' },
-  { id: PROJECTS.content_calendar, label: 'Content Calendar' },
-  { id: PROJECTS.brain_dump,       label: 'Brain Dump' },
   { id: PROJECTS.weekly_priorities,label: 'Weekly Priorities' },
+  { id: PROJECTS.content_calendar, label: 'Content Calendar' },
   { id: PROJECTS.launches,         label: 'Launches' },
 ];
 
 const PERSONAL_PROJECTS = [
-  { id: PROJECTS.on_the_burner,  label: 'On the Burner' },
-  { id: PROJECTS.daily_rhythms,  label: 'Daily Rhythms' },
-  { id: PROJECTS.home_people,    label: 'Home & People' },
-  { id: PROJECTS.school,         label: 'School' },
-  { id: PROJECTS.long_steep,     label: 'Long Steep' },
+  { id: '1216089110350588',    label: 'On the Burner' },
+  { id: PROJECTS.home_people,  label: 'Home & People' },
+  { id: PROJECTS.school,       label: 'School' },
 ];
 
 function asanaGet(path) {
