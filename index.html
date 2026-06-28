@@ -5,21 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>the other pot · grace</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☕</text></svg>">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Anton&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400&family=Anton&display=swap">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --rose:#944e63;--rose-mid:#b47b84;--rose-soft:#caa6a6;
-  --rose-warm:#d6a39a;--rose-bg:#f6e6e3;--rose-card:#fdf5f3;
-  --navy:#16042d;--espresso:#2c1810;--cream:#e8d5c4;
-  --amber:#c4a45a;--slate:#3d4a5c;
-  --border:#e8cfc9;--text:#2c1810;--text-soft:#9e7d68;--text-faint:#c4a898;
+  --navy:#16042d;
+  --navy-light:#1e0d3a;
+  --navy-card:#240f45;
+  --rose-deep:#944e63;
+  --rose-mid:#b47b84;
+  --rose-soft:#caa6a6;
+  --rose-warm:#d6a39a;
+  --rose-pale:#f6e6e3;
+  --gold:#c4a45a;
+  --cream:#f5f0e6;
+  --border:rgba(255,255,255,0.08);
+  --text:#f5e8e4;
+  --text-soft:#caa6a6;
+  --text-faint:#8a7a8a;
 }
 body{
-  font-family:'Inter',system-ui,sans-serif;
-  background:var(--rose-bg);
+  font-family:'Lora',Georgia,serif;
+  font-size:15px;
+  background:var(--navy);
   color:var(--text);
   min-height:100vh;
   display:flex;
@@ -28,367 +37,371 @@ body{
 
 /* TOPBAR */
 .topbar{
-  background:var(--espresso);
+  background:rgba(22,4,45,0.95);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--border);
   display:flex;align-items:center;
-  padding:0 28px;height:52px;
+  padding:0 28px;height:56px;
+  position:sticky;top:0;z-index:100;
 }
-.topbar-logo{font-family:'Anton',sans-serif;font-size:15px;letter-spacing:0.1em;color:var(--cream)}
-.topbar-logo em{color:var(--rose);font-style:normal}
-.topbar-date{font-family:'Playfair Display',serif;font-style:italic;font-size:15px;color:#5a3828;margin-left:14px}
+.topbar-logo{font-family:'Anton',sans-serif;font-size:14px;letter-spacing:0.12em;color:var(--cream)}
+.topbar-logo em{color:var(--rose-deep);font-style:normal}
+.topbar-sep{width:1px;height:18px;background:var(--border);margin:0 16px}
+.topbar-sub{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-faint)}
+.topbar-spacer{flex:1}
+.topbar-date{font-family:'Lora',serif;font-style:italic;font-size:13px;color:var(--text-faint)}
 
 /* HERO */
-.hero{
-  padding:48px 28px 36px;
-  text-align:center;
-  position:relative;
-  overflow:hidden;
-}
-.hero-steam{
-  position:absolute;top:0;left:50%;transform:translateX(-50%);
-  opacity:0.06;pointer-events:none;
-}
-.hero-eyebrow{
-  font-size:15px;letter-spacing:0.14em;text-transform:uppercase;
-  color:var(--rose);margin-bottom:12px;
-}
-.hero-title{
-  font-family:'Anton',sans-serif;font-size:42px;
-  letter-spacing:0.06em;color:var(--espresso);
-  line-height:1.1;margin-bottom:8px;
-}
-.hero-title em{color:var(--rose);font-style:normal}
-.hero-sub{
-  font-family:'Playfair Display',serif;font-style:italic;
-  font-size:15px;color:var(--text-soft);margin-bottom:4px;
-}
-.hero-greeting{
-  font-family:'Playfair Display',serif;font-style:italic;
-  font-size:15px;color:var(--text-faint);
-}
+.hero{padding:56px 28px 44px;text-align:center;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(148,78,99,0.15) 0%,transparent 70%);pointer-events:none}
+.hero-eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--rose-mid);margin-bottom:14px}
+.hero-icon{margin-bottom:20px;display:flex;justify-content:center}
+.hero-title{font-family:'Anton',sans-serif;font-size:clamp(36px,6vw,52px);letter-spacing:0.08em;color:var(--cream);line-height:1.05;margin-bottom:10px}
+.hero-title em{color:var(--rose-deep);font-style:normal}
+.hero-sub{font-family:'Lora',serif;font-style:italic;font-size:16px;color:var(--text-soft);margin-bottom:6px}
+.hero-greeting{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;color:var(--text-faint);margin-top:8px}
+
+/* SECTION DIVIDER */
+.section-div{display:flex;align-items:center;gap:14px;padding:0 28px 20px;max-width:960px;margin:0 auto;width:100%}
+.section-div-line{flex:1;height:1px;background:var(--border)}
+.section-div-text{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-faint);white-space:nowrap}
 
 /* TOOL GRID */
-.tool-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-  gap:14px;
-  padding:0 28px 48px;
-  max-width:960px;
-  margin:0 auto;
-  width:100%;
-}
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;padding:0 28px 20px;max-width:960px;margin:0 auto;width:100%}
 
 .tool-card{
-  background:var(--rose-card);
-  border:0.5px solid var(--border);
-  border-radius:14px;
+  border-radius:12px;
   padding:22px 22px 18px;
   text-decoration:none;
   color:inherit;
-  display:flex;
-  flex-direction:column;
-  gap:0;
-  transition:transform 0.15s, box-shadow 0.15s;
-  position:relative;
-  overflow:hidden;
+  display:flex;flex-direction:column;
+  transition:transform 0.18s,box-shadow 0.18s;
+  position:relative;overflow:hidden;
+  border:1px solid var(--border);
 }
-.tool-card:hover{
-  transform:translateY(-2px);
-  box-shadow:0 8px 24px rgba(44,24,16,0.08);
-}
-.tool-card-accent{
-  position:absolute;top:0;left:0;right:0;height:3px;
-  border-radius:14px 14px 0 0;
-}
-.tool-card-icon{
-  width:40px;height:40px;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:20px;margin-bottom:14px;flex-shrink:0;
-}
-.tool-card-eyebrow{
-  font-size:9px;letter-spacing:0.1em;text-transform:uppercase;
-  color:var(--text-faint);margin-bottom:5px;
-}
-.tool-card-name{
-  font-family:'Playfair Display',serif;font-size:19px;
-  color:var(--espresso);margin-bottom:6px;line-height:1.2;
-}
-.tool-card-name em{font-style:italic;color:var(--rose)}
-.tool-card-desc{
-  font-family:'Playfair Display',serif;font-style:italic;
-  font-size:15px;color:var(--text-soft);line-height:1.5;
-  margin-bottom:14px;flex:1;
-}
-.tool-card-features{
-  display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px;
-}
-.feature-pill{
-  font-size:9px;letter-spacing:0.04em;
-  padding:3px 9px;border-radius:20px;
-  border:0.5px solid var(--border);
-  color:var(--text-soft);background:var(--rose-bg);
-}
-.tool-card-footer{
-  display:flex;align-items:center;justify-content:space-between;
-  padding-top:14px;border-top:0.5px solid var(--border);
-}
-.tool-card-status{
-  font-size:9px;letter-spacing:0.07em;text-transform:uppercase;
-  padding:3px 9px;border-radius:20px;
-}
-.status-live{background:#e8f5e9;color:#2e7d32}
-.status-soon{background:var(--rose-bg);color:var(--rose-mid)}
-.status-sheets{background:#e8f0fe;color:#1a73e8}
-.tool-card-arrow{
-  font-size:19px;color:var(--text-faint);transition:color 0.15s,transform 0.15s;
-}
-.tool-card:hover .tool-card-arrow{color:var(--rose);transform:translateX(3px)}
-
-/* COMING SOON — muted */
-.tool-card.coming{opacity:0.72;cursor:default}
+.tool-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,0.3)}
+.tool-card.coming{opacity:0.6;cursor:default}
 .tool-card.coming:hover{transform:none;box-shadow:none}
 
-/* DIVIDER */
-.section-divider{
-  display:flex;align-items:center;gap:12px;
-  padding:0 28px 18px;max-width:960px;margin:0 auto;width:100%;
-}
-.section-divider-line{flex:1;height:0.5px;background:var(--border)}
-.section-divider-text{
-  font-size:9px;letter-spacing:0.12em;text-transform:uppercase;
-  color:var(--text-faint);white-space:nowrap;
-}
+/* Card color themes */
+.card-sunday{background:linear-gradient(135deg,#3a0f1f 0%,#2a0818 100%);border-color:rgba(148,78,99,0.3)}
+.card-sunday:hover{border-color:rgba(148,78,99,0.6)}
+.card-pour{background:linear-gradient(135deg,#2a1525 0%,#1e0d1e 100%);border-color:rgba(180,123,132,0.3)}
+.card-pour:hover{border-color:rgba(180,123,132,0.6)}
+.card-steep{background:linear-gradient(135deg,#251520 0%,#1a0d18 100%);border-color:rgba(202,166,166,0.3)}
+.card-steep:hover{border-color:rgba(202,166,166,0.6)}
+.card-table{background:linear-gradient(135deg,#2a1a18 0%,#1e1008 100%);border-color:rgba(214,163,154,0.3)}
+.card-table:hover{border-color:rgba(214,163,154,0.6)}
+.card-body{background:linear-gradient(135deg,#2a2028 0%,#1e1520 100%);border-color:rgba(246,230,227,0.15)}
+.card-body:hover{border-color:rgba(246,230,227,0.3)}
+.card-map{background:linear-gradient(135deg,#1e1a28 0%,#14101e 100%);border-color:rgba(196,164,90,0.3)}
+.card-map:hover{border-color:rgba(196,164,90,0.6)}
+
+.card-icon{width:44px;height:44px;margin-bottom:14px}
+.card-eyebrow{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-faint);margin-bottom:6px}
+.card-name{font-family:'Playfair Display',serif;font-size:19px;color:var(--cream);margin-bottom:6px;line-height:1.2}
+.card-name em{font-style:italic}
+.card-desc{font-family:'Lora',serif;font-style:italic;font-size:13px;line-height:1.55;margin-bottom:14px;flex:1}
+.card-features{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px}
+.feature-pill{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.06em;padding:3px 9px;border-radius:20px;border:1px solid var(--border);color:var(--text-faint);background:rgba(255,255,255,0.04)}
+.card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid var(--border)}
+.card-status{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px}
+.status-live{background:rgba(74,124,89,0.2);color:#7acc8a;border:1px solid rgba(74,124,89,0.3)}
+.status-soon{background:rgba(148,78,99,0.15);color:var(--rose-mid);border:1px solid rgba(148,78,99,0.2)}
+.status-sheets{background:rgba(26,115,232,0.15);color:#6ab0f5;border:1px solid rgba(26,115,232,0.2)}
+.card-arrow{font-size:18px;color:var(--text-faint);transition:color 0.15s,transform 0.15s}
+.tool-card:hover .card-arrow{color:var(--cream);transform:translateX(4px)}
+
+/* SHEETS ROW */
+.sheets-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;padding:0 28px 48px;max-width:960px;margin:0 auto;width:100%}
+.sheet-card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:14px 16px;text-decoration:none;color:inherit;display:flex;align-items:center;gap:12px;transition:all 0.15s}
+.sheet-card:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.15)}
+.sheet-icon{font-size:20px;flex-shrink:0}
+.sheet-name{font-family:'Playfair Display',serif;font-size:14px;color:var(--cream);margin-bottom:2px}
+.sheet-sub{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-faint)}
 
 /* FOOTER */
-.footer{
-  margin-top:auto;
-  padding:20px 28px;
-  border-top:0.5px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:8px;
-}
-.footer-brand{
-  font-family:'Playfair Display',serif;font-style:italic;
-  font-size:15px;color:var(--text-faint);
-}
-.footer-note{font-size:15px;color:var(--text-faint)}
+.footer{margin-top:auto;padding:20px 28px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.footer-brand{font-family:'Lora',serif;font-style:italic;font-size:13px;color:var(--text-faint)}
+.footer-note{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;color:var(--text-faint)}
 
-/* CUP SVG */
-.cup-small{display:inline-block;vertical-align:middle}
+/* ANIMATIONS */
+@keyframes steam1{0%,100%{transform:translateY(0) scaleX(1);opacity:0.6}50%{transform:translateY(-8px) scaleX(1.2);opacity:0.2}}
+@keyframes steam2{0%,100%{transform:translateY(0) scaleX(1);opacity:0.4}50%{transform:translateY(-10px) scaleX(0.8);opacity:0.1}}
+@keyframes steam3{0%,100%{transform:translateY(0) scaleX(1);opacity:0.5}50%{transform:translateY(-6px) scaleX(1.3);opacity:0.15}}
+@keyframes pour{0%{stroke-dashoffset:100}100%{stroke-dashoffset:0}}
+@keyframes drip{0%,100%{transform:translateY(0);opacity:0.8}50%{transform:translateY(6px);opacity:0.4}}
+@keyframes pulse-soft{0%,100%{opacity:0.8}50%{opacity:0.4}}
+@keyframes spin-slow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
 </style>
 </head>
 <body>
 
 <div class="topbar">
   <span class="topbar-logo">THE OTHER<em> </em>POT</span>
+  <div class="topbar-sep"></div>
+  <span class="topbar-sub">grace sarah</span>
+  <div class="topbar-spacer"></div>
   <span class="topbar-date" id="topbarDate"></span>
 </div>
 
 <div class="hero">
-  <div class="hero-steam">
-    <svg width="200" height="180" viewBox="0 0 200 180" fill="none">
-      <path d="M60 160 Q55 120 65 90 Q75 60 60 30" stroke="#2c1810" stroke-width="3" stroke-linecap="round" fill="none"/>
-      <path d="M100 160 Q95 115 105 80 Q115 45 100 10" stroke="#2c1810" stroke-width="3" stroke-linecap="round" fill="none"/>
-      <path d="M140 160 Q135 120 145 90 Q155 60 140 30" stroke="#2c1810" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <div class="hero-bg"></div>
+  <div class="hero-eyebrow">your life OS · regina, sk</div>
+  <div class="hero-icon">
+    <!-- Animated steaming cup -->
+    <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Steam -->
+      <path d="M28 22 Q26 16 29 11 Q32 6 28 1" stroke="#944e63" stroke-width="2" stroke-linecap="round" fill="none" style="animation:steam1 2.5s ease-in-out infinite"/>
+      <path d="M40 22 Q38 14 41 8 Q44 2 40 -2" stroke="#b47b84" stroke-width="2" stroke-linecap="round" fill="none" style="animation:steam2 2.8s ease-in-out infinite 0.4s"/>
+      <path d="M52 22 Q50 16 53 11 Q56 6 52 1" stroke="#caa6a6" stroke-width="2" stroke-linecap="round" fill="none" style="animation:steam3 2.3s ease-in-out infinite 0.8s"/>
+      <!-- Cup body -->
+      <rect x="12" y="28" width="56" height="40" rx="8" fill="#240f45" stroke="#944e63" stroke-width="1.5"/>
+      <!-- Handle -->
+      <path d="M68 38 Q80 38 80 50 Q80 62 68 62" stroke="#944e63" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      <!-- Coffee surface -->
+      <ellipse cx="40" cy="32" rx="24" ry="5" fill="#944e63" opacity="0.4"/>
+      <!-- Latte art swirl -->
+      <path d="M32 32 Q40 28 48 32 Q40 36 32 32" stroke="#d6a39a" stroke-width="1" fill="none" opacity="0.6" style="animation:pulse-soft 3s ease-in-out infinite"/>
+      <!-- Saucer -->
+      <ellipse cx="40" cy="70" rx="30" ry="5" fill="#1e0d3a" stroke="#3a1f4a" stroke-width="1"/>
     </svg>
   </div>
-  <div class="hero-eyebrow">your life OS · grace sarah</div>
   <div class="hero-title">THE OTHER<em> POT</em></div>
   <div class="hero-sub">the whole life, not just the work.</div>
   <div class="hero-greeting" id="heroGreeting"></div>
 </div>
 
-<div class="section-divider">
-  <div class="section-divider-line"></div>
-  <div class="section-divider-text">morning pour · work & content</div>
-  <div class="section-divider-line"></div>
+<div class="section-div">
+  <div class="section-div-line"></div>
+  <div class="section-div-text">morning pour · work & content</div>
+  <div class="section-div-line"></div>
 </div>
 
 <div class="tool-grid">
 
   <!-- Sunday Planning -->
-  <a href="sunday.html" class="tool-card">
-    <div class="tool-card-accent" style="background:var(--rose)"></div>
-    <div class="tool-card-icon" style="background:#f5d8e2">☕</div>
-    <div class="tool-card-eyebrow">morning pour · weekly ritual</div>
-    <div class="tool-card-name">sunday <em>planning</em></div>
-    <div class="tool-card-desc">the sunday pour — clear the cup, look at the week, pour it out. five steps, one ritual.</div>
-    <div class="tool-card-features">
+  <a href="sunday.html" class="tool-card card-sunday">
+    <div class="card-icon">
+      <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+        <!-- Pour animation -->
+        <path d="M8 8 Q6 4 10 2" stroke="#944e63" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam1 2s ease-in-out infinite"/>
+        <path d="M14 8 Q12 3 15 1" stroke="#b47b84" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam2 2.4s ease-in-out infinite 0.3s"/>
+        <rect x="4" y="12" width="22" height="20" rx="5" fill="#944e63" opacity="0.2" stroke="#944e63" stroke-width="1.5"/>
+        <ellipse cx="15" cy="15" rx="9" ry="2.5" fill="#944e63" opacity="0.4"/>
+        <path d="M26 18 Q33 18 33 24 Q33 30 26 30" stroke="#944e63" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <rect x="2" y="32" width="26" height="3" rx="1.5" fill="#944e63" opacity="0.3"/>
+        <!-- Drip -->
+        <circle cx="15" cy="37" r="1.5" fill="#944e63" opacity="0.5" style="animation:drip 2s ease-in-out infinite"/>
+        <circle cx="22" cy="39" r="1" fill="#b47b84" opacity="0.4" style="animation:drip 2.4s ease-in-out infinite 0.5s"/>
+      </svg>
+    </div>
+    <div class="card-eyebrow">morning pour · weekly ritual</div>
+    <div class="card-name">sunday <em>planning</em></div>
+    <div class="card-desc" style="color:#caa6a6">the sunday pour — clear the cup, look at the week, pour it out.</div>
+    <div class="card-features">
       <span class="feature-pill">5-step ritual</span>
       <span class="feature-pill">asana connected</span>
       <span class="feature-pill">content map</span>
-      <span class="feature-pill">brain dump</span>
       <span class="feature-pill">google calendar</span>
     </div>
-    <div class="tool-card-footer">
-      <span class="tool-card-status status-live">live</span>
-      <i class="ti ti-arrow-right tool-card-arrow"></i>
+    <div class="card-footer">
+      <span class="card-status status-live">live</span>
+      <span class="card-arrow">→</span>
     </div>
   </a>
 
   <!-- Time Blocker -->
-  <a href="pour.html" class="tool-card coming">
-    <div class="tool-card-accent" style="background:var(--slate)"></div>
-    <div class="tool-card-icon" style="background:#d8dde8">⏱</div>
-    <div class="tool-card-eyebrow">morning pour · daily execution</div>
-    <div class="tool-card-name">the <em>time blocker</em></div>
-    <div class="tool-card-desc">drag your week into the day. asana tasks, google calendar events, your blocks — one view.</div>
-    <div class="tool-card-features">
-      <span class="feature-pill">day view</span>
-      <span class="feature-pill">drag to schedule</span>
-      <span class="feature-pill">asana sidebar</span>
-      <span class="feature-pill">gcal overlay</span>
+  <a href="pour.html" class="tool-card card-pour">
+    <div class="card-icon">
+      <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+        <!-- Clock face -->
+        <circle cx="22" cy="22" r="18" stroke="#b47b84" stroke-width="1.5" fill="none" opacity="0.3"/>
+        <circle cx="22" cy="22" r="14" stroke="#b47b84" stroke-width="1" fill="#1e0d3a" opacity="0.8"/>
+        <!-- Clock hands -->
+        <line x1="22" y1="22" x2="22" y2="12" stroke="#b47b84" stroke-width="2" stroke-linecap="round"/>
+        <line x1="22" y1="22" x2="28" y2="26" stroke="#d6a39a" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="22" cy="22" r="2" fill="#b47b84"/>
+        <!-- Steam from top -->
+        <path d="M16 4 Q14 0 17 -2" stroke="#b47b84" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam1 2.2s ease-in-out infinite"/>
+        <path d="M22 3 Q20 -1 23 -3" stroke="#caa6a6" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam2 2.6s ease-in-out infinite 0.4s"/>
+        <path d="M28 4 Q26 0 29 -2" stroke="#d6a39a" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam3 2s ease-in-out infinite 0.8s"/>
+      </svg>
     </div>
-    <div class="tool-card-footer">
-      <span class="tool-card-status status-soon">building next</span>
-      <i class="ti ti-arrow-right tool-card-arrow"></i>
+    <div class="card-eyebrow">morning pour · daily execution</div>
+    <div class="card-name">the <em>time blocker</em></div>
+    <div class="card-desc" style="color:#b47b84">drag your week into the day. your tasks, your calendar, one view.</div>
+    <div class="card-features">
+      <span class="feature-pill">day view</span>
+      <span class="feature-pill">my tasks</span>
+      <span class="feature-pill">drag to schedule</span>
+    </div>
+    <div class="card-footer">
+      <span class="card-status status-live">live</span>
+      <span class="card-arrow">→</span>
     </div>
   </a>
 
   <!-- Content Map -->
-  <a href="content-maps/july-2026-content-map.html" class="tool-card">
-    <div class="tool-card-accent" style="background:var(--amber)"></div>
-    <div class="tool-card-icon" style="background:#f5e8d0">🗓</div>
-    <div class="tool-card-eyebrow">morning pour · content planning</div>
-    <div class="tool-card-name">content <em>map</em></div>
-    <div class="tool-card-desc">Q3 2026 — july, august, september. batch write sundays, publish tuesdays, notes tue–thu.</div>
-    <div class="tool-card-features">
+  <a href="content-maps/july-2026-content-map.html" class="tool-card card-map">
+    <div class="card-icon">
+      <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+        <!-- Calendar grid -->
+        <rect x="4" y="8" width="36" height="32" rx="4" stroke="#c4a45a" stroke-width="1.5" fill="none" opacity="0.4"/>
+        <line x1="4" y1="16" x2="40" y2="16" stroke="#c4a45a" stroke-width="1" opacity="0.4"/>
+        <rect x="8" y="20" width="6" height="4" rx="1" fill="#944e63" opacity="0.8"/>
+        <rect x="18" y="20" width="6" height="4" rx="1" fill="#c4a45a" opacity="0.8"/>
+        <rect x="28" y="20" width="6" height="4" rx="1" fill="#b47b84" opacity="0.6"/>
+        <rect x="8" y="28" width="6" height="4" rx="1" fill="#c4a45a" opacity="0.5"/>
+        <rect x="18" y="28" width="6" height="4" rx="1" fill="#944e63" opacity="0.6"/>
+        <!-- Binding rings -->
+        <circle cx="14" cy="8" r="2" fill="#c4a45a" opacity="0.6" style="animation:pulse-soft 2.5s ease-in-out infinite"/>
+        <circle cx="30" cy="8" r="2" fill="#c4a45a" opacity="0.6" style="animation:pulse-soft 2.5s ease-in-out infinite 0.5s"/>
+      </svg>
+    </div>
+    <div class="card-eyebrow">morning pour · content planning</div>
+    <div class="card-name">content <em>map</em></div>
+    <div class="card-desc" style="color:#c4a45a;opacity:0.8">Q3 2026 — live from asana. batch sundays, publish tuesdays.</div>
+    <div class="card-features">
       <span class="feature-pill">july</span>
       <span class="feature-pill">august</span>
       <span class="feature-pill">september</span>
-      <span class="feature-pill">Q3 milestones</span>
     </div>
-    <div class="tool-card-footer">
-      <span class="tool-card-status status-live">live</span>
-      <i class="ti ti-arrow-right tool-card-arrow"></i>
+    <div class="card-footer">
+      <span class="card-status status-live">live</span>
+      <span class="card-arrow">→</span>
     </div>
   </a>
 
 </div>
 
-<div class="section-divider">
-  <div class="section-divider-line"></div>
-  <div class="section-divider-text">the other pot · life layer</div>
-  <div class="section-divider-line"></div>
+<div class="section-div">
+  <div class="section-div-line"></div>
+  <div class="section-div-text">the other pot · life layer</div>
+  <div class="section-div-line"></div>
 </div>
 
 <div class="tool-grid">
 
   <!-- The Slow Steep -->
-  <a href="steep.html" class="tool-card coming">
-    <div class="tool-card-accent" style="background:var(--amber)"></div>
-    <div class="tool-card-icon" style="background:#f5e8d0">💰</div>
-    <div class="tool-card-eyebrow">the other pot · finances</div>
-    <div class="tool-card-name">the <em>slow steep</em></div>
-    <div class="tool-card-desc">your money, your terms. view and log from your 2026 budget — income, expenses, left over.</div>
-    <div class="tool-card-features">
+  <a href="steep.html" class="tool-card card-steep">
+    <div class="card-icon">
+      <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+        <!-- Coins dropping into cup -->
+        <rect x="8" y="24" width="28" height="16" rx="5" fill="#caa6a6" opacity="0.15" stroke="#caa6a6" stroke-width="1.5"/>
+        <ellipse cx="22" cy="27" rx="11" ry="3" fill="#caa6a6" opacity="0.2"/>
+        <!-- Coin 1 -->
+        <circle cx="22" cy="12" r="5" fill="#caa6a6" opacity="0.6" stroke="#d6a39a" stroke-width="1" style="animation:drip 2s ease-in-out infinite"/>
+        <text x="22" y="16" text-anchor="middle" font-size="7" fill="#16042d" font-family="DM Mono" font-weight="bold">$</text>
+        <!-- Coin 2 smaller -->
+        <circle cx="30" cy="8" r="3.5" fill="#caa6a6" opacity="0.4" stroke="#d6a39a" stroke-width="1" style="animation:drip 2.4s ease-in-out infinite 0.6s"/>
+        <!-- Steam from cup -->
+        <path d="M14 22 Q12 18 15 15" stroke="#caa6a6" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam1 2.5s ease-in-out infinite"/>
+        <path d="M22 21 Q20 16 23 13" stroke="#d6a39a" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam2 2.8s ease-in-out infinite 0.5s"/>
+      </svg>
+    </div>
+    <div class="card-eyebrow">the other pot · finances</div>
+    <div class="card-name">the <em>slow steep</em></div>
+    <div class="card-desc" style="color:#caa6a6">your money, your terms. view, log, and track from your budget sheet.</div>
+    <div class="card-features">
       <span class="feature-pill">google sheets</span>
-      <span class="feature-pill">monthly view</span>
-      <span class="feature-pill">log expenses</span>
-      <span class="feature-pill">income tracking</span>
+      <span class="feature-pill">bill reminders</span>
+      <span class="feature-pill">quick log</span>
     </div>
-    <div class="tool-card-footer">
-      <span class="tool-card-status status-soon">building soon</span>
-      <i class="ti ti-arrow-right tool-card-arrow"></i>
-    </div>
-  </a>
-
-  <!-- The Body -->
-  <a href="body.html" class="tool-card">
-    <div class="tool-card-accent" style="background:var(--rose-mid)"></div>
-    <div class="tool-card-icon" style="background:#f5d8e2">🌿</div>
-    <div class="tool-card-eyebrow">the other pot · wellness</div>
-    <div class="tool-card-name">the <em>body</em></div>
-    <div class="tool-card-desc">movement, sleep, mood, water, symptoms. cycle tracking for you, naliyah, and emma.</div>
-    <div class="tool-card-features">
-      <span class="feature-pill">daily wellness log</span>
-      <span class="feature-pill">period tracker</span>
-      <span class="feature-pill">grace + naliyah + emma</span>
-      <span class="feature-pill">google sheets</span>
-    </div>
-    <div class="tool-card-footer">
-      <span class="tool-card-status status-soon">building soon</span>
-      <i class="ti ti-arrow-right tool-card-arrow"></i>
+    <div class="card-footer">
+      <span class="card-status status-live">live</span>
+      <span class="card-arrow">→</span>
     </div>
   </a>
 
   <!-- The Table -->
-  <a href="table.html" class="tool-card">
-    <div class="tool-card-accent" style="background:var(--rose-warm)"></div>
-    <div class="tool-card-icon" style="background:#fde8e0">🍽</div>
-    <div class="tool-card-eyebrow">the other pot · meals</div>
-    <div class="tool-card-name">the <em>table</em></div>
-    <div class="tool-card-desc">weekly meal planning for the whole family. meal library with photos, grocery list auto-generates.</div>
-    <div class="tool-card-features">
-      <span class="feature-pill">meal library</span>
-      <span class="feature-pill">weekly planner</span>
+  <a href="table.html" class="tool-card card-table">
+    <div class="card-icon">
+      <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+        <!-- Bowl -->
+        <path d="M8 22 Q8 36 22 36 Q36 36 36 22" stroke="#d6a39a" stroke-width="1.5" fill="#d6a39a" fill-opacity="0.1"/>
+        <!-- Spoon -->
+        <ellipse cx="22" cy="16" rx="5" ry="7" fill="#d6a39a" opacity="0.3" stroke="#d6a39a" stroke-width="1.5" style="animation:float 2.5s ease-in-out infinite"/>
+        <line x1="22" y1="23" x2="22" y2="38" stroke="#d6a39a" stroke-width="1.5" stroke-linecap="round" style="animation:float 2.5s ease-in-out infinite"/>
+        <!-- Steam -->
+        <path d="M14 18 Q12 14 15 11" stroke="#d6a39a" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam1 2.2s ease-in-out infinite"/>
+        <path d="M30 18 Q28 14 31 11" stroke="#caa6a6" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam2 2.6s ease-in-out infinite 0.4s"/>
+      </svg>
+    </div>
+    <div class="card-eyebrow">the other pot · meals</div>
+    <div class="card-name">the <em>table</em></div>
+    <div class="card-desc" style="color:#d6a39a">weekly meal planning for the whole family. grocery list auto-generates.</div>
+    <div class="card-features">
+      <span class="feature-pill">meal planner</span>
       <span class="feature-pill">grocery list</span>
-      <span class="feature-pill">whole family</span>
+      <span class="feature-pill">meal library</span>
     </div>
-    <div class="tool-card-footer">
-      <span class="tool-card-status status-soon">building soon</span>
-      <i class="ti ti-arrow-right tool-card-arrow"></i>
-    </div>
-  </a>
-
-</div>
-
-<div class="section-divider">
-  <div class="section-divider-line"></div>
-  <div class="section-divider-text">your sheets · open in google</div>
-  <div class="section-divider-line"></div>
-</div>
-
-<div class="tool-grid" style="padding-bottom:32px">
-
-  <a href="https://docs.google.com/spreadsheets/d/1TFZCDNyGhBoIS2-awW3vM_NSFpeFmOaG9ifYU4sXAbs" target="_blank" class="tool-card">
-    <div class="tool-card-accent" style="background:#1a73e8"></div>
-    <div class="tool-card-icon" style="background:#e8f0fe">📊</div>
-    <div class="tool-card-eyebrow">google sheets · finances</div>
-    <div class="tool-card-name">the slow steep <em>2026</em></div>
-    <div class="tool-card-desc">your monthly budget — income, fixed, variable, business, savings. open directly in google sheets.</div>
-    <div class="tool-card-features">
-      <span class="feature-pill">jan–dec 2026</span>
-      <span class="feature-pill">RO income</span>
-      <span class="feature-pill">dashboard</span>
-    </div>
-    <div class="tool-card-footer">
-      <span class="tool-card-status status-sheets">google sheets</span>
-      <i class="ti ti-external-link tool-card-arrow"></i>
+    <div class="card-footer">
+      <span class="card-status status-live">live</span>
+      <span class="card-arrow">→</span>
     </div>
   </a>
 
-  <a href="#" class="tool-card coming" id="wellnessSheetCard">
-    <div class="tool-card-accent" style="background:#944e63"></div>
-    <div class="tool-card-icon" style="background:#f5d8e2">🌿</div>
-    <div class="tool-card-eyebrow">google sheets · wellness</div>
-    <div class="tool-card-name">the body · <em>wellness log</em></div>
-    <div class="tool-card-desc">daily movement, sleep, mood, water, symptoms. upload to google drive to activate.</div>
-    <div class="tool-card-features">
+  <!-- The Body -->
+  <a href="body.html" class="tool-card card-body">
+    <div class="card-icon">
+      <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+        <!-- Cup with plant/steam -->
+        <rect x="10" y="24" width="24" height="16" rx="5" fill="#f6e6e3" opacity="0.1" stroke="#f6e6e3" stroke-width="1.5" opacity="0.4"/>
+        <ellipse cx="22" cy="27" rx="10" ry="2.5" fill="#f6e6e3" opacity="0.15"/>
+        <!-- Gentle steam curls -->
+        <path d="M16 22 Q13 16 17 11 Q21 6 16 2" stroke="#f6e6e3" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.5" style="animation:steam1 3s ease-in-out infinite"/>
+        <path d="M22 22 Q19 15 23 9 Q27 3 22 -1" stroke="#d6a39a" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.4" style="animation:steam2 3.4s ease-in-out infinite 0.5s"/>
+        <path d="M28 22 Q25 16 29 11 Q33 6 28 2" stroke="#caa6a6" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.3" style="animation:steam3 2.8s ease-in-out infinite 1s"/>
+        <!-- Small heart -->
+        <path d="M19 35 Q22 32 25 35 Q28 38 22 42 Q16 38 19 35" fill="#f6e6e3" opacity="0.3" style="animation:pulse-soft 2s ease-in-out infinite"/>
+      </svg>
+    </div>
+    <div class="card-eyebrow">the other pot · wellness</div>
+    <div class="card-name">the <em>body</em></div>
+    <div class="card-desc" style="color:#f6e6e3;opacity:0.7">mood, movement, sleep, water, coffee, cycle. logged daily, saved to asana.</div>
+    <div class="card-features">
       <span class="feature-pill">daily log</span>
-      <span class="feature-pill">weekly summary</span>
+      <span class="feature-pill">cycle tracker</span>
+      <span class="feature-pill">asana connected</span>
     </div>
-    <div class="tool-card-footer">
-      <span class="tool-card-status status-soon">upload to activate</span>
-      <i class="ti ti-external-link tool-card-arrow"></i>
-    </div>
-  </a>
-
-  <a href="#" class="tool-card coming" id="periodSheetCard">
-    <div class="tool-card-accent" style="background:#b47b84"></div>
-    <div class="tool-card-icon" style="background:#f5d8e2">🌸</div>
-    <div class="tool-card-eyebrow">google sheets · cycle tracking</div>
-    <div class="tool-card-name">the body · <em>period tracker</em></div>
-    <div class="tool-card-desc">cycle tracking for grace, naliyah, and emma. perimenopause-aware for grace. upload to activate.</div>
-    <div class="tool-card-features">
-      <span class="feature-pill">grace · perimenopause</span>
-      <span class="feature-pill">naliyah + emma</span>
-    </div>
-    <div class="tool-card-footer">
-      <span class="tool-card-status status-soon">upload to activate</span>
-      <i class="ti ti-external-link tool-card-arrow"></i>
+    <div class="card-footer">
+      <span class="card-status status-live">live</span>
+      <span class="card-arrow">→</span>
     </div>
   </a>
 
+</div>
+
+<div class="section-div">
+  <div class="section-div-line"></div>
+  <div class="section-div-text">your sheets · open in google</div>
+  <div class="section-div-line"></div>
+</div>
+
+<div class="sheets-row">
+  <a href="https://docs.google.com/spreadsheets/d/1TFZCDNyGhBoIS2-awW3vM_NSFpeFmOaG9ifYU4sXAbs" target="_blank" class="sheet-card">
+    <span class="sheet-icon">📊</span>
+    <div>
+      <div class="sheet-name">the bottom line 2026</div>
+      <div class="sheet-sub">budget · bills · dashboard</div>
+    </div>
+  </a>
+  <a href="https://docs.google.com/spreadsheets/d/1owdAEX5y1x7nOAQbPIX_WWZufylUAbFf" target="_blank" class="sheet-card">
+    <span class="sheet-icon">🌿</span>
+    <div>
+      <div class="sheet-name">the body · wellness log</div>
+      <div class="sheet-sub">daily log · weekly summary</div>
+    </div>
+  </a>
+  <a href="https://docs.google.com/spreadsheets/d/1owdAEX5y1x7nOAQbPIX_WWZufylUAbFf" target="_blank" class="sheet-card">
+    <span class="sheet-icon">🌸</span>
+    <div>
+      <div class="sheet-name">the body · period tracker</div>
+      <div class="sheet-sub">grace · naliyah · emma</div>
+    </div>
+  </a>
 </div>
 
 <div class="footer">
@@ -397,7 +410,6 @@ body{
 </div>
 
 <script>
-// Greeting
 const greetings = {
   0: "sunday. the best cup of the week.",
   1: "monday. fresh pot.",
@@ -409,7 +421,7 @@ const greetings = {
 };
 const now = new Date();
 document.getElementById('heroGreeting').textContent = greetings[now.getDay()];
-document.getElementById('topbarDate').textContent = now.toLocaleDateString('en-CA', {weekday:'long', month:'long', day:'numeric', year:'numeric'});
+document.getElementById('topbarDate').textContent = now.toLocaleDateString('en-CA',{weekday:'long',month:'long',day:'numeric'});
 </script>
 </body>
 </html>
