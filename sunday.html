@@ -39,6 +39,11 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 
 /* STEP TABS */
 .steps-row{display:flex;padding:0 28px;border-bottom:0.5px solid var(--border);background:var(--card);overflow-x:auto}
+
+.quick-jump{background:var(--card);border-bottom:0.5px solid var(--border);padding:8px 28px;display:flex;align-items:center;gap:8px;overflow-x:auto;position:sticky;top:52px;z-index:90}
+.quick-chip{border-radius:20px;padding:5px 12px;font-size:11px;cursor:pointer;font-family:'Inter',system-ui,sans-serif;white-space:nowrap;border:0.5px solid transparent;transition:all 0.15s}
+.quick-chip:hover{opacity:0.8}
+.quick-label{font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint);white-space:nowrap}
 .step-tab{padding:11px 14px 9px;font-size:11px;letter-spacing:0.05em;color:var(--text-soft);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;display:flex;align-items:center;gap:6px;transition:all 0.15s}
 .step-tab.active{color:var(--espresso);border-bottom-color:var(--rose)}
 .step-tab.done{color:var(--text-faint)}
@@ -264,6 +269,14 @@ textarea:focus,input.text-input:focus{border-color:var(--rose)}
   <a href="index.html" class="topbar-link"><i class="ti ti-arrow-left"></i> back</a>
 </div>
 
+
+<div class="quick-jump" id="quickJump">
+  <span class="quick-label">jump to:</span>
+  <button class="quick-chip" style="background:var(--amber-bg);border-color:#dfd0a0;color:#8a7030" onclick="goToStep(3)">☕ pour-over</button>
+  <button class="quick-chip" style="background:var(--rose-bg);border-color:var(--border);color:var(--rose)" onclick="goToStep(4)">brain dump</button>
+  <button class="quick-chip" style="background:var(--navy);color:var(--amber)" onclick="goToStep(5)">one word</button>
+  <button class="quick-chip" style="background:none;border-color:var(--border);color:var(--text-faint)" onclick="goToStep(1)">full ritual →</button>
+</div>
 <div class="hero">
   <div class="hero-eyebrow">☕ weekly ritual</div>
   <div class="hero-title">the <em>sunday pour</em></div>
@@ -282,15 +295,6 @@ textarea:focus,input.text-input:focus{border-color:var(--rose)}
   </div>
 </div>
 
-
-<!-- QUICK ACCESS -->
-<div style="background:var(--card);border-bottom:0.5px solid var(--border);padding:8px 28px;display:flex;align-items:center;gap:8px;overflow-x:auto">
-  <span style="font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint);white-space:nowrap">jump to:</span>
-  <button onclick="goToStep(3)" style="background:var(--amber-bg);border:0.5px solid #dfd0a0;border-radius:20px;padding:5px 12px;font-size:11px;color:#8a7030;cursor:pointer;font-family:'Inter',system-ui,sans-serif;white-space:nowrap">☕ pour-over</button>
-  <button onclick="goToStep(4)" style="background:var(--rose-bg);border:0.5px solid var(--border);border-radius:20px;padding:5px 12px;font-size:11px;color:var(--rose);cursor:pointer;font-family:'Inter',system-ui,sans-serif;white-space:nowrap">brain dump</button>
-  <button onclick="goToStep(5)" style="background:var(--navy);border:none;border-radius:20px;padding:5px 12px;font-size:11px;color:var(--amber);cursor:pointer;font-family:'Inter',system-ui,sans-serif;white-space:nowrap">one word</button>
-  <button onclick="goToStep(1)" style="background:none;border:0.5px solid var(--border);border-radius:20px;padding:5px 12px;font-size:11px;color:var(--text-faint);cursor:pointer;font-family:'Inter',system-ui,sans-serif;white-space:nowrap">full ritual →</button>
-</div>
 <div class="steps-row">
   <div class="step-tab active" data-step="1" onclick="goToStep(1)"><div class="step-num" id="snum1">1</div> clear the cup</div>
   <div class="step-tab" data-step="2" onclick="goToStep(2)"><div class="step-num" id="snum2">2</div> look at the week</div>
