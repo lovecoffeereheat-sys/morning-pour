@@ -335,6 +335,25 @@ exports.handler = async (event) => {
       return { statusCode: 200, headers, body: JSON.stringify({ tasks }) };
     }
 
+
+    // ── BRAIN DUMP SECTION (My Tasks) ──
+    if (view === 'brain_dump_section') {
+      const res = await asanaGet(
+        `/sections/1214131354603822/tasks?opt_fields=name,completed,due_on,notes&limit=100`
+      );
+      const tasks = (res.data || [])
+        .filter(t => !t.completed)
+        .map(t => ({
+          gid: t.gid,
+          name: t.name,
+          due_on: t.due_on || null,
+          notes: t.notes || '',
+          project: 'Brain Dump',
+          project_id: '1214131354603805'
+        }));
+      return { statusCode: 200, headers, body: JSON.stringify({ tasks }) };
+    }
+
     // ── CREATE TASK ──
     if (view === 'create_task' && event.httpMethod === 'POST') {
       const body = JSON.parse(event.body || '{}');
