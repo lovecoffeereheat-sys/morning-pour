@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>the morning steep · morning pour</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📖</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400&family=Anton&display=swap">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#16042d;--navy-light:#1e0d3a;--navy-card:#240f45;
+  --rose:#944e63;--rose-mid:#b47b84;--rose-soft:#caa6a6;
+  --rose-warm:#d6a39a;--rose-pale:#f6e6e3;--rose-card:#fdf5f3;
+  --gold:#c4a45a;--cream:#f5f0e6;--espresso:#2c1810;
+  --border:rgba(255,255,255,0.08);--border-light:#e8cfc9;
+  --text:#f5e8e4;--text-soft:#caa6a6;--text-faint:#6a5a6a;
+  --ink:#2c1810;--ink-soft:#9e7d68;--ink-faint:#c4a898;
+}
+
+body{font-family:'Lora',Georgia,serif;font-size:15px;background:var(--navy);color:var(--text);min-height:100vh}
+
+/* TOPBAR */
+.topbar{background:rgba(22,4,45,0.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;height:52px;position:sticky;top:0;z-index:100}
+.topbar-logo{font-family:'Anton',sans-serif;font-size:13px;letter-spacing:0.12em;color:var(--cream)}
+.topbar-logo em{color:var(--rose);font-style:normal}
+.topbar-sep{width:1px;height:16px;background:var(--border);margin:0 14px}
+.topbar-sub{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-faint)}
+.topbar-spacer{flex:1}
+.topbar-link{font-size:11px;color:var(--text-faint);text-decoration:none;display:flex;align-items:center;gap:5px;margin-left:10px;font-family:'DM Mono',monospace;letter-spacing:0.06em}
+.topbar-link:hover{color:var(--text-soft)}
+.topbar-print{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;padding:5px 12px;border-radius:20px;background:none;border:1px solid var(--border);color:var(--gold);cursor:pointer;transition:all 0.15s}
+.topbar-print:hover{border-color:var(--gold);background:rgba(196,164,90,0.08)}
+
+/* HERO */
+.hero{padding:40px 28px 32px;text-align:center;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(148,78,99,0.12) 0%,transparent 70%);pointer-events:none}
+.hero-eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--rose-mid);margin-bottom:12px}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,42px);color:var(--cream);line-height:1.15;margin-bottom:8px}
+.hero-title em{font-style:italic;color:var(--rose)}
+.hero-sub{font-family:'Lora',serif;font-style:italic;font-size:15px;color:var(--text-soft);margin-bottom:16px}
+.hero-date{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;color:var(--text-faint)}
+
+/* CONTENT */
+.content{max-width:680px;margin:0 auto;padding:24px 28px 60px;display:flex;flex-direction:column;gap:16px}
+
+/* TRANSLATION TOGGLE */
+.translation-row{display:flex;align-items:center;gap:8px;justify-content:flex-end;margin-bottom:-8px}
+.trans-btn{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;padding:5px 12px;border-radius:20px;border:1px solid var(--border);color:var(--text-faint);cursor:pointer;background:none;transition:all 0.15s}
+.trans-btn.active{background:var(--rose);border-color:var(--rose);color:#fff}
+.trans-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-faint);letter-spacing:0.08em}
+
+/* THEME PICKER */
+.theme-section{background:var(--navy-light);border:1px solid var(--border);border-radius:12px;padding:18px 20px}
+.theme-head{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-faint);margin-bottom:12px}
+.theme-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+.theme-chip{padding:10px 12px;border-radius:9px;border:1px solid var(--border);cursor:pointer;transition:all 0.15s;background:rgba(255,255,255,0.02);display:flex;align-items:center;gap:8px}
+.theme-chip:hover{border-color:rgba(148,78,99,0.4);background:rgba(148,78,99,0.06)}
+.theme-chip.active{border-color:var(--rose);background:rgba(148,78,99,0.12)}
+.theme-chip-icon{font-size:16px;flex-shrink:0}
+.theme-chip-name{font-family:'Lora',serif;font-size:13px;color:var(--text-soft)}
+.theme-chip.active .theme-chip-name{color:var(--text)}
+
+/* PASSAGE CARD */
+.passage-card{background:var(--navy-card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.passage-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.passage-ref{font-family:'Playfair Display',serif;font-size:15px;color:var(--cream)}
+.passage-ref em{font-style:italic;color:var(--rose-soft)}
+.passage-shuffle{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.06em;padding:5px 12px;border-radius:20px;border:1px solid var(--border);color:var(--text-faint);cursor:pointer;background:none;transition:all 0.15s}
+.passage-shuffle:hover{border-color:var(--rose-soft);color:var(--text-soft)}
+.passage-body{padding:20px 22px}
+.passage-text{font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:var(--cream);line-height:1.8;margin-bottom:10px}
+.passage-theme-tag{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;color:var(--rose-soft);text-transform:uppercase}
+
+/* JOURNAL SECTIONS */
+.journal-section{background:var(--navy-light);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.journal-section-head{padding:13px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.journal-section-icon{font-size:16px}
+.journal-section-title{font-family:'Playfair Display',serif;font-size:15px;color:var(--cream)}
+.journal-section-sub{font-family:'Lora',serif;font-style:italic;font-size:12px;color:var(--text-faint);margin-left:auto}
+.journal-section-body{padding:16px 18px}
+.journal-textarea{width:100%;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-size:15px;color:var(--text);font-family:'Lora',serif;line-height:1.7;outline:none;resize:none;transition:border-color 0.15s;min-height:100px}
+.journal-textarea:focus{border-color:rgba(148,78,99,0.5)}
+.journal-textarea::placeholder{color:var(--text-faint);font-style:italic}
+
+/* GRATITUDE */
+.gratitude-row{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.gratitude-num{font-family:'DM Mono',monospace;font-size:11px;color:var(--rose);width:20px;flex-shrink:0}
+.gratitude-input{flex:1;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:14px;color:var(--text);font-family:'Lora',serif;outline:none;transition:border-color 0.15s}
+.gratitude-input:focus{border-color:rgba(148,78,99,0.5)}
+.gratitude-input::placeholder{color:var(--text-faint);font-style:italic}
+
+/* ONE WORD */
+.word-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.word-chip{font-family:'Lora',serif;font-size:13px;padding:6px 14px;border-radius:20px;border:1px solid var(--border);color:var(--text-soft);cursor:pointer;transition:all 0.15s;background:none}
+.word-chip:hover{border-color:var(--rose-soft)}
+.word-chip.active{background:var(--rose);border-color:var(--rose);color:#fff}
+.word-input{width:100%;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:15px;color:var(--text);font-family:'Playfair Display',serif;font-style:italic;outline:none;transition:border-color 0.15s;margin-top:6px}
+.word-input:focus{border-color:rgba(148,78,99,0.5)}
+.word-input::placeholder{color:var(--text-faint)}
+
+/* SAVE */
+.save-row{display:flex;gap:10px}
+.btn-save{flex:1;background:var(--rose);color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;cursor:pointer;font-family:'Lora',serif;letter-spacing:0.04em;transition:opacity 0.15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-save:hover{opacity:0.88}
+.btn-print{background:none;border:1px solid var(--border);border-radius:10px;padding:12px 18px;font-size:13px;color:var(--text-faint);cursor:pointer;font-family:'Lora',serif;transition:all 0.15s;display:flex;align-items:center;gap:7px}
+.btn-print:hover{border-color:var(--gold);color:var(--gold)}
+
+/* PAST ENTRIES */
+.entries-section{background:var(--navy-light);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.entries-head{padding:13px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.entries-title{font-family:'Playfair Display',serif;font-size:15px;color:var(--cream)}
+.entries-count{font-family:'DM Mono',monospace;font-size:10px;color:var(--rose);margin-left:auto}
+.entry-row{padding:12px 18px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.15s}
+.entry-row:last-child{border-bottom:none}
+.entry-row:hover{background:rgba(148,78,99,0.06)}
+.entry-date{font-family:'DM Mono',monospace;font-size:11px;color:var(--rose-soft);margin-bottom:4px}
+.entry-ref{font-family:'Playfair Display',serif;font-size:14px;color:var(--cream);margin-bottom:3px}
+.entry-preview{font-family:'Lora',serif;font-style:italic;font-size:12px;color:var(--text-faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.entries-empty{font-family:'Lora',serif;font-style:italic;font-size:13px;color:var(--text-faint);padding:16px 18px;text-align:center}
+
+.toast{position:fixed;bottom:24px;right:24px;background:var(--navy-card);border:1px solid var(--border);color:var(--cream);padding:11px 18px;border-radius:8px;font-size:13px;display:flex;align-items:center;gap:8px;opacity:0;transition:opacity 0.3s;pointer-events:none;z-index:999;font-family:'Lora',serif}
+.toast.show{opacity:1}
+
+/* ── PRINT STYLES ── */
+@media print {
+  body{background:#fff;color:var(--ink)}
+  .topbar,.theme-section,.translation-row,.save-row,.entries-section,.passage-shuffle{display:none!important}
+  .hero{padding:40px 0 24px;background:none}
+  .hero-bg{display:none}
+  .hero-eyebrow{color:var(--rose);font-size:9px}
+  .hero-title{color:var(--ink);font-size:32px}
+  .hero-sub{color:var(--ink-soft)}
+  .hero-date{color:var(--ink-faint)}
+  .content{padding:0;max-width:100%;gap:20px}
+  .passage-card{background:#fff;border:1px solid var(--border-light);border-radius:8px;page-break-inside:avoid}
+  .passage-head{background:var(--rose);padding:12px 16px}
+  .passage-ref{color:#fff;font-size:14px}
+  .passage-body{padding:16px}
+  .passage-text{color:var(--ink);font-size:15px}
+  .passage-theme-tag{color:var(--rose)}
+  .journal-section{background:#fff;border:1px solid var(--border-light);page-break-inside:avoid}
+  .journal-section-head{background:var(--rose-pale);padding:10px 16px}
+  .journal-section-title{color:var(--ink);font-size:14px}
+  .journal-section-sub{color:var(--ink-soft)}
+  .journal-section-body{padding:14px 16px}
+  .journal-textarea{background:#fff;border:1px solid var(--border-light);color:var(--ink);font-size:14px;min-height:80px}
+  .gratitude-input{background:#fff;border:1px solid var(--border-light);color:var(--ink)}
+  .gratitude-num{color:var(--rose)}
+  .word-chips{display:none}
+  .word-input{background:#fff;border:1px solid var(--border-light);color:var(--ink);font-size:16px}
+  @page{margin:2cm;size:letter portrait}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-logo">THE OTHER<em> </em>POT</span>
+  <div class="topbar-sep"></div>
+  <span class="topbar-sub">the morning steep</span>
+  <div class="topbar-spacer"></div>
+  <button class="topbar-print" onclick="window.print()">🖨 print today</button>
+  <a href="index.html" class="topbar-link" style="margin-left:12px">hub</a>
+</div>
+
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-eyebrow">☕ the other pot · morning journal</div>
+  <div class="hero-title">the <em>morning steep</em></div>
+  <div class="hero-sub">sit down. second cup optional. let it open.</div>
+  <div class="hero-date" id="heroDate"></div>
+</div>
+
+<div class="content">
+
+  <!-- TRANSLATION TOGGLE -->
+  <div class="translation-row">
+    <span class="trans-label">translation:</span>
+    <button class="trans-btn active" id="btnNIV" onclick="setTranslation('NIV')">NIV</button>
+    <button class="trans-btn" id="btnKJV" onclick="setTranslation('KJV')">KJV</button>
+  </div>
+
+  <!-- THEME PICKER -->
+  <div class="theme-section">
+    <div class="theme-head">what are you carrying in today?</div>
+    <div class="theme-grid" id="themeGrid"></div>
+  </div>
+
+  <!-- PASSAGE -->
+  <div class="passage-card">
+    <div class="passage-head">
+      <span class="passage-ref" id="passageRef">pick a theme above</span>
+      <button class="passage-shuffle" onclick="shufflePassage()">another one →</button>
+    </div>
+    <div class="passage-body">
+      <div class="passage-text" id="passageText">your passage will appear here.</div>
+      <div class="passage-theme-tag" id="passageThemeTag"></div>
+    </div>
+  </div>
+
+  <!-- OBSERVATION -->
+  <div class="journal-section">
+    <div class="journal-section-head">
+      <span class="journal-section-icon">👁</span>
+      <span class="journal-section-title">what's here</span>
+      <span class="journal-section-sub">what does it actually say?</span>
+    </div>
+    <div class="journal-section-body">
+      <textarea class="journal-textarea" id="observation" rows="4" placeholder="not what you think it should mean. what does it say? what words stand out? what's the context?"></textarea>
+    </div>
+  </div>
+
+  <!-- APPLICATION -->
+  <div class="journal-section">
+    <div class="journal-section-head">
+      <span class="journal-section-icon">☕</span>
+      <span class="journal-section-title">what it means for today</span>
+      <span class="journal-section-sub">honest, not aspirational</span>
+    </div>
+    <div class="journal-section-body">
+      <textarea class="journal-textarea" id="application" rows="4" placeholder="where does this land in your actual life right now? not theory. today."></textarea>
+    </div>
+  </div>
+
+  <!-- CARRYING IN -->
+  <div class="journal-section">
+    <div class="journal-section-head">
+      <span class="journal-section-icon">🌿</span>
+      <span class="journal-section-title">what I'm carrying in</span>
+      <span class="journal-section-sub">gratitude, weight, or both</span>
+    </div>
+    <div class="journal-section-body">
+      <div class="gratitude-row"><span class="gratitude-num">01</span><input class="gratitude-input" id="g1" placeholder="something you noticed, felt, or received..."></div>
+      <div class="gratitude-row"><span class="gratitude-num">02</span><input class="gratitude-input" id="g2" placeholder=""></div>
+      <div class="gratitude-row"><span class="gratitude-num">03</span><input class="gratitude-input" id="g3" placeholder=""></div>
+      <textarea class="journal-textarea" id="prayer" rows="3" style="margin-top:10px" placeholder="anything else on your heart. this can be messy. it usually is."></textarea>
+    </div>
+  </div>
+
+  <!-- ONE WORD -->
+  <div class="journal-section">
+    <div class="journal-section-head">
+      <span class="journal-section-icon">✦</span>
+      <span class="journal-section-title">one word to hold</span>
+      <span class="journal-section-sub">carry it into the day</span>
+    </div>
+    <div class="journal-section-body">
+      <div class="word-chips" id="wordChips"></div>
+      <input class="word-input" id="oneWord" placeholder="or write your own...">
+    </div>
+  </div>
+
+  <!-- SAVE -->
+  <div class="save-row">
+    <button class="btn-save" onclick="saveEntry()">☕ steep it · save today's entry</button>
+    <button class="btn-print" onclick="window.print()">🖨 print</button>
+  </div>
+
+  <!-- PAST ENTRIES -->
+  <div class="entries-section">
+    <div class="entries-head">
+      <span style="font-size:14px">📖</span>
+      <span class="entries-title">past entries</span>
+      <span class="entries-count" id="entriesCount"></span>
+    </div>
+    <div id="entriesList"></div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"><span id="toastMsg"></span></div>
+
+<script>
+const TRANSLATION = { current: 'NIV' };
+
+const THEMES = [
+  { id:'rest',      icon:'☕', name:'rest & stillness' },
+  { id:'identity',  icon:'🌱', name:'identity & worth' },
+  { id:'courage',   icon:'💪', name:'courage & strength' },
+  { id:'surrender', icon:'🙏', name:'surrender & trust' },
+  { id:'healing',   icon:'🌿', name:'healing & renewal' },
+  { id:'provision', icon:'☀️', name:'provision & grace' },
+  { id:'purpose',   icon:'🔥', name:'purpose & calling' },
+  { id:'gratitude', icon:'💛', name:'gratitude & joy' },
+  { id:'hard',      icon:'🌊', name:'hard seasons' },
+  { id:'love',      icon:'🤍', name:'love & belonging' },
+];
+
+const PASSAGES = {
+  rest: [
+    { ref:'Psalm 46:10', NIV:'Be still, and know that I am God; I will be exalted among the nations, I will be exalted in the earth.', KJV:'Be still, and know that I am God: I will be exalted among the heathen, I will be exalted in the earth.' },
+    { ref:'Matthew 11:28-30', NIV:'Come to me, all you who are weary and burdened, and I will give you rest. Take my yoke upon you and learn from me, for I am gentle and humble in heart, and you will find rest for your souls. For my yoke is easy and my burden is light.', KJV:'Come unto me, all ye that labour and are heavy laden, and I will give you rest. Take my yoke upon you, and learn of me; for I am meek and lowly in heart: and ye shall find rest unto your souls. For my yoke is easy, and my burden is light.' },
+    { ref:'Psalm 23:1-3', NIV:'The Lord is my shepherd, I lack nothing. He makes me lie down in green pastures, he leads me beside quiet waters, he refreshes my soul.', KJV:'The Lord is my shepherd; I shall not want. He maketh me to lie down in green pastures: he leadeth me beside the still waters. He restoreth my soul.' },
+    { ref:'Isaiah 30:15', NIV:'In repentance and rest is your salvation, in quietness and trust is your strength.', KJV:'In returning and rest shall ye be saved; in quietness and in confidence shall be your strength.' },
+    { ref:'Psalm 62:1-2', NIV:'Truly my soul finds rest in God; my salvation comes from him. Truly he is my rock and my salvation; he is my fortress, I will never be shaken.', KJV:'Truly my soul waiteth upon God: from him cometh my salvation. He only is my rock and my salvation; he is my defence; I shall not be greatly moved.' },
+    { ref:'Zephaniah 3:17', NIV:'The Lord your God is with you, the Mighty Warrior who saves. He will take great delight in you; in his love he will no longer rebuke you, but will rejoice over you with singing.', KJV:'The Lord thy God in the midst of thee is mighty; he will save, he will rejoice over thee with joy; he will rest in his love, he will joy over thee with singing.' },
+    { ref:'Psalm 131:2', NIV:'But I have calmed and quieted myself, I am like a weaned child with its mother; like a weaned child I am content.', KJV:'Surely I have behaved and quieted myself, as a child that is weaned of his mother: my soul is even as a weaned child.' },
+    { ref:'Mark 6:31', NIV:'"Come with me by yourselves to a quiet place and get some rest."', KJV:'And he said unto them, Come ye yourselves apart into a desert place, and rest a while.' },
+    { ref:'Hebrews 4:9-10', NIV:'There remains, then, a Sabbath-rest for the people of God; for anyone who enters God\'s rest also rests from their works, just as God did from his.', KJV:'There remaineth therefore a rest to the people of God. For he that is entered into his rest, he also hath ceased from his own works, as God did from his.' },
+  ],
+  identity: [
+    { ref:'Psalm 139:13-14', NIV:'For you created my inmost being; you knit me together in my mother\'s womb. I praise you because I am fearfully and wonderfully made; your works are wonderful, I know that full well.', KJV:'For thou hast possessed my reins: thou hast covered me in my mother\'s womb. I will praise thee; for I am fearfully and wonderfully made: marvellous are thy works; and that my soul knoweth right well.' },
+    { ref:'Ephesians 2:10', NIV:'For we are God\'s handiwork, created in Christ Jesus to do good works, which God prepared in advance for us to do.', KJV:'For we are his workmanship, created in Christ Jesus unto good works, which God hath before ordained that we should walk in them.' },
+    { ref:'1 John 3:1', NIV:'See what great love the Father has lavished on us, that we should be called children of God! And that is what we are!', KJV:'Behold, what manner of love the Father hath bestowed upon us, that we should be called the sons of God: and such we are.' },
+    { ref:'Galatians 2:20', NIV:'I have been crucified with Christ and I no longer live, but Christ lives in me. The life I now live in the body, I live by faith in the Son of God, who loved me and gave himself for me.', KJV:'I am crucified with Christ: nevertheless I live; yet not I, but Christ liveth in me: and the life which I now live in the flesh I live by the faith of the Son of God, who loved me, and gave himself for me.' },
+    { ref:'2 Corinthians 5:17', NIV:'Therefore, if anyone is in Christ, the new creation has come: The old has gone, the new is here!', KJV:'Therefore if any man be in Christ, he is a new creature: old things are passed away; behold, all things are become new.' },
+    { ref:'Romans 8:15-16', NIV:'The Spirit you received does not make you slaves, so that you live in fear again; rather, the Spirit you received brought about your adoption to sonship. And by him we cry, "Abba, Father." The Spirit himself testifies with our spirit that we are God\'s children.', KJV:'For ye have not received the spirit of bondage again to fear; but ye have received the Spirit of adoption, whereby we cry, Abba, Father. The Spirit itself beareth witness with our spirit, that we are the children of God.' },
+    { ref:'Deuteronomy 7:6', NIV:'For you are a people holy to the Lord your God. The Lord your God has chosen you out of all the peoples on the face of the earth to be his people, his treasured possession.', KJV:'For thou art an holy people unto the Lord thy God: the Lord thy God hath chosen thee to be a special people unto himself, above all people that are upon the face of the earth.' },
+    { ref:'Isaiah 43:1', NIV:'But now, this is what the Lord says — he who created you, Jacob, he who formed you, Israel: "Do not fear, for I have redeemed you; I have summoned you by name; you are mine."', KJV:'But now thus saith the Lord that created thee, O Jacob, and he that formed thee, O Israel, Fear not: for I have redeemed thee, I have called thee by thy name; thou art mine.' },
+    { ref:'Ephesians 1:4-5', NIV:'For he chose us in him before the creation of the world to be holy and blameless in his sight. In love he predestined us for adoption to sonship through Jesus Christ, in accordance with his pleasure and will.', KJV:'According as he hath chosen us in him before the foundation of the world, that we should be holy and without blame before him in love: having predestinated us unto the adoption of children by Jesus Christ to himself.' },
+  ],
+  courage: [
+    { ref:'Isaiah 41:10', NIV:'So do not fear, for I am with you; do not be dismayed, for I am your God. I will strengthen you and help you; I will uphold you with my righteous right hand.', KJV:'Fear thou not; for I am with thee: be not dismayed; for I am thy God: I will strengthen thee; yea, I will help thee; yea, I will uphold thee with the right hand of my righteousness.' },
+    { ref:'Joshua 1:9', NIV:'Have I not commanded you? Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go.', KJV:'Have not I commanded thee? Be strong and of a good courage; be not afraid, neither be thou dismayed: for the Lord thy God is with thee whithersoever thou goest.' },
+    { ref:'Philippians 4:13', NIV:'I can do all this through him who gives me strength.', KJV:'I can do all things through Christ which strengtheneth me.' },
+    { ref:'2 Timothy 1:7', NIV:'For the Spirit God gave us does not make us timid, but gives us power, love and self-discipline.', KJV:'For God hath not given us the spirit of fear; but of power, and of love, and of a sound mind.' },
+    { ref:'Psalm 27:1', NIV:'The Lord is my light and my salvation — whom shall I fear? The Lord is the stronghold of my life — of whom shall I be afraid?', KJV:'The Lord is my light and my salvation; whom shall I fear? the Lord is the strength of my life; of whom shall I be afraid?' },
+    { ref:'Deuteronomy 31:6', NIV:'Be strong and courageous. Do not be afraid or terrified because of them, for the Lord your God goes with you; he will never leave you nor forsake you.', KJV:'Be strong and of a good courage, fear not, nor be afraid of them: for the Lord thy God, he it is that doth go with thee; he will not fail thee, nor forsake thee.' },
+    { ref:'Romans 8:31', NIV:'What, then, shall we say in response to these things? If God is for us, who can be against us?', KJV:'What shall we then say to these things? If God be for us, who can be against us?' },
+    { ref:'Psalm 118:6', NIV:'The Lord is with me; I will not be afraid. What can mere mortals do to me?', KJV:'The Lord is on my side; I will not fear: what can man do unto me?' },
+    { ref:'Isaiah 43:2', NIV:'When you pass through the waters, I will be with you; and when you pass through the rivers, they will not sweep over you. When you walk through the fire, you will not be burned; the flames will not set you ablaze.', KJV:'When thou passest through the waters, I will be with thee; and through the rivers, they shall not overflow thee: when thou walkest through the fire, thou shalt not be burned; neither shall the flame kindle upon thee.' },
+  ],
+  surrender: [
+    { ref:'Proverbs 3:5-6', NIV:'Trust in the Lord with all your heart and lean not on your own understanding; in all your ways submit to him, and he will make your paths straight.', KJV:'Trust in the Lord with all thine heart; and lean not unto thine own understanding. In all thy ways acknowledge him, and he shall direct thy paths.' },
+    { ref:'Philippians 4:6-7', NIV:'Do not be anxious about anything, but in every situation, by prayer and petition, with thanksgiving, present your requests to God. And the peace of God, which transcends all understanding, will guard your hearts and your minds in Christ Jesus.', KJV:'Be careful for nothing; but in every thing by prayer and supplication with thanksgiving let your requests be made known unto God. And the peace of God, which passeth all understanding, shall keep your hearts and minds through Christ Jesus.' },
+    { ref:'Matthew 6:33', NIV:'But seek first his kingdom and his righteousness, and all these things will be given to you as well.', KJV:'But seek ye first the kingdom of God, and his righteousness; and all these things shall be added unto you.' },
+    { ref:'Psalm 37:5', NIV:'Commit your way to the Lord; trust in him and he will do this.', KJV:'Commit thy way unto the Lord; trust also in him; and he shall bring it to pass.' },
+    { ref:'Isaiah 26:3', NIV:'You will keep in perfect peace those whose minds are steadfast, because they trust in you.', KJV:'Thou wilt keep him in perfect peace, whose mind is stayed on thee: because he trusteth in thee.' },
+    { ref:'1 Peter 5:7', NIV:'Cast all your anxiety on him because he cares for you.', KJV:'Casting all your care upon him; for he careth for you.' },
+    { ref:'Psalm 46:1', NIV:'God is our refuge and strength, an ever-present help in trouble.', KJV:'God is our refuge and strength, a very present help in trouble.' },
+    { ref:'Luke 22:42', NIV:'"Father, if you are willing, take this cup from me; yet not my will, but yours be done."', KJV:'Father, if thou be willing, remove this cup from me: nevertheless not my will, but thine, be done.' },
+    { ref:'Jeremiah 17:7-8', NIV:'But blessed is the one who trusts in the Lord, whose confidence is in him. They will be like a tree planted by the water that sends out its roots by the stream. It does not fear when heat comes; its leaves are always green.', KJV:'Blessed is the man that trusteth in the Lord, and whose hope the Lord is. For he shall be as a tree planted by the waters, and that spreadeth out her roots by the river, and shall not see when heat cometh, but her leaf shall be green.' },
+  ],
+  healing: [
+    { ref:'Isaiah 40:31', NIV:'But those who hope in the Lord will renew their strength. They will soar on wings like eagles; they will run and not grow weary, they will walk and not be faint.', KJV:'But they that wait upon the Lord shall renew their strength; they shall mount up with wings as eagles; they shall run, and not be weary; and they shall walk, and not faint.' },
+    { ref:'Lamentations 3:22-23', NIV:'Because of the Lord\'s great love we are not consumed, for his compassions never fail. They are new every morning; great is your faithfulness.', KJV:'It is of the Lord\'s mercies that we are not consumed, because his compassions fail not. They are new every morning: great is thy faithfulness.' },
+    { ref:'Psalm 34:18', NIV:'The Lord is close to the brokenhearted and saves those who are crushed in spirit.', KJV:'The Lord is nigh unto them that are of a broken heart; and saveth such as be of a contrite spirit.' },
+    { ref:'Revelation 21:4', NIV:'He will wipe every tear from their eyes. There will be no more death or mourning or crying or pain, for the old order of things has passed away.', KJV:'And God shall wipe away all tears from their eyes; and there shall be no more death, neither sorrow, nor crying, neither shall there be any more pain: for the former things are passed away.' },
+    { ref:'Jeremiah 30:17', NIV:'"But I will restore you to health and heal your wounds," declares the Lord.', KJV:'For I will restore health unto thee, and I will heal thee of thy wounds, saith the Lord.' },
+    { ref:'Psalm 147:3', NIV:'He heals the brokenhearted and binds up their wounds.', KJV:'He healeth the broken in heart, and bindeth up their wounds.' },
+    { ref:'2 Corinthians 4:16-17', NIV:'Therefore we do not lose heart. Though outwardly we are wasting away, yet inwardly we are being renewed day by day. For our light and momentary troubles are achieving for us an eternal glory that far outweighs them all.', KJV:'For which cause we faint not; but though our outward man perish, yet the inward man is renewed day by day. For our light affliction, which is but for a moment, worketh for us a far more exceeding and eternal weight of glory.' },
+    { ref:'Romans 8:18', NIV:'I consider that our present sufferings are not worth comparing with the glory that will be revealed in us.', KJV:'For I reckon that the sufferings of this present time are not worthy to be compared with the glory which shall be revealed in us.' },
+    { ref:'Psalm 30:5', NIV:'For his anger lasts only a moment, but his favor lasts a lifetime; weeping may stay for the night, but rejoicing comes in the morning.', KJV:'For his anger endureth but a moment; in his favour is life: weeping may endure for a night, but joy cometh in the morning.' },
+  ],
+  provision: [
+    { ref:'Matthew 6:25-27', NIV:'"Therefore I tell you, do not worry about your life, what you will eat or drink; or about your body, what you will wear. Is not life more than food, and the body more than clothes? Look at the birds of the air; they do not sow or reap or store away in barns, and yet your heavenly Father feeds them. Are you not much more valuable than they?"', KJV:'Therefore I say unto you, Take no thought for your life, what ye shall eat, or what ye shall drink; nor yet for your body, what ye shall put on. Is not the life more than meat, and the body than raiment? Behold the fowls of the air: for they sow not, neither do they reap, nor gather into barns; yet your heavenly Father feedeth them. Are ye not much better than they?' },
+    { ref:'2 Corinthians 12:9', NIV:'But he said to me, "My grace is sufficient for you, for my power is made perfect in weakness." Therefore I will boast all the more gladly about my weaknesses, so that Christ\'s power may rest on me.', KJV:'And he said unto me, My grace is sufficient for thee: for my strength is made perfect in weakness. Most gladly therefore will I rather glory in my infirmities, that the power of Christ may rest upon me.' },
+    { ref:'Philippians 4:19', NIV:'And my God will meet all your needs according to the riches of his glory in Christ Jesus.', KJV:'But my God shall supply all your need according to his riches in glory by Christ Jesus.' },
+    { ref:'Psalm 23:6', NIV:'Surely your goodness and love will follow me all the days of my life, and I will dwell in the house of the Lord forever.', KJV:'Surely goodness and mercy shall follow me all the days of my life: and I will dwell in the house of the Lord for ever.' },
+    { ref:'Luke 12:7', NIV:'Indeed, the very hairs of your head are all numbered. Don\'t be afraid; you are worth more than many sparrows.', KJV:'But even the very hairs of your head are all numbered. Fear not therefore: ye are of more value than many sparrows.' },
+    { ref:'Psalm 84:11', NIV:'For the Lord God is a sun and shield; the Lord bestows favor and honor; no good thing does he withhold from those whose walk is blameless.', KJV:'For the Lord God is a sun and shield: the Lord will give grace and glory: no good thing will he withhold from them that walk uprightly.' },
+    { ref:'Romans 8:32', NIV:'He who did not spare his own Son, but gave him up for us all — how will he not also, along with him, graciously give us all things?', KJV:'He that spared not his own Son, but delivered him up for us all, how shall he not with him also freely give us all things?' },
+    { ref:'James 1:17', NIV:'Every good and perfect gift is from above, coming down from the Father of the heavenly lights, who does not change like shifting shadows.', KJV:'Every good gift and every perfect gift is from above, and cometh down from the Father of lights, with whom is no variableness, neither shadow of turning.' },
+    { ref:'Psalm 37:25', NIV:'I was young and now I am old, yet I have never seen the righteous forsaken or their children begging bread.', KJV:'I have been young, and now am old; yet have I not seen the righteous forsaken, nor his seed begging bread.' },
+  ],
+  purpose: [
+    { ref:'Jeremiah 29:11', NIV:'"For I know the plans I have for you," declares the Lord, "plans to prosper you and not to harm you, plans to give you hope and a future."', KJV:'For I know the thoughts that I think toward you, saith the Lord, thoughts of peace, and not of evil, to give you an expected end.' },
+    { ref:'Romans 8:28', NIV:'And we know that in all things God works for the good of those who love him, who have been called according to his purpose.', KJV:'And we know that all things work together for good to them that love God, to them who are the called according to his purpose.' },
+    { ref:'Ephesians 2:10', NIV:'For we are God\'s handiwork, created in Christ Jesus to do good works, which God prepared in advance for us to do.', KJV:'For we are his workmanship, created in Christ Jesus unto good works, which God hath before ordained that we should walk in them.' },
+    { ref:'Proverbs 16:9', NIV:'In their hearts humans plan their course, but the Lord establishes their steps.', KJV:'A man\'s heart deviseth his way: but the Lord directeth his steps.' },
+    { ref:'Isaiah 46:10', NIV:'I make known the end from the beginning, from ancient times, what is still to come. I say, "My purpose will stand, and I will do all that I please."', KJV:'Declaring the end from the beginning, and from ancient times the things that are not yet done, saying, My counsel shall stand, and I will do all my pleasure.' },
+    { ref:'Psalm 57:2', NIV:'I cry out to God Most High, to God, who vindicates me. He sends from heaven and saves me, rebuking those who hotly pursue me — God sends forth his love and his faithfulness.', KJV:'I will cry unto God most high; unto God that performeth all things for me.' },
+    { ref:'1 Corinthians 10:31', NIV:'So whether you eat or drink or whatever you do, do it all for the glory of God.', KJV:'Whether therefore ye eat, or drink, or whatsoever ye do, do all to the glory of God.' },
+    { ref:'Colossians 3:23-24', NIV:'Whatever you do, work at it with all your heart, as working for the Lord, not for human masters, since you know that you will receive an inheritance from the Lord as a reward. It is the Lord Christ you are serving.', KJV:'And whatsoever ye do, do it heartily, as to the Lord, and not unto men; knowing that of the Lord ye shall receive the reward of the inheritance: for ye serve the Lord Christ.' },
+    { ref:'Acts 17:26-27', NIV:'From one man he made all the nations, that they should inhabit the whole earth; and he marked out their appointed times in history and the boundaries of their lands. God did this so that they would seek him and perhaps reach out for him and find him, though he is not far from any one of us.', KJV:'And hath made of one blood all nations of men for to dwell on all the face of the earth, and hath determined the times before appointed, and the bounds of their habitation; that they should seek the Lord, if haply they might feel after him, and find him, though he be not far from every one of us.' },
+  ],
+  gratitude: [
+    { ref:'Psalm 100:4-5', NIV:'Enter his gates with thanksgiving and his courts with praise; give thanks to him and praise his name. For the Lord is good and his love endures forever; his faithfulness continues through all generations.', KJV:'Enter into his gates with thanksgiving, and into his courts with praise: be thankful unto him, and bless his name. For the Lord is good; his mercy is everlasting; and his truth endureth to all generations.' },
+    { ref:'1 Thessalonians 5:16-18', NIV:'Rejoice always, pray continually, give thanks in all circumstances; for this is God\'s will for you in Christ Jesus.', KJV:'Rejoice evermore. Pray without ceasing. In every thing give thanks: for this is the will of God in Christ Jesus concerning you.' },
+    { ref:'Psalm 118:24', NIV:'The Lord has done it this very day; let us rejoice today and be glad.', KJV:'This is the day which the Lord hath made; we will rejoice and be glad in it.' },
+    { ref:'Colossians 3:15-17', NIV:'Let the peace of Christ rule in your hearts, since as members of one body you were called to peace. And be thankful. Let the message of Christ dwell among you richly as you teach and admonish one another with all wisdom through psalms, hymns, and songs from the Spirit, singing to God with gratitude in your hearts.', KJV:'And let the peace of God rule in your hearts, to the which also ye are called in one body; and be ye thankful. Let the word of Christ dwell in you richly in all wisdom; teaching and admonishing one another in psalms and hymns and spiritual songs, singing with grace in your hearts to the Lord.' },
+    { ref:'Psalm 9:1-2', NIV:'I will give thanks to you, Lord, with all my heart; I will tell of all your wonderful deeds. I will be glad and rejoice in you; I will sing the praises of your name, O Most High.', KJV:'I will praise thee, O Lord, with my whole heart; I will shew forth all thy marvellous works. I will be glad and rejoice in thee: I will sing praise to thy name, O thou most High.' },
+    { ref:'Ephesians 5:19-20', NIV:'Speaking to one another with psalms, hymns, and songs from the Spirit. Sing and make music from your heart to the Lord, always giving thanks to God the Father for everything, in the name of our Lord Jesus Christ.', KJV:'Speaking to yourselves in psalms and hymns and spiritual songs, singing and making melody in your heart to the Lord; giving thanks always for all things unto God and the Father in the name of our Lord Jesus Christ.' },
+    { ref:'Hebrews 13:15', NIV:'Through Jesus, therefore, let us continually offer to God a sacrifice of praise — the fruit of lips that openly profess his name.', KJV:'By him therefore let us offer the sacrifice of praise to God continually, that is, the fruit of our lips giving thanks to his name.' },
+    { ref:'Psalm 107:1', NIV:'Give thanks to the Lord, for he is good; his love endures forever.', KJV:'O give thanks unto the Lord, for he is good: for his mercy endureth for ever.' },
+    { ref:'James 1:17', NIV:'Every good and perfect gift is from above, coming down from the Father of the heavenly lights, who does not change like shifting shadows.', KJV:'Every good gift and every perfect gift is from above, and cometh down from the Father of lights, with whom is no variableness, neither shadow of turning.' },
+  ],
+  hard: [
+    { ref:'Romans 5:3-4', NIV:'Not only so, but we also glory in our sufferings, because we know that suffering produces perseverance; perseverance, character; and character, hope.', KJV:'And not only so, but we glory in tribulations also: knowing that tribulation worketh patience; and patience, experience; and experience, hope.' },
+    { ref:'James 1:2-4', NIV:'Consider it pure joy, my brothers and sisters, whenever you face trials of many kinds, because you know that the testing of your faith produces perseverance. Let perseverance finish its work so that you may be mature and complete, not lacking anything.', KJV:'My brethren, count it all joy when ye fall into divers temptations; knowing this, that the trying of your faith worketh patience. But let patience have her perfect work, that ye may be perfect and entire, wanting nothing.' },
+    { ref:'2 Corinthians 1:3-4', NIV:'Praise be to the God and Father of our Lord Jesus Christ, the Father of compassion and the God of all comfort, who comforts us in all our troubles, so that we can comfort those in any trouble with the comfort we ourselves receive from God.', KJV:'Blessed be God, even the Father of our Lord Jesus Christ, the Father of mercies, and the God of all comfort; who comforteth us in all our tribulation, that we may be able to comfort them which are in any trouble, by the comfort wherewith we ourselves are comforted of God.' },
+    { ref:'Psalm 34:19', NIV:'The righteous person may have many troubles, but the Lord delivers him from them all.', KJV:'Many are the afflictions of the righteous: but the Lord delivereth him out of them all.' },
+    { ref:'John 16:33', NIV:'"I have told you these things, so that in me you may have peace. In this world you will have trouble. But take heart! I have overcome the world."', KJV:'These things I have spoken unto you, that in me ye might have peace. In the world ye shall have tribulation: but be of good cheer; I have overcome the world.' },
+    { ref:'Nahum 1:7', NIV:'The Lord is good, a refuge in times of trouble. He cares for those who trust in him.', KJV:'The Lord is good, a strong hold in the day of trouble; and he knoweth them that trust in him.' },
+    { ref:'Psalm 46:2-3', NIV:'Therefore we will not fear, though the earth give way and the mountains fall into the heart of the sea, though its waters roar and foam and the mountains quake with their surging.', KJV:'Therefore will not we fear, though the earth be removed, and though the mountains be carried into the midst of the sea; though the waters thereof roar and be troubled, though the mountains shake with the swelling thereof.' },
+    { ref:'Isaiah 43:2', NIV:'When you pass through the waters, I will be with you; and when you pass through the rivers, they will not sweep over you. When you walk through the fire, you will not be burned; the flames will not set you ablaze.', KJV:'When thou passest through the waters, I will be with thee; and through the rivers, they shall not overflow thee: when thou walkest through the fire, thou shalt not be burned; neither shall the flame kindle upon thee.' },
+    { ref:'Psalm 55:22', NIV:'Cast your cares on the Lord and he will sustain you; he will never let the righteous be shaken.', KJV:'Cast thy burden upon the Lord, and he shall sustain thee: he shall never suffer the righteous to be moved.' },
+  ],
+  love: [
+    { ref:'Romans 8:38-39', NIV:'For I am convinced that neither death nor life, neither angels nor demons, neither the present nor the future, nor any powers, neither height nor depth, nor anything else in all creation, will be able to separate us from the love of God that is in Christ Jesus our Lord.', KJV:'For I am persuaded, that neither death, nor life, nor angels, nor principalities, nor powers, nor things present, nor things to come, nor height, nor depth, nor any other creature, shall be able to separate us from the love of God, which is in Christ Jesus our Lord.' },
+    { ref:'1 John 4:16', NIV:'And so we know and rely on the love God has for us. God is love. Whoever lives in love lives in God, and God in them.', KJV:'And we have known and believed the love that God hath to us. God is love; and he that dwelleth in love dwelleth in God, and God in him.' },
+    { ref:'John 3:16', NIV:'For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.', KJV:'For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life.' },
+    { ref:'1 Corinthians 13:4-7', NIV:'Love is patient, love is kind. It does not envy, it does not boast, it is not proud. It does not dishonor others, it is not self-seeking, it is not easily angered, it keeps no record of wrongs. Love does not delight in evil but rejoices with the truth. It always protects, always trusts, always hopes, always perseveres.', KJV:'Charity suffereth long, and is kind; charity envieth not; charity vaunteth not itself, is not puffed up, doth not behave itself unseemly, seeketh not her own, is not easily provoked, thinketh no evil; rejoiceth not in iniquity, but rejoiceth in the truth; beareth all things, believeth all things, hopeth all things, endureth all things.' },
+    { ref:'Ephesians 3:17-19', NIV:'And I pray that you, being rooted and established in love, may have power, together with all the Lord\'s holy people, to grasp how wide and long and high and deep is the love of Christ, and to know this love that surpasses knowledge.', KJV:'That Christ may dwell in your hearts by faith; that ye, being rooted and grounded in love, may be able to comprehend with all saints what is the breadth, and length, and depth, and height; and to know the love of Christ, which passeth knowledge.' },
+    { ref:'Psalm 36:7', NIV:'How priceless is your unfailing love, O God! People take refuge in the shadow of your wings.', KJV:'How excellent is thy lovingkindness, O God! therefore the children of men put their trust under the shadow of thy wings.' },
+    { ref:'1 John 4:19', NIV:'We love because he first loved us.', KJV:'We love him, because he first loved us.' },
+    { ref:'Zephaniah 3:17', NIV:'The Lord your God is with you, the Mighty Warrior who saves. He will take great delight in you; in his love he will no longer rebuke you, but will rejoice over you with singing.', KJV:'The Lord thy God in the midst of thee is mighty; he will save, he will rejoice over thee with joy; he will rest in his love, he will joy over thee with singing.' },
+    { ref:'Romans 5:8', NIV:'But God demonstrates his own love for us in this: While we were still sinners, Christ died for us.', KJV:'But God commendeth his love toward us, in that, while we were yet sinners, Christ died for us.' },
+  ],
+};
+
+const ONE_WORDS = ['present','rooted','open','still','enough','held','faithful','brave','gentle','forward','grounded','known','free','steady','soft','whole','clear','light','carried','chosen'];
+
+let activeTheme = null;
+let currentPassageIdx = 0;
+let entries = [];
+
+// ── INIT ──
+const today = new Date();
+document.getElementById('heroDate').textContent = today.toLocaleDateString('en-CA',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+buildThemeGrid();
+buildWordChips();
+loadEntries();
+renderEntries();
+
+// ── TRANSLATION ──
+function setTranslation(t) {
+  TRANSLATION.current = t;
+  document.getElementById('btnNIV').classList.toggle('active', t === 'NIV');
+  document.getElementById('btnKJV').classList.toggle('active', t === 'KJV');
+  if(activeTheme) showPassage(activeTheme, currentPassageIdx);
+}
+
+// ── THEMES ──
+function buildThemeGrid() {
+  const grid = document.getElementById('themeGrid');
+  THEMES.forEach(theme => {
+    const chip = document.createElement('div');
+    chip.className = 'theme-chip';
+    chip.id = `theme-${theme.id}`;
+    chip.innerHTML = `<span class="theme-chip-icon">${theme.icon}</span><span class="theme-chip-name">${theme.name}</span>`;
+    chip.onclick = () => selectTheme(theme.id);
+    grid.appendChild(chip);
+  });
+}
+
+function selectTheme(id) {
+  activeTheme = id;
+  document.querySelectorAll('.theme-chip').forEach(c => c.classList.remove('active'));
+  document.getElementById(`theme-${id}`).classList.add('active');
+  currentPassageIdx = Math.floor(Math.random() * PASSAGES[id].length);
+  showPassage(id, currentPassageIdx);
+}
+
+function showPassage(themeId, idx) {
+  const passages = PASSAGES[themeId];
+  const p = passages[idx];
+  const theme = THEMES.find(t => t.id === themeId);
+  document.getElementById('passageRef').innerHTML = `${p.ref} <em>· ${theme.icon} ${theme.name}</em>`;
+  document.getElementById('passageText').textContent = p[TRANSLATION.current];
+  document.getElementById('passageThemeTag').textContent = TRANSLATION.current;
+}
+
+function shufflePassage() {
+  if(!activeTheme) { showToast('pick a theme first ☕'); return; }
+  const passages = PASSAGES[activeTheme];
+  currentPassageIdx = (currentPassageIdx + 1) % passages.length;
+  showPassage(activeTheme, currentPassageIdx);
+}
+
+// ── WORD CHIPS ──
+function buildWordChips() {
+  const container = document.getElementById('wordChips');
+  ONE_WORDS.forEach(word => {
+    const chip = document.createElement('button');
+    chip.className = 'word-chip';
+    chip.textContent = word;
+    chip.onclick = () => {
+      document.querySelectorAll('.word-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      document.getElementById('oneWord').value = word;
+    };
+    container.appendChild(chip);
+  });
+}
+
+// ── SAVE ──
+function saveEntry() {
+  const passage = activeTheme ? PASSAGES[activeTheme][currentPassageIdx] : null;
+  const entry = {
+    id: Date.now(),
+    date: today.toISOString().split('T')[0],
+    theme: activeTheme,
+    translation: TRANSLATION.current,
+    ref: passage?.ref || '',
+    text: passage?.[TRANSLATION.current] || '',
+    observation: document.getElementById('observation').value.trim(),
+    application: document.getElementById('application').value.trim(),
+    gratitude: [
+      document.getElementById('g1').value.trim(),
+      document.getElementById('g2').value.trim(),
+      document.getElementById('g3').value.trim(),
+    ].filter(Boolean),
+    prayer: document.getElementById('prayer').value.trim(),
+    oneWord: document.getElementById('oneWord').value.trim(),
+  };
+
+  entries = entries.filter(e => e.date !== entry.date);
+  entries.unshift(entry);
+  entries = entries.slice(0, 365);
+  localStorage.setItem('mp_journal_entries', JSON.stringify(entries));
+  renderEntries();
+  showToast('steeped ☕ entry saved');
+}
+
+// ── ENTRIES ──
+function loadEntries() {
+  try {
+    const s = localStorage.getItem('mp_journal_entries');
+    if(s) entries = JSON.parse(s);
+  } catch(e){}
+}
+
+function renderEntries() {
+  const container = document.getElementById('entriesList');
+  document.getElementById('entriesCount').textContent = entries.length + ' entries';
+  if(!entries.length) {
+    container.innerHTML = '<div class="entries-empty">your entries will appear here after you save ☕</div>';
+    return;
+  }
+  container.innerHTML = '';
+  entries.slice(0, 10).forEach(entry => {
+    const theme = THEMES.find(t => t.id === entry.theme);
+    const el = document.createElement('div');
+    el.className = 'entry-row';
+    el.innerHTML = `
+      <div class="entry-date">${entry.date} ${theme ? theme.icon : ''}</div>
+      <div class="entry-ref">${entry.ref || 'no passage'}</div>
+      <div class="entry-preview">${entry.observation || entry.application || entry.prayer || '—'}</div>
+    `;
+    el.onclick = () => loadEntry(entry);
+    container.appendChild(el);
+  });
+}
+
+function loadEntry(entry) {
+  if(entry.theme) selectTheme(entry.theme);
+  document.getElementById('observation').value = entry.observation || '';
+  document.getElementById('application').value = entry.application || '';
+  document.getElementById('g1').value = entry.gratitude?.[0] || '';
+  document.getElementById('g2').value = entry.gratitude?.[1] || '';
+  document.getElementById('g3').value = entry.gratitude?.[2] || '';
+  document.getElementById('prayer').value = entry.prayer || '';
+  document.getElementById('oneWord').value = entry.oneWord || '';
+  window.scrollTo({top: 0, behavior: 'smooth'});
+  showToast(`loaded ${entry.date} ☕`);
+}
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>
