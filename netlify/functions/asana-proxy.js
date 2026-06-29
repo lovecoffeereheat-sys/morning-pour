@@ -366,11 +366,7 @@ exports.handler = async (event) => {
 
     // ── MY TASKS SECTIONS (diagnostic) ──
     if (view === 'my_tasks_sections') {
-      const meRes = await asanaGet('/users/me?opt_fields=gid');
-      const userGid = meRes.data?.gid;
-      const taskListRes = await asanaGet(`/users/${userGid}/user_task_list?workspace=1182497100078086&opt_fields=gid`);
-      const taskListGid = taskListRes.data?.gid;
-      const sectionsRes = await asanaGet(`/user_task_lists/${taskListGid}/sections?opt_fields=name,gid`);
+      const sectionsRes = await asanaGet(`/projects/1214131354603805/sections?opt_fields=name,gid`);
       return { statusCode: 200, headers, body: JSON.stringify({ sections: sectionsRes.data || [] }) };
     }
 
