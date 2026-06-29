@@ -10,130 +10,93 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --navy:#16042d;
-  --navy-light:#1e0d3a;
-  --navy-card:#240f45;
-  --rose-deep:#944e63;
-  --rose-mid:#b47b84;
-  --rose-soft:#caa6a6;
-  --rose-warm:#d6a39a;
-  --rose-pale:#f6e6e3;
-  --gold:#c4a45a;
-  --cream:#f5f0e6;
-  --border:rgba(255,255,255,0.08);
-  --text:#f5e8e4;
-  --text-soft:#caa6a6;
-  --text-faint:#8a7a8a;
+  --navy:#16042d;--navy-light:#1e0d3a;
+  --rose:#944e63;--rose-mid:#b47b84;--rose-soft:#caa6a6;
+  --rose-warm:#d6a39a;--rose-pale:#f6e6e3;--rose-card:#fdf5f3;
+  --gold:#c4a45a;--cream:#f5f0e6;--espresso:#2c1810;
+  --border:#e8cfc9;--border-soft:#ede6df;
+  --text:#2c1810;--text-soft:#9e7d68;--text-faint:#c4a898;
 }
-body{
-  font-family:'Lora',Georgia,serif;
-  font-size:15px;
-  background:var(--navy);
-  color:var(--text);
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-}
+body{font-family:'Lora',Georgia,serif;font-size:15px;background:var(--rose-pale);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
 
 /* TOPBAR */
-.topbar{
-  background:rgba(22,4,45,0.95);
-  backdrop-filter:blur(8px);
-  border-bottom:1px solid var(--border);
-  display:flex;align-items:center;
-  padding:0 28px;height:56px;
-  position:sticky;top:0;z-index:100;
-}
+.topbar{background:var(--espresso);display:flex;align-items:center;padding:0 28px;height:54px;position:sticky;top:0;z-index:100}
 .topbar-logo{font-family:'Anton',sans-serif;font-size:14px;letter-spacing:0.12em;color:var(--cream)}
-.topbar-logo em{color:var(--rose-deep);font-style:normal}
-.topbar-sep{width:1px;height:18px;background:var(--border);margin:0 16px}
-.topbar-sub{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-faint)}
+.topbar-logo em{color:var(--rose);font-style:normal}
+.topbar-sep{width:1px;height:18px;background:rgba(255,255,255,0.1);margin:0 16px}
+.topbar-sub{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.3)}
 .topbar-spacer{flex:1}
-.topbar-date{font-family:'Lora',serif;font-style:italic;font-size:13px;color:var(--text-faint)}
+.topbar-date{font-family:'Lora',serif;font-style:italic;font-size:13px;color:rgba(255,255,255,0.35)}
 
 /* HERO */
-.hero{padding:56px 28px 44px;text-align:center;position:relative;overflow:hidden}
-.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(148,78,99,0.15) 0%,transparent 70%);pointer-events:none}
-.hero-eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--rose-mid);margin-bottom:14px}
-.hero-icon{margin-bottom:20px;display:flex;justify-content:center}
-.hero-title{font-family:'Anton',sans-serif;font-size:clamp(36px,6vw,52px);letter-spacing:0.08em;color:var(--cream);line-height:1.05;margin-bottom:10px}
-.hero-title em{color:var(--rose-deep);font-style:normal}
-.hero-sub{font-family:'Lora',serif;font-style:italic;font-size:16px;color:var(--text-soft);margin-bottom:6px}
-.hero-greeting{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;color:var(--text-faint);margin-top:8px}
+.hero{padding:48px 28px 40px;border-bottom:1px solid var(--border);position:relative;overflow:hidden;background:var(--cream)}
+.hero-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;gap:40px;flex-wrap:wrap}
+.hero-text{flex:1;min-width:280px}
+.hero-eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.24em;text-transform:uppercase;color:var(--rose);margin-bottom:14px}
+.hero-title{font-family:'Anton',sans-serif;font-size:clamp(36px,6vw,52px);letter-spacing:0.08em;color:var(--espresso);line-height:1.05;margin-bottom:10px}
+.hero-title em{color:var(--rose);font-style:normal}
+.hero-sub{font-family:'Lora',serif;font-style:italic;font-size:16px;color:var(--text-soft);margin-bottom:6px;line-height:1.6}
+.hero-greeting{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;color:var(--text-faint);margin-top:12px}
+.hero-location{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;color:var(--text-faint);margin-top:6px}
+.hero-photo-wrap{flex-shrink:0;position:relative}
+.hero-photo{width:180px;height:180px;border-radius:50%;object-fit:cover;object-position:center top;border:3px solid var(--rose-pale);box-shadow:0 8px 32px rgba(148,78,99,0.2)}
+.hero-photo-ring{position:absolute;inset:-6px;border-radius:50%;border:1.5px solid var(--border);pointer-events:none}
 
 /* SECTION DIVIDER */
-.section-div{display:flex;align-items:center;gap:14px;padding:0 28px 20px;max-width:960px;margin:0 auto;width:100%}
+.section-div{display:flex;align-items:center;gap:14px;padding:28px 28px 16px;max-width:1020px;margin:0 auto;width:100%}
 .section-div-line{flex:1;height:1px;background:var(--border)}
 .section-div-text{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-faint);white-space:nowrap}
 
 /* TOOL GRID */
-.tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;padding:0 28px 20px;max-width:960px;margin:0 auto;width:100%}
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;padding:0 28px 8px;max-width:1020px;margin:0 auto;width:100%}
 
-.tool-card{
-  border-radius:12px;
-  padding:22px 22px 18px;
-  text-decoration:none;
-  color:inherit;
-  display:flex;flex-direction:column;
-  transition:transform 0.18s,box-shadow 0.18s;
-  position:relative;overflow:hidden;
-  border:1px solid var(--border);
-}
-.tool-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,0.3)}
-.tool-card.coming{opacity:0.6;cursor:default}
-.tool-card.coming:hover{transform:none;box-shadow:none}
+.tool-card{border-radius:12px;padding:20px 20px 16px;text-decoration:none;color:inherit;display:flex;flex-direction:column;transition:transform 0.18s,box-shadow 0.18s;position:relative;overflow:hidden;border:1px solid var(--border)}
+.tool-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(148,78,99,0.12)}
 
-/* Card color themes */
-.card-sunday{background:linear-gradient(135deg,#3a0f1f 0%,#2a0818 100%);border-color:rgba(148,78,99,0.3)}
-.card-sunday:hover{border-color:rgba(148,78,99,0.6)}
-.card-pour{background:linear-gradient(135deg,#2a1525 0%,#1e0d1e 100%);border-color:rgba(180,123,132,0.3)}
-.card-pour:hover{border-color:rgba(180,123,132,0.6)}
-.card-steep{background:linear-gradient(135deg,#251520 0%,#1a0d18 100%);border-color:rgba(202,166,166,0.3)}
-.card-steep:hover{border-color:rgba(202,166,166,0.6)}
-.card-table{background:linear-gradient(135deg,#2a1a18 0%,#1e1008 100%);border-color:rgba(214,163,154,0.3)}
-.card-table:hover{border-color:rgba(214,163,154,0.6)}
-.card-body{background:linear-gradient(135deg,#2a2028 0%,#1e1520 100%);border-color:rgba(246,230,227,0.15)}
-.card-body:hover{border-color:rgba(246,230,227,0.3)}
-.card-map{background:linear-gradient(135deg,#1e1a28 0%,#14101e 100%);border-color:rgba(196,164,90,0.3)}
-.card-map:hover{border-color:rgba(196,164,90,0.6)}
+/* Card color themes — light */
+.card-sunday{background:linear-gradient(135deg,#fdf0f4 0%,#f8e8ee 100%);border-color:#e8c4ce}
+.card-pour{background:linear-gradient(135deg,#fef4f0 0%,#f8ece6 100%);border-color:#e8cfc4}
+.card-steep{background:linear-gradient(135deg,#fdf8f0 0%,#f8f0e4 100%);border-color:#e8dcc4}
+.card-table{background:linear-gradient(135deg,#f8f4ee 0%,#f4ede4 100%);border-color:#e0d0c0}
+.card-body{background:linear-gradient(135deg,#f4f8f0 0%,#ecf4e8 100%);border-color:#c4d8bc}
+.card-map{background:linear-gradient(135deg,#fdf8f0 0%,#f8f2e4 100%);border-color:#e0d0a8}
+.card-journal{background:linear-gradient(135deg,#f8f4f0 0%,#f4ece4 100%);border-color:#d8c8b8}
+.card-command{background:linear-gradient(135deg,#f0f8f4 0%,#e8f4ee 100%);border-color:#b8d8c8}
 
-.card-icon{width:44px;height:44px;margin-bottom:14px}
-.card-eyebrow{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-faint);margin-bottom:6px}
-.card-name{font-family:'Playfair Display',serif;font-size:19px;color:var(--cream);margin-bottom:6px;line-height:1.2}
+.card-icon{width:42px;height:42px;margin-bottom:14px}
+.card-eyebrow{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-faint);margin-bottom:5px}
+.card-name{font-family:'Playfair Display',serif;font-size:18px;color:var(--espresso);margin-bottom:5px;line-height:1.2}
 .card-name em{font-style:italic}
-.card-desc{font-family:'Lora',serif;font-style:italic;font-size:13px;line-height:1.55;margin-bottom:14px;flex:1}
-.card-features{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px}
-.feature-pill{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.06em;padding:3px 9px;border-radius:20px;border:1px solid var(--border);color:var(--text-faint);background:rgba(255,255,255,0.04)}
-.card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid var(--border)}
+.card-desc{font-family:'Lora',serif;font-style:italic;font-size:13px;line-height:1.55;margin-bottom:12px;flex:1;color:var(--text-soft)}
+.card-features{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
+.feature-pill{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.05em;padding:3px 8px;border-radius:20px;border:1px solid var(--border);color:var(--text-faint);background:rgba(255,255,255,0.6)}
+.card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:12px;border-top:1px solid var(--border)}
 .card-status{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px}
-.status-live{background:rgba(74,124,89,0.2);color:#7acc8a;border:1px solid rgba(74,124,89,0.3)}
-.status-soon{background:rgba(148,78,99,0.15);color:var(--rose-mid);border:1px solid rgba(148,78,99,0.2)}
-.status-sheets{background:rgba(26,115,232,0.15);color:#6ab0f5;border:1px solid rgba(26,115,232,0.2)}
-.card-arrow{font-size:18px;color:var(--text-faint);transition:color 0.15s,transform 0.15s}
-.tool-card:hover .card-arrow{color:var(--cream);transform:translateX(4px)}
+.status-live{background:rgba(74,124,89,0.1);color:#4a7c59;border:1px solid rgba(74,124,89,0.2)}
+.status-soon{background:rgba(196,164,90,0.1);color:var(--gold);border:1px solid rgba(196,164,90,0.2)}
+.card-arrow{font-size:16px;color:var(--text-faint);transition:all 0.15s}
+.tool-card:hover .card-arrow{color:var(--rose);transform:translateX(3px)}
 
 /* SHEETS ROW */
-.sheets-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;padding:0 28px 48px;max-width:960px;margin:0 auto;width:100%}
-.sheet-card{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:14px 16px;text-decoration:none;color:inherit;display:flex;align-items:center;gap:12px;transition:all 0.15s}
-.sheet-card:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.15)}
+.sheets-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;padding:0 28px 40px;max-width:1020px;margin:0 auto;width:100%}
+.sheet-card{background:var(--rose-card);border:1px solid var(--border);border-radius:10px;padding:13px 16px;text-decoration:none;color:inherit;display:flex;align-items:center;gap:12px;transition:all 0.15s}
+.sheet-card:hover{background:var(--cream);border-color:var(--rose-soft)}
 .sheet-icon{font-size:20px;flex-shrink:0}
-.sheet-name{font-family:'Playfair Display',serif;font-size:14px;color:var(--cream);margin-bottom:2px}
-.sheet-sub{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-faint)}
+.sheet-name{font-family:'Playfair Display',serif;font-size:13px;color:var(--espresso);margin-bottom:2px}
+.sheet-sub{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint)}
 
 /* FOOTER */
-.footer{margin-top:auto;padding:20px 28px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
-.footer-brand{font-family:'Lora',serif;font-style:italic;font-size:13px;color:var(--text-faint)}
+.footer{margin-top:auto;padding:20px 28px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;background:var(--cream)}
+.footer-brand{font-family:'Lora',serif;font-style:italic;font-size:13px;color:var(--text-soft)}
 .footer-note{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;color:var(--text-faint)}
 
 /* ANIMATIONS */
 @keyframes steam1{0%,100%{transform:translateY(0) scaleX(1);opacity:0.6}50%{transform:translateY(-8px) scaleX(1.2);opacity:0.2}}
 @keyframes steam2{0%,100%{transform:translateY(0) scaleX(1);opacity:0.4}50%{transform:translateY(-10px) scaleX(0.8);opacity:0.1}}
 @keyframes steam3{0%,100%{transform:translateY(0) scaleX(1);opacity:0.5}50%{transform:translateY(-6px) scaleX(1.3);opacity:0.15}}
-@keyframes pour{0%{stroke-dashoffset:100}100%{stroke-dashoffset:0}}
-@keyframes drip{0%,100%{transform:translateY(0);opacity:0.8}50%{transform:translateY(6px);opacity:0.4}}
-@keyframes pulse-soft{0%,100%{opacity:0.8}50%{opacity:0.4}}
-@keyframes spin-slow{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes pulse-soft{0%,100%{opacity:0.8}50%{opacity:0.3}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes drip{0%,100%{transform:translateY(0);opacity:0.8}50%{transform:translateY(6px);opacity:0.4}}
 </style>
 </head>
 <body>
@@ -147,30 +110,19 @@ body{
 </div>
 
 <div class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-eyebrow">your life OS · regina, sk</div>
-  <div class="hero-icon">
-    <!-- Animated steaming cup -->
-    <svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <!-- Steam -->
-      <path d="M28 22 Q26 16 29 11 Q32 6 28 1" stroke="#944e63" stroke-width="2" stroke-linecap="round" fill="none" style="animation:steam1 2.5s ease-in-out infinite"/>
-      <path d="M40 22 Q38 14 41 8 Q44 2 40 -2" stroke="#b47b84" stroke-width="2" stroke-linecap="round" fill="none" style="animation:steam2 2.8s ease-in-out infinite 0.4s"/>
-      <path d="M52 22 Q50 16 53 11 Q56 6 52 1" stroke="#caa6a6" stroke-width="2" stroke-linecap="round" fill="none" style="animation:steam3 2.3s ease-in-out infinite 0.8s"/>
-      <!-- Cup body -->
-      <rect x="12" y="28" width="56" height="40" rx="8" fill="#240f45" stroke="#944e63" stroke-width="1.5"/>
-      <!-- Handle -->
-      <path d="M68 38 Q80 38 80 50 Q80 62 68 62" stroke="#944e63" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-      <!-- Coffee surface -->
-      <ellipse cx="40" cy="32" rx="24" ry="5" fill="#944e63" opacity="0.4"/>
-      <!-- Latte art swirl -->
-      <path d="M32 32 Q40 28 48 32 Q40 36 32 32" stroke="#d6a39a" stroke-width="1" fill="none" opacity="0.6" style="animation:pulse-soft 3s ease-in-out infinite"/>
-      <!-- Saucer -->
-      <ellipse cx="40" cy="70" rx="30" ry="5" fill="#1e0d3a" stroke="#3a1f4a" stroke-width="1"/>
-    </svg>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-eyebrow">your life OS · fairholme, sk</div>
+      <div class="hero-title">THE OTHER<em> POT</em></div>
+      <div class="hero-sub">the whole life, not just the work.<br>built for one. maybe for many.</div>
+      <div class="hero-greeting" id="heroGreeting"></div>
+      <div class="hero-location">☕ fairholme, saskatchewan · reheated, obviously</div>
+    </div>
+    <div class="hero-photo-wrap">
+      <img src="grace.jpg" alt="Grace Sarah" class="hero-photo">
+      <div class="hero-photo-ring"></div>
+    </div>
   </div>
-  <div class="hero-title">THE OTHER<em> POT</em></div>
-  <div class="hero-sub">the whole life, not just the work.</div>
-  <div class="hero-greeting" id="heroGreeting"></div>
 </div>
 
 <div class="section-div">
@@ -184,27 +136,23 @@ body{
   <!-- Sunday Planning -->
   <a href="sunday.html" class="tool-card card-sunday">
     <div class="card-icon">
-      <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
-        <!-- Pour animation -->
+      <svg width="42" height="42" viewBox="0 0 42 42" fill="none">
         <path d="M8 8 Q6 4 10 2" stroke="#944e63" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam1 2s ease-in-out infinite"/>
         <path d="M14 8 Q12 3 15 1" stroke="#b47b84" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam2 2.4s ease-in-out infinite 0.3s"/>
-        <rect x="4" y="12" width="22" height="20" rx="5" fill="#944e63" opacity="0.2" stroke="#944e63" stroke-width="1.5"/>
-        <ellipse cx="15" cy="15" rx="9" ry="2.5" fill="#944e63" opacity="0.4"/>
+        <rect x="4" y="12" width="22" height="20" rx="5" fill="#944e63" opacity="0.12" stroke="#944e63" stroke-width="1.5"/>
+        <ellipse cx="15" cy="15" rx="9" ry="2.5" fill="#944e63" opacity="0.2"/>
         <path d="M26 18 Q33 18 33 24 Q33 30 26 30" stroke="#944e63" stroke-width="2" stroke-linecap="round" fill="none"/>
-        <rect x="2" y="32" width="26" height="3" rx="1.5" fill="#944e63" opacity="0.3"/>
-        <!-- Drip -->
-        <circle cx="15" cy="37" r="1.5" fill="#944e63" opacity="0.5" style="animation:drip 2s ease-in-out infinite"/>
-        <circle cx="22" cy="39" r="1" fill="#b47b84" opacity="0.4" style="animation:drip 2.4s ease-in-out infinite 0.5s"/>
+        <rect x="2" y="32" width="26" height="3" rx="1.5" fill="#944e63" opacity="0.2"/>
       </svg>
     </div>
     <div class="card-eyebrow">morning pour · weekly ritual</div>
     <div class="card-name">sunday <em>planning</em></div>
-    <div class="card-desc" style="color:#caa6a6">the sunday pour — clear the cup, look at the week, pour it out.</div>
+    <div class="card-desc">the sunday pour — clear the cup, look at the week, pour it out.</div>
     <div class="card-features">
       <span class="feature-pill">5-step ritual</span>
       <span class="feature-pill">asana connected</span>
       <span class="feature-pill">content map</span>
-      <span class="feature-pill">google calendar</span>
+      <span class="feature-pill">brain dump</span>
     </div>
     <div class="card-footer">
       <span class="card-status status-live">live</span>
@@ -215,27 +163,24 @@ body{
   <!-- Time Blocker -->
   <a href="pour.html" class="tool-card card-pour">
     <div class="card-icon">
-      <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
-        <!-- Clock face -->
-        <circle cx="22" cy="22" r="18" stroke="#b47b84" stroke-width="1.5" fill="none" opacity="0.3"/>
-        <circle cx="22" cy="22" r="14" stroke="#b47b84" stroke-width="1" fill="#1e0d3a" opacity="0.8"/>
-        <!-- Clock hands -->
-        <line x1="22" y1="22" x2="22" y2="12" stroke="#b47b84" stroke-width="2" stroke-linecap="round"/>
-        <line x1="22" y1="22" x2="28" y2="26" stroke="#d6a39a" stroke-width="1.5" stroke-linecap="round"/>
-        <circle cx="22" cy="22" r="2" fill="#b47b84"/>
-        <!-- Steam from top -->
-        <path d="M16 4 Q14 0 17 -2" stroke="#b47b84" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam1 2.2s ease-in-out infinite"/>
-        <path d="M22 3 Q20 -1 23 -3" stroke="#caa6a6" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam2 2.6s ease-in-out infinite 0.4s"/>
-        <path d="M28 4 Q26 0 29 -2" stroke="#d6a39a" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam3 2s ease-in-out infinite 0.8s"/>
+      <svg width="42" height="42" viewBox="0 0 42 42" fill="none">
+        <circle cx="21" cy="21" r="16" stroke="#b47b84" stroke-width="1.5" fill="none" opacity="0.3"/>
+        <circle cx="21" cy="21" r="12" stroke="#b47b84" stroke-width="1" fill="none" opacity="0.5"/>
+        <line x1="21" y1="21" x2="21" y2="12" stroke="#b47b84" stroke-width="2" stroke-linecap="round"/>
+        <line x1="21" y1="21" x2="27" y2="25" stroke="#d6a39a" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="21" cy="21" r="2" fill="#b47b84"/>
+        <path d="M15 4 Q13 0 16 -2" stroke="#b47b84" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam1 2.2s ease-in-out infinite"/>
+        <path d="M21 3 Q19 -1 22 -3" stroke="#caa6a6" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam2 2.6s ease-in-out infinite 0.4s"/>
       </svg>
     </div>
     <div class="card-eyebrow">morning pour · daily execution</div>
     <div class="card-name">the <em>time blocker</em></div>
-    <div class="card-desc" style="color:#b47b84">drag your week into the day. your tasks, your calendar, one view.</div>
+    <div class="card-desc">category time boxing. today mode and week ahead. your tasks, your calendar.</div>
     <div class="card-features">
-      <span class="feature-pill">day view</span>
+      <span class="feature-pill">today mode</span>
+      <span class="feature-pill">week ahead</span>
       <span class="feature-pill">my tasks</span>
-      <span class="feature-pill">drag to schedule</span>
+      <span class="feature-pill">7 categories</span>
     </div>
     <div class="card-footer">
       <span class="card-status status-live">live</span>
@@ -244,22 +189,21 @@ body{
   </a>
 
   <!-- Command Center -->
-  <a href="command.html" class="tool-card" style="background:linear-gradient(135deg,#1a0d35 0%,#120820 100%);border-color:rgba(74,124,89,0.3)">
+  <a href="command.html" class="tool-card card-command">
     <div class="card-icon">
-      <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
-        <circle cx="22" cy="22" r="18" stroke="#4a7c59" stroke-width="1" fill="none" opacity="0.3"/>
-        <circle cx="22" cy="22" r="12" stroke="#4a7c59" stroke-width="1" fill="none" opacity="0.5"/>
-        <circle cx="22" cy="22" r="6" stroke="#4a7c59" stroke-width="1.5" fill="none"/>
-        <circle cx="22" cy="22" r="2" fill="#7acc8a"/>
-        <line x1="22" y1="4" x2="22" y2="10" stroke="#4a7c59" stroke-width="1.5" stroke-linecap="round" opacity="0.6" style="animation:pulse-soft 2s ease-in-out infinite"/>
-        <line x1="40" y1="22" x2="34" y2="22" stroke="#4a7c59" stroke-width="1.5" stroke-linecap="round" opacity="0.4" style="animation:pulse-soft 2s ease-in-out infinite 0.5s"/>
-        <line x1="22" y1="40" x2="22" y2="34" stroke="#4a7c59" stroke-width="1.5" stroke-linecap="round" opacity="0.3" style="animation:pulse-soft 2s ease-in-out infinite 1s"/>
-        <line x1="4" y1="22" x2="10" y2="22" stroke="#4a7c59" stroke-width="1.5" stroke-linecap="round" opacity="0.4" style="animation:pulse-soft 2s ease-in-out infinite 0.3s"/>
+      <svg width="42" height="42" viewBox="0 0 42 42" fill="none">
+        <circle cx="21" cy="21" r="17" stroke="#4a7c59" stroke-width="1" fill="none" opacity="0.3"/>
+        <circle cx="21" cy="21" r="11" stroke="#4a7c59" stroke-width="1" fill="none" opacity="0.5"/>
+        <circle cx="21" cy="21" r="5" stroke="#4a7c59" stroke-width="1.5" fill="none"/>
+        <circle cx="21" cy="21" r="2" fill="#7acc8a"/>
+        <line x1="21" y1="4" x2="21" y2="10" stroke="#4a7c59" stroke-width="1.5" stroke-linecap="round" style="animation:pulse-soft 2s ease-in-out infinite"/>
+        <line x1="38" y1="21" x2="32" y2="21" stroke="#4a7c59" stroke-width="1.5" stroke-linecap="round" style="animation:pulse-soft 2s ease-in-out infinite 0.5s"/>
+        <line x1="4" y1="21" x2="10" y2="21" stroke="#4a7c59" stroke-width="1.5" stroke-linecap="round" style="animation:pulse-soft 2s ease-in-out infinite 0.3s"/>
       </svg>
     </div>
     <div class="card-eyebrow">reheated, obviously · business</div>
     <div class="card-name">command <em>center</em></div>
-    <div class="card-desc" style="color:#7acc8a;opacity:0.8">substack · tool users · revenue · q3 north star. updated sundays.</div>
+    <div class="card-desc">substack · tool users · revenue · q3 north star. updated sundays.</div>
     <div class="card-features">
       <span class="feature-pill">tool users</span>
       <span class="feature-pill">substack</span>
@@ -273,29 +217,27 @@ body{
   </a>
 
   <!-- Content Map -->
-  <a href="content-maps/july-2026-content-map.html" class="tool-card card-map">
+  <a href="content-maps/content-map.html" class="tool-card card-map">
     <div class="card-icon">
-      <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
-        <!-- Calendar grid -->
-        <rect x="4" y="8" width="36" height="32" rx="4" stroke="#c4a45a" stroke-width="1.5" fill="none" opacity="0.4"/>
-        <line x1="4" y1="16" x2="40" y2="16" stroke="#c4a45a" stroke-width="1" opacity="0.4"/>
-        <rect x="8" y="20" width="6" height="4" rx="1" fill="#944e63" opacity="0.8"/>
-        <rect x="18" y="20" width="6" height="4" rx="1" fill="#c4a45a" opacity="0.8"/>
+      <svg width="42" height="42" viewBox="0 0 42 42" fill="none">
+        <rect x="4" y="8" width="34" height="30" rx="4" stroke="#c4a45a" stroke-width="1.5" fill="none" opacity="0.3"/>
+        <line x1="4" y1="16" x2="38" y2="16" stroke="#c4a45a" stroke-width="1" opacity="0.4"/>
+        <rect x="8" y="20" width="6" height="4" rx="1" fill="#944e63" opacity="0.7"/>
+        <rect x="18" y="20" width="6" height="4" rx="1" fill="#c4a45a" opacity="0.7"/>
         <rect x="28" y="20" width="6" height="4" rx="1" fill="#b47b84" opacity="0.6"/>
         <rect x="8" y="28" width="6" height="4" rx="1" fill="#c4a45a" opacity="0.5"/>
-        <rect x="18" y="28" width="6" height="4" rx="1" fill="#944e63" opacity="0.6"/>
-        <!-- Binding rings -->
+        <rect x="18" y="28" width="6" height="4" rx="1" fill="#944e63" opacity="0.5"/>
         <circle cx="14" cy="8" r="2" fill="#c4a45a" opacity="0.6" style="animation:pulse-soft 2.5s ease-in-out infinite"/>
-        <circle cx="30" cy="8" r="2" fill="#c4a45a" opacity="0.6" style="animation:pulse-soft 2.5s ease-in-out infinite 0.5s"/>
+        <circle cx="28" cy="8" r="2" fill="#c4a45a" opacity="0.6" style="animation:pulse-soft 2.5s ease-in-out infinite 0.5s"/>
       </svg>
     </div>
     <div class="card-eyebrow">morning pour · content planning</div>
     <div class="card-name">content <em>map</em></div>
-    <div class="card-desc" style="color:#c4a45a;opacity:0.8">Q3 2026 — live from asana. batch sundays, publish tuesdays.</div>
+    <div class="card-desc">Q3 2026 live from asana. batch sundays, publish tuesdays. full year view.</div>
     <div class="card-features">
-      <span class="feature-pill">july</span>
-      <span class="feature-pill">august</span>
-      <span class="feature-pill">september</span>
+      <span class="feature-pill">quarterly view</span>
+      <span class="feature-pill">live from asana</span>
+      <span class="feature-pill">notes + posts</span>
     </div>
     <div class="card-footer">
       <span class="card-status status-live">live</span>
@@ -316,23 +258,18 @@ body{
   <!-- The Slow Steep -->
   <a href="steep.html" class="tool-card card-steep">
     <div class="card-icon">
-      <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
-        <!-- Coins dropping into cup -->
-        <rect x="8" y="24" width="28" height="16" rx="5" fill="#caa6a6" opacity="0.15" stroke="#caa6a6" stroke-width="1.5"/>
-        <ellipse cx="22" cy="27" rx="11" ry="3" fill="#caa6a6" opacity="0.2"/>
-        <!-- Coin 1 -->
-        <circle cx="22" cy="12" r="5" fill="#caa6a6" opacity="0.6" stroke="#d6a39a" stroke-width="1" style="animation:drip 2s ease-in-out infinite"/>
-        <text x="22" y="16" text-anchor="middle" font-size="7" fill="#16042d" font-family="DM Mono" font-weight="bold">$</text>
-        <!-- Coin 2 smaller -->
-        <circle cx="30" cy="8" r="3.5" fill="#caa6a6" opacity="0.4" stroke="#d6a39a" stroke-width="1" style="animation:drip 2.4s ease-in-out infinite 0.6s"/>
-        <!-- Steam from cup -->
-        <path d="M14 22 Q12 18 15 15" stroke="#caa6a6" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam1 2.5s ease-in-out infinite"/>
-        <path d="M22 21 Q20 16 23 13" stroke="#d6a39a" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam2 2.8s ease-in-out infinite 0.5s"/>
+      <svg width="42" height="42" viewBox="0 0 42 42" fill="none">
+        <rect x="8" y="22" width="26" height="16" rx="5" fill="#c4a45a" opacity="0.12" stroke="#c4a45a" stroke-width="1.5"/>
+        <ellipse cx="21" cy="25" rx="10" ry="3" fill="#c4a45a" opacity="0.2"/>
+        <circle cx="21" cy="12" r="5" fill="#c4a45a" opacity="0.5" stroke="#d4b46a" stroke-width="1" style="animation:drip 2s ease-in-out infinite"/>
+        <text x="21" y="16" text-anchor="middle" font-size="7" fill="#2c1810" font-family="DM Mono" font-weight="bold">$</text>
+        <path d="M14 20 Q12 16 15 13" stroke="#c4a45a" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam1 2.5s ease-in-out infinite"/>
+        <path d="M21 19 Q19 14 22 11" stroke="#d6a39a" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam2 2.8s ease-in-out infinite 0.5s"/>
       </svg>
     </div>
     <div class="card-eyebrow">the other pot · finances</div>
     <div class="card-name">the <em>slow steep</em></div>
-    <div class="card-desc" style="color:#caa6a6">your money, your terms. view, log, and track from your budget sheet.</div>
+    <div class="card-desc">your money, your terms. view, log, and track from the bottom line sheet.</div>
     <div class="card-features">
       <span class="feature-pill">google sheets</span>
       <span class="feature-pill">bill reminders</span>
@@ -347,24 +284,48 @@ body{
   <!-- The Table -->
   <a href="table.html" class="tool-card card-table">
     <div class="card-icon">
-      <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
-        <!-- Bowl -->
-        <path d="M8 22 Q8 36 22 36 Q36 36 36 22" stroke="#d6a39a" stroke-width="1.5" fill="#d6a39a" fill-opacity="0.1"/>
-        <!-- Spoon -->
-        <ellipse cx="22" cy="16" rx="5" ry="7" fill="#d6a39a" opacity="0.3" stroke="#d6a39a" stroke-width="1.5" style="animation:float 2.5s ease-in-out infinite"/>
-        <line x1="22" y1="23" x2="22" y2="38" stroke="#d6a39a" stroke-width="1.5" stroke-linecap="round" style="animation:float 2.5s ease-in-out infinite"/>
-        <!-- Steam -->
+      <svg width="42" height="42" viewBox="0 0 42 42" fill="none">
+        <path d="M8 20 Q8 34 21 34 Q34 34 34 20" stroke="#d6a39a" stroke-width="1.5" fill="#d6a39a" fill-opacity="0.08"/>
+        <ellipse cx="21" cy="16" rx="5" ry="7" fill="#d6a39a" opacity="0.25" stroke="#d6a39a" stroke-width="1.5" style="animation:float 2.5s ease-in-out infinite"/>
+        <line x1="21" y1="23" x2="21" y2="36" stroke="#d6a39a" stroke-width="1.5" stroke-linecap="round" style="animation:float 2.5s ease-in-out infinite"/>
         <path d="M14 18 Q12 14 15 11" stroke="#d6a39a" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam1 2.2s ease-in-out infinite"/>
-        <path d="M30 18 Q28 14 31 11" stroke="#caa6a6" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam2 2.6s ease-in-out infinite 0.4s"/>
+        <path d="M28 18 Q26 14 29 11" stroke="#caa6a6" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam2 2.6s ease-in-out infinite 0.4s"/>
       </svg>
     </div>
     <div class="card-eyebrow">the other pot · meals</div>
     <div class="card-name">the <em>table</em></div>
-    <div class="card-desc" style="color:#d6a39a">weekly meal planning for the whole family. grocery list auto-generates.</div>
+    <div class="card-desc">weekly meal planning for the whole family. grocery list auto-generates.</div>
     <div class="card-features">
       <span class="feature-pill">meal planner</span>
       <span class="feature-pill">grocery list</span>
-      <span class="feature-pill">meal library</span>
+      <span class="feature-pill">copy for phone</span>
+    </div>
+    <div class="card-footer">
+      <span class="card-status status-live">live</span>
+      <span class="card-arrow">→</span>
+    </div>
+  </a>
+
+  <!-- The Daily Grind -->
+  <a href="body.html" class="tool-card card-body">
+    <div class="card-icon">
+      <svg width="42" height="42" viewBox="0 0 42 42" fill="none">
+        <rect x="10" y="22" width="22" height="16" rx="5" fill="#4a7c59" opacity="0.1" stroke="#4a7c59" stroke-width="1.5" opacity="0.4"/>
+        <ellipse cx="21" cy="25" rx="9" ry="2.5" fill="#4a7c59" opacity="0.12"/>
+        <path d="M15 20 Q12 14 16 9 Q20 4 15 0" stroke="#4a7c59" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.5" style="animation:steam1 3s ease-in-out infinite"/>
+        <path d="M21 20 Q18 13 22 7 Q26 1 21 -2" stroke="#7acc8a" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.4" style="animation:steam2 3.4s ease-in-out infinite 0.5s"/>
+        <path d="M27 20 Q24 14 28 9 Q32 4 27 0" stroke="#caa6a6" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.3" style="animation:steam3 2.8s ease-in-out infinite 1s"/>
+        <path d="M18 33 Q21 30 24 33 Q27 36 21 40 Q15 36 18 33" fill="#4a7c59" opacity="0.25" style="animation:pulse-soft 2s ease-in-out infinite"/>
+      </svg>
+    </div>
+    <div class="card-eyebrow">the other pot · wellness</div>
+    <div class="card-name">the <em>daily grind</em></div>
+    <div class="card-desc">mood, movement, sleep, water, coffee, cycle, goals. logged daily.</div>
+    <div class="card-features">
+      <span class="feature-pill">daily log</span>
+      <span class="feature-pill">cycle tracker</span>
+      <span class="feature-pill">movement</span>
+      <span class="feature-pill">goals</span>
     </div>
     <div class="card-footer">
       <span class="card-status status-live">live</span>
@@ -373,55 +334,26 @@ body{
   </a>
 
   <!-- The Morning Steep -->
-  <a href="journal.html" class="tool-card" style="background:linear-gradient(135deg,#1e1530 0%,#160d28 100%);border-color:rgba(196,164,90,0.3)">
+  <a href="journal.html" class="tool-card card-journal">
     <div class="card-icon">
-      <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
-        <rect x="6" y="14" width="28" height="24" rx="4" fill="#c4a45a" opacity="0.15" stroke="#c4a45a" stroke-width="1.5"/>
-        <line x1="11" y1="22" x2="29" y2="22" stroke="#c4a45a" stroke-width="1" opacity="0.5"/>
-        <line x1="11" y1="27" x2="25" y2="27" stroke="#c4a45a" stroke-width="1" opacity="0.4"/>
-        <line x1="11" y1="32" x2="22" y2="32" stroke="#c4a45a" stroke-width="1" opacity="0.3"/>
-        <path d="M14 12 Q12 8 15 5" stroke="#c4a45a" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam1 2.5s ease-in-out infinite"/>
-        <path d="M20 11 Q18 6 21 3" stroke="#d6a39a" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam2 2.8s ease-in-out infinite 0.4s"/>
-        <path d="M26 12 Q24 8 27 5" stroke="#caa6a6" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam3 2.3s ease-in-out infinite 0.8s"/>
+      <svg width="42" height="42" viewBox="0 0 42 42" fill="none">
+        <rect x="6" y="12" width="26" height="24" rx="4" fill="#c4a45a" opacity="0.1" stroke="#c4a45a" stroke-width="1.5" opacity="0.5"/>
+        <line x1="11" y1="20" x2="27" y2="20" stroke="#c4a45a" stroke-width="1" opacity="0.5"/>
+        <line x1="11" y1="25" x2="23" y2="25" stroke="#c4a45a" stroke-width="1" opacity="0.4"/>
+        <line x1="11" y1="30" x2="20" y2="30" stroke="#c4a45a" stroke-width="1" opacity="0.3"/>
+        <path d="M13 10 Q11 6 14 3" stroke="#c4a45a" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam1 2.5s ease-in-out infinite"/>
+        <path d="M19 9 Q17 4 20 1" stroke="#d6a39a" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam2 2.8s ease-in-out infinite 0.4s"/>
+        <path d="M25 10 Q23 6 26 3" stroke="#caa6a6" stroke-width="1.5" stroke-linecap="round" fill="none" style="animation:steam3 2.3s ease-in-out infinite 0.8s"/>
       </svg>
     </div>
     <div class="card-eyebrow">the other pot · morning journal</div>
     <div class="card-name">the <em>morning steep</em></div>
-    <div class="card-desc" style="color:#c4a45a;opacity:0.8">sit down. second cup optional. scripture, reflection, gratitude, one word.</div>
+    <div class="card-desc">sit down. second cup optional. scripture, reflection, gratitude, one word.</div>
     <div class="card-features">
       <span class="feature-pill">90 passages</span>
       <span class="feature-pill">10 themes</span>
       <span class="feature-pill">NIV · KJV</span>
       <span class="feature-pill">print-ready</span>
-    </div>
-    <div class="card-footer">
-      <span class="card-status status-live">live</span>
-      <span class="card-arrow">→</span>
-    </div>
-  </a>
-
-  <!-- The Body / Daily Grind -->
-  <a href="body.html" class="tool-card card-body">
-    <div class="card-icon">
-      <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
-        <!-- Cup with plant/steam -->
-        <rect x="10" y="24" width="24" height="16" rx="5" fill="#f6e6e3" opacity="0.1" stroke="#f6e6e3" stroke-width="1.5" opacity="0.4"/>
-        <ellipse cx="22" cy="27" rx="10" ry="2.5" fill="#f6e6e3" opacity="0.15"/>
-        <!-- Gentle steam curls -->
-        <path d="M16 22 Q13 16 17 11 Q21 6 16 2" stroke="#f6e6e3" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.5" style="animation:steam1 3s ease-in-out infinite"/>
-        <path d="M22 22 Q19 15 23 9 Q27 3 22 -1" stroke="#d6a39a" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.4" style="animation:steam2 3.4s ease-in-out infinite 0.5s"/>
-        <path d="M28 22 Q25 16 29 11 Q33 6 28 2" stroke="#caa6a6" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.3" style="animation:steam3 2.8s ease-in-out infinite 1s"/>
-        <!-- Small heart -->
-        <path d="M19 35 Q22 32 25 35 Q28 38 22 42 Q16 38 19 35" fill="#f6e6e3" opacity="0.3" style="animation:pulse-soft 2s ease-in-out infinite"/>
-      </svg>
-    </div>
-    <div class="card-eyebrow">the other pot · wellness</div>
-    <div class="card-name">the <em>daily grind</em></div>
-    <div class="card-desc" style="color:#f6e6e3;opacity:0.7">mood, movement, sleep, water, coffee, cycle, goals. logged daily, saved to asana.</div>
-    <div class="card-features">
-      <span class="feature-pill">daily log</span>
-      <span class="feature-pill">cycle tracker</span>
-      <span class="feature-pill">asana connected</span>
     </div>
     <div class="card-footer">
       <span class="card-status status-live">live</span>
@@ -462,19 +394,19 @@ body{
 </div>
 
 <div class="footer">
-  <span class="footer-brand">the other pot · grace sarah · regina, sk</span>
-  <span class="footer-note">☕ built for one. maybe for many.</span>
+  <span class="footer-brand">the other pot · grace sarah · fairholme, sk</span>
+  <span class="footer-note">☕ reheated, obviously</span>
 </div>
 
 <script>
 const greetings = {
-  0: "sunday. the best cup of the week.",
-  1: "monday. fresh pot.",
-  2: "tuesday. the work is in the cup.",
-  3: "wednesday. halfway through the steep.",
-  4: "thursday. almost there.",
-  5: "friday. the last pour of the week.",
-  6: "saturday. no rush today.",
+  0:'sunday. the best cup of the week.',
+  1:'monday. fresh pot.',
+  2:'tuesday. the work is in the cup.',
+  3:'wednesday. halfway through the steep.',
+  4:'thursday. almost there.',
+  5:'friday. the last pour of the week.',
+  6:'saturday. no rush today.',
 };
 const now = new Date();
 document.getElementById('heroGreeting').textContent = greetings[now.getDay()];

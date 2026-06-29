@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 Content Map · Reheated, Obviously</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☕</text></svg>">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Lora:ital,wght@0,400;1,400&family=Inter:wght@400;500;600&family=DM+Mono:wght@400&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#f6e6e3;color:#1e2433;padding:0;min-height:100vh}
+.topbar{background:#2c1810;display:flex;align-items:center;padding:0 28px;height:52px;position:sticky;top:0;z-index:100}
+.topbar-logo{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.12em;color:#f5e8e4}
+.topbar-sep{width:1px;height:16px;background:rgba(255,255,255,0.1);margin:0 14px}
+.topbar-sub{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.3)}
+.topbar-spacer{flex:1}
+.topbar-back{font-size:11px;color:rgba(255,255,255,0.3);text-decoration:none;font-family:'DM Mono',monospace}
+.topbar-back:hover{color:#f5e8e4}
+
+header{padding:28px 28px 20px;border-bottom:1.5px solid #1e2433;max-width:1100px;margin:0 auto;width:100%}
+.brand{font-family:'DM Mono',monospace;font-size:11px;color:#944e63;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px}
+h1{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:#1e2433;margin-bottom:4px}
+.sub{font-size:13px;color:#3d4a5c}
+
+/* QUARTER TABS */
+.quarter-tabs{display:flex;gap:6px;padding:16px 28px 0;max-width:1100px;margin:0 auto;width:100%;flex-wrap:wrap}
+.quarter-tab{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.08em;padding:7px 18px;border-radius:20px;border:1px solid #1e2433;color:#3d4a5c;cursor:pointer;background:none;transition:all 0.15s}
+.quarter-tab:hover{background:#1e2433;color:#f5e8e4}
+.quarter-tab.active{background:#1e2433;color:#c4a45a;border-color:#1e2433}
+.quarter-tab.q3{background:#944e63;border-color:#944e63;color:#fff}
+.quarter-tab.q3.active{background:#944e63;color:#fff}
+
+/* MONTH TABS */
+.month-tabs{display:flex;gap:6px;padding:12px 28px 0;max-width:1100px;margin:0 auto;width:100%;flex-wrap:wrap}
+.month-tab{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.06em;padding:5px 14px;border-radius:20px;border:0.5px solid rgba(30,36,51,0.3);color:#3d4a5c;cursor:pointer;background:none;transition:all 0.15s}
+.month-tab:hover{border-color:#944e63;color:#944e63}
+.month-tab.active{background:#944e63;border-color:#944e63;color:#fff}
+
+.content{padding:16px 28px 40px;max-width:1100px;margin:0 auto;width:100%}
+
+/* MILESTONES */
+.milestones{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.milestone-card{background:#1e2433;border-radius:8px;padding:12px 14px}
+.milestone-card .m-label{font-size:10px;font-weight:600;color:#c4a45a;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:4px;font-family:'DM Mono',monospace}
+.milestone-card .m-val{font-family:'Playfair Display',serif;font-size:15px;color:#f6e6e3;margin-bottom:2px}
+.milestone-card .m-sub{font-size:11px;color:#b47b84}
+
+/* LEGEND */
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:14px;align-items:center}
+.legend-title{font-size:11px;font-weight:600;color:#3d4a5c;text-transform:uppercase;letter-spacing:0.06em;font-family:'DM Mono',monospace}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:#1e2433}
+.legend-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+.dot-batch{background:#3d4a5c}.dot-post{background:#944e63}.dot-tool{background:#c4a45a}.dot-note{background:#b47b84}
+
+/* CALENDAR */
+.calendar{border:1px solid #1e2433;border-radius:10px;overflow:hidden;margin-bottom:14px}
+.cal-header{display:grid;grid-template-columns:70px repeat(7,1fr);background:#1e2433}
+.cal-header div{font-size:11px;font-weight:600;color:#c4a45a;text-align:center;padding:8px 4px;letter-spacing:0.05em;text-transform:uppercase;font-family:'DM Mono',monospace}
+.cal-header div:first-child{color:#b47b84;font-size:10px}
+.week{display:grid;grid-template-columns:70px repeat(7,1fr);border-top:0.5px solid rgba(30,36,51,0.15)}
+.week:nth-child(odd){background:rgba(255,255,255,0.3)}
+.week:nth-child(even){background:rgba(255,255,255,0.15)}
+.week-label{display:flex;align-items:center;justify-content:flex-end;padding:10px;font-size:10px;font-weight:600;color:#944e63;text-transform:uppercase;letter-spacing:0.05em;border-right:0.5px solid rgba(30,36,51,0.1);font-family:'DM Mono',monospace}
+.day-cell{padding:6px 4px;border-right:0.5px solid rgba(30,36,51,0.08);min-height:68px;display:flex;flex-direction:column;gap:3px}
+.day-cell:last-child{border-right:none}
+.date{font-size:11px;color:#3d4a5c;font-weight:500;margin-bottom:2px;text-align:center;font-family:'DM Mono',monospace}
+.date.prev{color:#b47b84;opacity:0.5}
+.date.today-date{color:#944e63;font-weight:700}
+.pill{border-radius:4px;padding:3px 5px;font-size:9.5px;font-weight:500;line-height:1.4;text-align:center;cursor:pointer;font-family:'Inter',sans-serif}
+.pill-batch{background:#3d4a5c;color:#f6e6e3}
+.pill-post{background:#944e63;color:#f6e6e3}
+.pill-tool{background:#c4a45a;color:#1e2433}
+.pill-note{background:rgba(180,123,132,0.25);color:#944e63;border:0.5px solid #b47b84}
+.loading{text-align:center;padding:40px;font-family:'Lora',serif;font-style:italic;color:#9e7d68}
+.asana-badge{display:inline-flex;align-items:center;gap:6px;background:#1e2433;color:#c4a45a;border-radius:20px;padding:4px 12px;font-size:11px;margin-bottom:12px;text-decoration:none;font-family:'DM Mono',monospace}
+
+.guardrails{border:0.5px solid rgba(30,36,51,0.2);border-radius:8px;padding:12px 16px;background:rgba(255,255,255,0.4);margin-top:14px}
+.guardrails-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:#944e63;margin-bottom:8px;font-family:'DM Mono',monospace}
+.guardrails-list{display:flex;flex-wrap:wrap;gap:6px 20px}
+.guardrail-item{font-size:11px;color:#1e2433;display:flex;align-items:center;gap:5px}
+.guardrail-item::before{content:'';width:4px;height:4px;border-radius:50%;background:#c4a45a;flex-shrink:0}
+footer{padding:14px 28px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;max-width:1100px;margin:0 auto;width:100%}
+.footer-note{font-size:11px;color:#3d4a5c;font-family:'DM Mono',monospace}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-logo">REHEATED, OBVIOUSLY</span>
+  <div class="topbar-sep"></div>
+  <span class="topbar-sub">content map 2026</span>
+  <div class="topbar-spacer"></div>
+  <a href="../index.html" class="topbar-back">← hub</a>
+</div>
+
+<header>
+  <div class="brand">Reheated, Obviously · 2026</div>
+  <h1>content map</h1>
+  <div class="sub">Season: Growing &nbsp;·&nbsp; North Star: 10 users by September 30 &nbsp;·&nbsp; Posts publish Tuesday 7–8am CDT</div>
+</header>
+
+<div class="quarter-tabs">
+  <button class="quarter-tab" onclick="setQuarter(1)">Q1 · Jan–Mar</button>
+  <button class="quarter-tab" onclick="setQuarter(2)">Q2 · Apr–Jun</button>
+  <button class="quarter-tab q3 active" onclick="setQuarter(3)">Q3 · Jul–Sep</button>
+  <button class="quarter-tab" onclick="setQuarter(4)">Q4 · Oct–Dec</button>
+</div>
+
+<div class="month-tabs" id="monthTabs"></div>
+
+<div class="content">
+  <a href="https://app.asana.com/0/1215878381563758" target="_blank" class="asana-badge">☕ live from asana · content calendar</a>
+
+  <div class="milestones" id="milestones"></div>
+
+  <div class="legend">
+    <span class="legend-title">Key</span>
+    <div class="legend-item"><div class="legend-dot dot-batch"></div>Batch writing (Sunday)</div>
+    <div class="legend-item"><div class="legend-dot dot-post"></div>Post / essay</div>
+    <div class="legend-item"><div class="legend-dot dot-tool"></div>Tool post</div>
+    <div class="legend-item"><div class="legend-dot dot-note"></div>Notes day</div>
+  </div>
+
+  <div id="calendar" class="calendar"><div class="loading">loading from asana...</div></div>
+
+  <div class="guardrails">
+    <div class="guardrails-title">Q3 guardrails</div>
+    <div class="guardrails-list">
+      <div class="guardrail-item">No new client-facing tools this quarter</div>
+      <div class="guardrail-item">No landing page, no Instagram rebuild</div>
+      <div class="guardrail-item">Morning Pour back-end is fair game</div>
+      <div class="guardrail-item">Every shiny idea goes through the bouncer first</div>
+      <div class="guardrail-item">Plan for worst-day-Grace, not best-day-Grace</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-note">Posts: Tuesday 7–8am CDT &nbsp;·&nbsp; Batch write: Sundays &nbsp;·&nbsp; Notes core days: Tue / Wed / Thu</div>
+  <div class="footer-note">Reheated, Obviously · reheatedobviously.substack.com</div>
+</footer>
+
+<script>
+const QUARTER_MONTHS = {
+  1: [0,1,2],   // Jan Feb Mar
+  2: [3,4,5],   // Apr May Jun
+  3: [6,7,8],   // Jul Aug Sep
+  4: [9,10,11], // Oct Nov Dec
+};
+const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const MONTH_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const YEAR = 2026;
+const today = new Date();
+
+const QUARTER_MILESTONES = {
+  1: [{label:'Q1 focus',val:'Content foundation',sub:'Build the writing habit'},{label:'Q1 goal',val:'Consistent notes',sub:'3+ per week'},{label:'Q1 rhythm',val:'Batch Sundays',sub:'Publish Tuesdays'}],
+  2: [{label:'Q2 focus',val:'Audience building',sub:'Grow the list'},{label:'Q2 goal',val:'First paid users',sub:'After the Call or Before Monday'},{label:'Q2 rhythm',val:'Notes + essays',sub:'Find your voice again'}],
+  3: [{label:'July milestone',val:'First paid sale',sub:'After the Call or Before Monday'},{label:'Q3 north star',val:'10 users by Sep 30',sub:'Draft & Sips free · 2 paid tools'},{label:'Notes rhythm',val:'5+ per week',sub:'Tue / Wed / Thu core · Mon & Sat bonus'}],
+  4: [{label:'Q4 focus',val:'The Sunday Pour launch',sub:'Mid-Aug soft launch'},{label:'Q4 goal',val:'15 total users',sub:'Build into winter'},{label:'Q4 rhythm',val:'Deepen + convert',sub:'Less acquisition, more depth'}],
+};
+
+let activeQuarter = 3;
+let activeMonth = 6; // July
+let allTasks = [];
+let allNotes = [];
+
+async function loadAllContent() {
+  try {
+    const [calRes, notesRes] = await Promise.all([
+      fetch('/.netlify/functions/asana-proxy?view=content_calendar').then(r=>r.json()),
+      fetch('/.netlify/functions/asana-proxy?view=ro_notes').then(r=>r.json())
+    ]);
+    allTasks = calRes.tasks || [];
+    allNotes = notesRes.tasks || [];
+    renderAll();
+  } catch(e) {
+    document.getElementById('calendar').innerHTML = '<div class="loading">could not load — check connection</div>';
+  }
+}
+
+function setQuarter(q) {
+  activeQuarter = q;
+  activeMonth = QUARTER_MONTHS[q][0];
+  document.querySelectorAll('.quarter-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.quarter-tab')[q-1].classList.add('active');
+  renderAll();
+}
+
+function setMonth(m) {
+  activeMonth = m;
+  renderAll();
+}
+
+function renderAll() {
+  renderMonthTabs();
+  renderMilestones();
+  renderCalendar();
+}
+
+function renderMonthTabs() {
+  const container = document.getElementById('monthTabs');
+  container.innerHTML = '';
+  QUARTER_MONTHS[activeQuarter].forEach(m => {
+    const btn = document.createElement('button');
+    btn.className = 'month-tab' + (m === activeMonth ? ' active' : '');
+    btn.textContent = MONTH_NAMES[m];
+    btn.onclick = () => setMonth(m);
+    container.appendChild(btn);
+  });
+  // All months in quarter option
+  const allBtn = document.createElement('button');
+  allBtn.className = 'month-tab';
+  allBtn.textContent = 'all three months';
+  allBtn.onclick = () => { activeMonth = -1; renderAll(); };
+  container.appendChild(allBtn);
+}
+
+function renderMilestones() {
+  const container = document.getElementById('milestones');
+  const milestones = QUARTER_MILESTONES[activeQuarter];
+  container.innerHTML = milestones.map(m => `
+    <div class="milestone-card">
+      <div class="m-label">${m.label}</div>
+      <div class="m-val">${m.val}</div>
+      <div class="m-sub">${m.sub}</div>
+    </div>
+  `).join('');
+}
+
+function renderCalendar() {
+  const months = activeMonth === -1 ? QUARTER_MONTHS[activeQuarter] : [activeMonth];
+  const cal = document.getElementById('calendar');
+  
+  const taskMap = {};
+  allTasks.forEach(t => {
+    if(!taskMap[t.due_on]) taskMap[t.due_on] = [];
+    taskMap[t.due_on].push(t);
+  });
+  allNotes.forEach(t => {
+    if(!taskMap[t.due_on]) taskMap[t.due_on] = [];
+    taskMap[t.due_on].push({...t, type:'note'});
+  });
+
+  let html = '<div class="cal-header"><div></div><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div>';
+
+  months.forEach(month => {
+    // Month label if showing multiple
+    if(months.length > 1) {
+      html += `<div style="background:#1e2433;color:#c4a45a;padding:8px 16px;font-family:DM Mono,monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;grid-column:1/-1">${MONTH_NAMES[month]} ${YEAR}</div>`;
+    }
+
+    const firstDay = new Date(YEAR, month, 1).getDay();
+    const daysInMonth = new Date(YEAR, month+1, 0).getDate();
+    
+    // Build weeks
+    const weeks = [];
+    let week = [];
+    // Fill leading days from prev month
+    const prevDays = new Date(YEAR, month, 0).getDate();
+    for(let i = firstDay-1; i >= 0; i--) {
+      week.push({ day: prevDays-i, month: month-1, prev: true });
+    }
+    for(let d = 1; d <= daysInMonth; d++) {
+      week.push({ day: d, month, prev: false });
+      if(week.length === 7) { weeks.push(week); week = []; }
+    }
+    if(week.length) {
+      let nextDay = 1;
+      while(week.length < 7) { week.push({ day: nextDay++, month: month+1, prev: true }); }
+      weeks.push(week);
+    }
+
+    weeks.forEach((week, wi) => {
+      html += `<div class="week"><div class="week-label">Wk ${wi+1}</div>`;
+      week.forEach(({day, month: m, prev}) => {
+        const dateStr = `${YEAR}-${String(m+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+        const isToday = today.getFullYear()===YEAR && today.getMonth()===m && today.getDate()===day;
+        const dayTasks = taskMap[dateStr] || [];
+        html += `<div class="day-cell">`;
+        html += `<div class="date${prev?' prev':''}${isToday?' today-date':''}">${day}</div>`;
+        dayTasks.forEach(t => {
+          const type = t.type || detectType(t.name);
+          html += `<div class="pill pill-${type}" title="${t.name}">${t.name.length > 18 ? t.name.slice(0,18)+'…' : t.name}</div>`;
+        });
+        html += `</div>`;
+      });
+      html += `</div>`;
+    });
+  });
+
+  cal.innerHTML = html;
+}
+
+function detectType(name) {
+  const l = name.toLowerCase();
+  if(l.includes('batch')) return 'batch';
+  if(l.includes('tool')||l.includes('after the call')||l.includes('before monday')||l.includes('draft')) return 'tool';
+  if(l.includes('note')) return 'note';
+  return 'post';
+}
+
+loadAllContent();
+</script>
+</body>
+</html>

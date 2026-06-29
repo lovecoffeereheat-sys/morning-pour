@@ -309,11 +309,58 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;background:var(--navy-deep)
           <div class="platform-name">instagram</div>
           <div class="platform-handle">@reheatedobviously</div>
         </div>
-        <span class="platform-status status-soon">coming back</span>
+        <span class="platform-status status-active">active</span>
       </div>
-      <div class="coming-overlay">
-        <div class="coming-icon">📱</div>
-        <div class="coming-text">getting back on instagram soon ☕<br>numbers will live here when you do</div>
+      <div class="platform-body wide">
+        <div class="metric">
+          <div class="metric-label">followers</div>
+          <div class="metric-value rose" id="igFollowers">—</div>
+          <div class="metric-trend" id="igFollowersTrend"></div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">new this week</div>
+          <div class="metric-value" id="igNew">—</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">posts this week</div>
+          <div class="metric-value" id="igPosts">—</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">avg reach</div>
+          <div class="metric-value" id="igReach">—</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">avg engagement</div>
+          <div class="metric-value" id="igEngagement">—</div>
+          <div class="metric-sub">likes + comments</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">stories this week</div>
+          <div class="metric-value" id="igStories">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTENT THIS WEEK -->
+    <div class="platform-card" style="grid-column:1/-1">
+      <div class="platform-head">
+        <div class="platform-icon" style="background:rgba(148,78,99,0.12)">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <rect x="2" y="3" width="18" height="3" rx="1" fill="#944e63"/>
+            <rect x="2" y="8" width="18" height="3" rx="1" fill="#944e63" opacity="0.7"/>
+            <path d="M2 13 L11 18 L20 13 V20 L11 20 L2 20 Z" fill="#944e63" opacity="0.8"/>
+          </svg>
+        </div>
+        <div>
+          <div class="platform-name">content this week</div>
+          <div class="platform-handle">live from asana · content calendar + ro content</div>
+        </div>
+        <span class="platform-status status-active">live</span>
+      </div>
+      <div style="padding:16px 18px">
+        <div id="contentThisWeek" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px">
+          <div style="font-family:Lora,serif;font-style:italic;font-size:13px;color:var(--text-faint);padding:8px">loading from asana...</div>
+        </div>
       </div>
     </div>
 
@@ -357,6 +404,7 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;background:var(--navy-deep)
     <div class="modal-sub">sunday morning, 5 minutes. get it all in here.</div>
 
     <div class="modal-section">🎯 tool users</div>
+    <div style="font-family:DM Mono,monospace;font-size:9px;color:var(--text-faint);margin-bottom:10px;line-height:1.6">find in → payhip.com · each product listing · sales count</div>
     <div class="m-row">
       <div class="m-field"><span class="m-label">after the call · paid</span><input class="m-input" id="f-atcPaid" type="number" min="0" placeholder="0"></div>
       <div class="m-field"><span class="m-label">after the call · free</span><input class="m-input" id="f-atcFree" type="number" min="0" placeholder="0"></div>
@@ -371,6 +419,7 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;background:var(--navy-deep)
     </div>
 
     <div class="modal-section">📧 substack</div>
+    <div style="font-family:DM Mono,monospace;font-size:9px;color:var(--text-faint);margin-bottom:10px;line-height:1.6">find in → substack.com/publish · stats tab · dashboard</div>
     <div class="m-row">
       <div class="m-field"><span class="m-label">total subscribers</span><input class="m-input" id="f-substackSubs" type="number" min="0" placeholder="209"></div>
       <div class="m-field"><span class="m-label">new this week</span><input class="m-input" id="f-substackNew" type="number" placeholder="+0"></div>
@@ -385,6 +434,7 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;background:var(--navy-deep)
     </div>
 
     <div class="modal-section">💰 revenue (CAD)</div>
+    <div style="font-family:DM Mono,monospace;font-size:9px;color:var(--text-faint);margin-bottom:10px;line-height:1.6">find in → payhip.com · sales · filter by date</div>
     <div class="m-row">
       <div class="m-field"><span class="m-label">this month total</span><input class="m-input" id="f-revMonth" placeholder="$0.00"></div>
       <div class="m-field"><span class="m-label">sales this week</span><input class="m-input" id="f-revWeek" type="number" min="0" placeholder="0"></div>
@@ -392,6 +442,21 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;background:var(--navy-deep)
     <div class="m-row">
       <div class="m-field"><span class="m-label">all time total</span><input class="m-input" id="f-revTotal" placeholder="$0.00"></div>
       <div class="m-field"><span class="m-label">q3 total (jul-sep)</span><input class="m-input" id="f-revQ3" placeholder="$0.00"></div>
+    </div>
+
+    <div class="modal-section">📱 instagram · @reheatedobviously</div>
+    <div style="font-family:DM Mono,monospace;font-size:9px;color:var(--text-faint);margin-bottom:10px;line-height:1.6">find in → instagram app · professional dashboard · insights</div>
+    <div class="m-row">
+      <div class="m-field"><span class="m-label">followers</span><input class="m-input" id="f-igFollowers" type="number" min="0" placeholder="0"></div>
+      <div class="m-field"><span class="m-label">new this week</span><input class="m-input" id="f-igNew" placeholder="+0"></div>
+    </div>
+    <div class="m-row">
+      <div class="m-field"><span class="m-label">posts this week</span><input class="m-input" id="f-igPosts" type="number" min="0" placeholder="0"></div>
+      <div class="m-field"><span class="m-label">stories this week</span><input class="m-input" id="f-igStories" type="number" min="0" placeholder="0"></div>
+    </div>
+    <div class="m-row">
+      <div class="m-field"><span class="m-label">avg reach</span><input class="m-input" id="f-igReach" placeholder="0"></div>
+      <div class="m-field"><span class="m-label">avg engagement</span><input class="m-input" id="f-igEngagement" placeholder="0"></div>
     </div>
 
     <div class="modal-section">📝 weekly notes</div>
@@ -419,7 +484,9 @@ function loadData() {
 function saveData() {
   const fields = ['atcPaid','atcFree','bmPaid','bmFree','dsFree',
     'substackSubs','substackNew','substackOpen','substackPaid','substackNotes','substackRestacks',
-    'revMonth','revWeek','revTotal','revQ3','notes'];
+    'revMonth','revWeek','revTotal','revQ3',
+    'igFollowers','igNew','igPosts','igStories','igReach','igEngagement',
+    'notes'];
   
   fields.forEach(f => {
     const el = document.getElementById(`f-${f}`);
@@ -490,12 +557,22 @@ function renderDashboard() {
 
   // Notes
   if(data.notes) document.getElementById('weeklyNotes').textContent = data.notes;
+
+  // Instagram
+  if(data.igFollowers) document.getElementById('igFollowers').textContent = parseInt(data.igFollowers).toLocaleString();
+  if(data.igNew) { const n=parseInt(data.igNew); document.getElementById('igNew').textContent = (n>=0?'+':'')+n; document.getElementById('igFollowersTrend').innerHTML = n>0?'<span class="trend-up">↑ growing</span>':''; }
+  if(data.igPosts) document.getElementById('igPosts').textContent = data.igPosts;
+  if(data.igStories) document.getElementById('igStories').textContent = data.igStories;
+  if(data.igReach) document.getElementById('igReach').textContent = data.igReach;
+  if(data.igEngagement) document.getElementById('igEngagement').textContent = data.igEngagement;
 }
 
 function populateModal() {
   const fields = ['atcPaid','atcFree','bmPaid','bmFree','dsFree',
     'substackSubs','substackNew','substackOpen','substackPaid','substackNotes','substackRestacks',
-    'revMonth','revWeek','revTotal','revQ3','notes'];
+    'revMonth','revWeek','revTotal','revQ3',
+    'igFollowers','igNew','igPosts','igStories','igReach','igEngagement',
+    'notes'];
   fields.forEach(f => {
     const el = document.getElementById(`f-${f}`);
     if(el && data[f]) el.value = data[f];
@@ -522,6 +599,40 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 2500);
 }
 
+async function loadContentThisWeek() {
+  const container = document.getElementById('contentThisWeek');
+  try {
+    const [calRes, notesRes] = await Promise.all([
+      fetch('/.netlify/functions/asana-proxy?view=publishing_this_week').then(r=>r.json()),
+      fetch('/.netlify/functions/asana-proxy?view=in_progress_content').then(r=>r.json())
+    ]);
+    const publishing = calRes.tasks || [];
+    const inProgress = (notesRes.tasks || []).slice(0,4);
+    container.innerHTML = '';
+
+    if(!publishing.length && !inProgress.length) {
+      container.innerHTML = '<div style="font-family:Lora,serif;font-style:italic;font-size:13px;color:var(--text-faint);padding:8px">nothing scheduled this week</div>';
+      return;
+    }
+
+    publishing.forEach(t => {
+      const el = document.createElement('div');
+      el.style.cssText = 'background:rgba(148,78,99,0.08);border:1px solid rgba(148,78,99,0.2);border-radius:8px;padding:10px 12px';
+      el.innerHTML = '<div style="font-family:DM Mono,monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--rose-mid);margin-bottom:4px">publishing · '+t.due_on+'</div><div style="font-size:13px;color:var(--text)">'+t.name+'</div>';
+      container.appendChild(el);
+    });
+
+    inProgress.slice(0,3).forEach(t => {
+      const el = document.createElement('div');
+      el.style.cssText = 'background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:10px 12px';
+      el.innerHTML = '<div style="font-family:DM Mono,monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint);margin-bottom:4px">in progress</div><div style="font-size:13px;color:var(--text-soft)">'+t.name+'</div>';
+      container.appendChild(el);
+    });
+  } catch(e) {
+    container.innerHTML = '<div style="font-family:Lora,serif;font-style:italic;font-size:13px;color:var(--text-faint);padding:8px">could not load — check connection</div>';
+  }
+}
+
 // Init
 const today = new Date();
 document.getElementById('heroDate') && (document.getElementById('heroDate').textContent = today.toLocaleDateString('en-CA',{weekday:'long',month:'long',day:'numeric'}));
@@ -534,6 +645,7 @@ document.getElementById('daysLeftBottom').textContent = `10 users needed · ${da
 
 loadData();
 renderDashboard();
+loadContentThisWeek();
 </script>
 </body>
 </html>
