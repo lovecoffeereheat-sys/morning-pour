@@ -210,8 +210,9 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;background:var(--navy);colo
     </div>
     <div class="sidebar-tabs" id="sidebarTabs">
       <div class="sidebar-tab active" id="tabAll" onclick="switchTab('all')">all</div>
-      <div class="sidebar-tab" id="tabRo" onclick="switchTab('ro')">ro</div>
-      <div class="sidebar-tab" id="tabPersonal" onclick="switchTab('personal')">personal</div>
+      <div class="sidebar-tab" id="tabToday" onclick="switchTab('TODAY')">today</div>
+      <div class="sidebar-tab" id="tabWeek" onclick="switchTab('THIS WEEK')">this week</div>
+      <div class="sidebar-tab" id="tabNext" onclick="switchTab('NEXT WEEK')">next week</div>
     </div>
     <div class="sidebar-tasks" id="sidebarContent"></div>
   </div>
@@ -722,8 +723,11 @@ function guessLane(task) {
 
 function switchTab(tab) {
   activeTab = tab;
-  ['All','Ro','Personal'].forEach(t => document.getElementById('tab'+t).classList.remove('active'));
-  document.getElementById('tab'+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add('active');
+  document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.remove('active'));
+  if(tab === 'all') document.getElementById('tabAll').classList.add('active');
+  else if(tab === 'TODAY') document.getElementById('tabToday').classList.add('active');
+  else if(tab === 'THIS WEEK') document.getElementById('tabWeek').classList.add('active');
+  else if(tab === 'NEXT WEEK') document.getElementById('tabNext').classList.add('active');
   renderSidebar();
 }
 
@@ -735,7 +739,12 @@ function filterTasks() {
 function renderSidebar() {
   if(mode === 'week') { renderWeekSidebar(); return; }
   const container = document.getElementById('sidebarContent');
-  const tasks = activeTab === 'all' ? allTasks : activeTab === 'ro' ? roTasks : personalTasks;
+  
+  let tasks = allTasks;
+  if(activeTab !== 'all') {
+    tasks = allTasks.filter(t => t.project === activeTab);
+  }
+  
   const filtered = searchTerm ? tasks.filter(t => t.name.toLowerCase().includes(searchTerm)) : tasks;
 
   if(!filtered.length) {
@@ -745,24 +754,18 @@ function renderSidebar() {
 
   container.innerHTML = '';
 
-  // Group by lane if all tab
   if(activeTab === 'all') {
-    const roF = filtered.filter(t => t.lane === 'ro');
-    const persF = filtered.filter(t => t.lane === 'personal');
-    if(roF.length) {
+    // Group by section
+    const sections = ['TODAY', 'THIS WEEK', 'NEXT WEEK'];
+    sections.forEach(section => {
+      const sectionTasks = filtered.filter(t => t.project === section);
+      if(!sectionTasks.length) return;
       const head = document.createElement('div');
       head.className = 'sidebar-section ro';
-      head.textContent = 'content & build · ro';
+      head.textContent = section.toLowerCase();
       container.appendChild(head);
-      roF.forEach(t => container.appendChild(makeTaskRow(t)));
-    }
-    if(persF.length) {
-      const head = document.createElement('div');
-      head.className = 'sidebar-section personal';
-      head.textContent = 'personal & mom life';
-      container.appendChild(head);
-      persF.forEach(t => container.appendChild(makeTaskRow(t)));
-    }
+      sectionTasks.forEach(t => container.appendChild(makeTaskRow(t)));
+    });
   } else {
     filtered.forEach(t => container.appendChild(makeTaskRow(t)));
   }
