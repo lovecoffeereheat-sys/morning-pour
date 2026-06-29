@@ -366,8 +366,23 @@ exports.handler = async (event) => {
 
     // ── MY TASKS SECTIONS (diagnostic) ──
     if (view === 'my_tasks_sections') {
-      const sectionsRes = await asanaGet(`/projects/1214131354603805/sections?opt_fields=name,gid`);
-      return { statusCode: 200, headers, body: JSON.stringify({ sections: sectionsRes.data || [] }) };
+      // Try multiple approaches to get My Tasks sections
+      const meRes = await asanaGet('/users/me?opt_fields=gid,workspaces');
+      const userGid = meRes.data?.gid;
+      
+      // Get user task list
+      const taskListRes = await asanaGet(`/users/${userGid}/user_task_list?workspace=1182497100078086&opt_fields=gid,name`);
+      const taskListGid = taskListRes.data?.gid;
+      
+      // Try sections on the task list directly
+      const sectionsRes = await asanaGet(`/projects/${taskListGid}/sections?opt_fields=name,gid`);
+      
+      return { statusCode: 200, headers, body: JSON.stringify({ 
+        userGid,
+        taskListGid,
+        sections: sectionsRes.data || [],
+        taskListData: taskListRes.data
+      }) };
     }
 
     // ── CREATE TASK ──
