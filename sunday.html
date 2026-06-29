@@ -190,6 +190,19 @@ textarea:focus,input.text-input:focus{border-color:var(--rose)}
 .lane-add:hover{opacity:0.7}
 
 /* BRAIN DUMP */
+
+.brain-dump-list{margin-top:12px;display:flex;flex-direction:column;gap:6px}
+.brain-dump-item{display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(255,255,255,0.03);border:1px solid var(--border-soft);border-radius:8px}
+.brain-dump-item-name{flex:1;font-size:14px;color:var(--text)}
+.brain-dump-sort-btns{display:flex;gap:4px;flex-shrink:0}
+.sort-btn{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.06em;padding:4px 8px;border-radius:5px;border:1px solid var(--border);color:var(--text-faint);cursor:pointer;background:none;transition:all 0.15s;white-space:nowrap}
+.sort-btn:hover{border-color:var(--rose);color:var(--text)}
+.sort-btn.today{border-color:var(--rose);color:var(--rose)}
+.sort-btn.week{border-color:var(--amber);color:var(--amber)}
+.sort-btn.later{border-color:var(--text-faint);color:var(--text-faint)}
+.sort-btn.done{border-color:rgba(74,124,89,0.5);color:#7acc8a;background:rgba(74,124,89,0.1)}
+.brain-dump-empty{font-style:italic;font-size:13px;color:var(--text-faint);padding:8px 0;text-align:center}
+.brain-dump-loading{font-style:italic;font-size:13px;color:var(--text-faint);padding:8px 0;text-align:center}
 .dump-input-row{display:flex;gap:8px;margin-bottom:8px}
 .dump-input{flex:1;background:var(--bg);border:0.5px solid var(--border-soft);border-radius:8px;padding:9px 12px;font-size:15px;color:var(--text);font-family:'Inter',system-ui,sans-serif;outline:none;transition:border-color 0.15s}
 .dump-input:focus{border-color:var(--rose)}
@@ -457,29 +470,29 @@ textarea:focus,input.text-input:focus{border-color:var(--rose)}
 <!-- STEP 4 -->
 <div class="step-panel" id="step4">
   <div class="section-label">step 4 — brain dump</div>
+
+  <!-- REVIEW EXISTING BRAIN DUMP -->
   <div class="card">
-    <div class="card-title">anything still rattling around?</div>
-    <div class="card-desc">capture it, tag it, send it to asana. clear the decks before the week starts.</div>
+    <div class="card-title">what's in the inbox?</div>
+    <div class="card-desc">sort each one — today, this week, later, or delete. what stays unprocessed owns you.</div>
+    <div class="brain-dump-list" id="brainDumpList">
+      <div class="brain-dump-loading">loading from asana...</div>
+    </div>
+  </div>
+
+  <!-- CAPTURE NEW -->
+  <div class="card" style="margin-top:12px">
+    <div class="card-title">anything else?</div>
+    <div class="card-desc">capture it and send it to your brain dump section in asana.</div>
     <div class="dump-input-row">
-      <input class="dump-input" id="dumpInput" placeholder="type a task or idea..." onkeydown="if(event.key==='Enter')addDumpItem()">
+      <input class="dump-input" id="dumpInput" placeholder="type a task or idea..." onkeydown="if(event.key==='Enter')quickCapture()">
     </div>
-    <div class="dump-lane-btns">
-      <button class="dump-lane-btn dump-btn-content" id="dumpBtnContent" onclick="setDumpLane('ro')"><i class="ti ti-circle-dot"></i> content & build</button>
-      <button class="dump-lane-btn dump-btn-personal" id="dumpBtnPersonal" onclick="setDumpLane('personal')"><i class="ti ti-heart"></i> personal & mom life</button>
-    </div>
-    <div class="dump-project-row" id="dumpProjectRow">
-      <select class="project-select" id="dumpProject"></select>
-    </div>
-    <button class="btn-send" onclick="addDumpItem()" style="margin-top:12px"><i class="ti ti-plus"></i> add to queue</button>
-    <div class="dump-queue" id="dumpQueue"></div>
+    <button class="btn-send" onclick="quickCapture()" style="margin-top:10px"><i class="ti ti-plus"></i> add to brain dump</button>
   </div>
-  <div id="dumpSendRow" style="display:none" class="btn-row">
+
+  <div class="btn-row">
     <button class="btn-ghost" onclick="goToStep(3)">← back</button>
-    <button class="btn-primary" onclick="sendDumpToAsana()"><i class="ti ti-brand-asana"></i> send all to asana</button>
-  </div>
-  <div id="dumpNoSend" class="btn-row">
-    <button class="btn-ghost" onclick="goToStep(3)">← back</button>
-    <button class="btn-primary" onclick="goToStep(5)"><i class="ti ti-arrow-right"></i> one word</button>
+    <button class="btn-primary" onclick="goToStep(5)"><i class="ti ti-arrow-right"></i> one word →</button>
   </div>
 </div>
 

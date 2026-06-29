@@ -184,37 +184,66 @@ exports.handler = async (event) => {
 
     // ── MY TASKS ──
     if (view === 'my_tasks') {
-      // First get the user's task list GID
-      const meRes = await asanaGet('/users/me?opt_fields=gid');
-      const userGid = meRes.data?.gid;
-      if (!userGid) return { statusCode: 200, headers, body: JSON.stringify({ tasks: [] }) };
-
-      const taskListRes = await asanaGet(`/users/${userGid}/user_task_list?workspace=1182497100078086&opt_fields=gid`);
-      const taskListGid = taskListRes.data?.gid;
-      if (!taskListGid) return { statusCode: 200, headers, body: JSON.stringify({ tasks: [] }) };
-
-      const res = await asanaGet(
-        `/user_task_lists/${taskListGid}/tasks?opt_fields=name,due_on,completed,memberships.section.name&limit=100&completed_since=now`
-      );
-      const tasks = (res.data || [])
-        .filter(t => !t.completed)
-        .map(t => {
-          const section = t.memberships?.[0]?.section?.name || '';
-          return {
+      // Fetch from Today, This Week, Next Week sections only (exclude Brain Dump + Later)
+      const ACTIVE_SECTIONS = [
+        { gid: '1214127756563294', name: 'TODAY' },
+        { gid: '1215944486350612', name: 'THIS WEEK' },
+        { gid: '1214127756563295', name: 'NEXT WEEK' },
+      ];
+      
+      const allTasks = [];
+      for (const section of ACTIVE_SECTIONS) {
+        const res = await asanaGet(
+          `/sections/${section.gid}/tasks?opt_fields=name,due_on,completed&limit=100`
+        );
+        const tasks = (res.data || [])
+          .filter(t => !t.completed)
+          .map(t => ({
             gid: t.gid,
             name: t.name,
             due_on: t.due_on || null,
-            project: section || 'My Tasks',
-            project_id: taskListGid
-          };
-        })
-        .sort((a,b) => {
-          if (!a.due_on && !b.due_on) return 0;
-          if (!a.due_on) return 1;
-          if (!b.due_on) return -1;
-          return a.due_on.localeCompare(b.due_on);
-        });
+            project: section.name,
+            project_id: '1214131354603805'
+          }));
+        allTasks.push(...tasks);
+      }
+      
+      allTasks.sort((a,b) => {
+        const order = { 'TODAY': 0, 'THIS WEEK': 1, 'NEXT WEEK': 2 };
+        return (order[a.project] || 0) - (order[b.project] || 0);
+      });
+      
+      return { statusCode: 200, headers, body: JSON.stringify({ tasks: allTasks }) };
+    }
+    
+    // ── BRAIN DUMP SECTION ──
+    if (view === 'brain_dump') {
+      const res = await asanaGet(
+        `/sections/1214127756563293/tasks?opt_fields=name,completed,due_on,notes&limit=100`
+      );
+      const tasks = (res.data || [])
+        .filter(t => !t.completed)
+        .map(t => ({
+          gid: t.gid,
+          name: t.name,
+          due_on: t.due_on || null,
+          notes: t.notes || '',
+          project: 'BRAIN DUMP',
+          project_id: '1214131354603805'
+        }));
       return { statusCode: 200, headers, body: JSON.stringify({ tasks }) };
+    }
+    
+    // ── MOVE TASK TO SECTION ──
+    if (view === 'move_task' && method === 'POST') {
+      const { task_gid, section_gid } = body;
+      const res = await fetch(`https://app.asana.com/api/1.0/sections/${section_gid}/addTask`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: { task: task_gid } })
+      });
+      const data = await res.json();
+      return { statusCode: 200, headers, body: JSON.stringify({ success: true, data }) };
     }
 
     // ── RO TASKS (content lane) ──

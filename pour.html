@@ -144,6 +144,16 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;background:var(--navy);colo
 .cat-pick-name{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.05em;color:var(--text-soft)}
 
 /* DURATION PICKER */
+
+.task-suggestions{margin-top:4px;display:flex;flex-direction:column;gap:4px;max-height:160px;overflow-y:auto}
+.task-suggest-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:6px;border:1px solid var(--border);cursor:pointer;transition:all 0.15s;background:rgba(255,255,255,0.02)}
+.task-suggest-item:hover{border-color:var(--rose);background:rgba(148,78,99,0.08)}
+.task-suggest-item.selected{border-color:var(--rose);background:rgba(148,78,99,0.12)}
+.task-suggest-check{width:16px;height:16px;border-radius:4px;border:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px}
+.task-suggest-item.selected .task-suggest-check{background:var(--rose);border-color:var(--rose);color:#fff}
+.task-suggest-name{font-size:12px;color:var(--text-soft);flex:1;line-height:1.3}
+.task-suggest-section{font-family:'DM Mono',monospace;font-size:9px;color:var(--text-faint)}
+.no-suggestions{font-style:italic;font-size:12px;color:var(--text-faint);padding:6px 0;text-align:center}
 .dur-row{display:flex;gap:6px;flex-wrap:wrap}
 .dur-btn{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.06em;padding:7px 14px;border-radius:20px;border:1px solid var(--border);color:var(--text-faint);cursor:pointer;background:none;transition:all 0.15s}
 .dur-btn:hover{border-color:var(--rose);color:var(--text-soft)}
@@ -245,6 +255,10 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;background:var(--navy);colo
       <button class="dur-btn" onclick="setDuration(2)">2h</button>
       <button class="dur-btn" onclick="setDuration(3)">3h</button>
     </div>
+
+    <!-- Task suggestions -->
+    <span class="m-label" id="suggestLabel" style="display:none">suggested tasks</span>
+    <div class="task-suggestions" id="taskSuggestions"></div>
 
     <div class="modal-actions">
       <button class="m-btn-save" onclick="saveBlock()">save block</button>
@@ -431,12 +445,15 @@ function renderDayGrid() {
     const el = document.createElement('div');
     el.className = 'time-block';
     el.style.cssText = `background:${cat.color};top:calc(${topPct}% + 48px);height:${heightPct}%;`;
+    const taskList = block.tasks?.length 
+      ? block.tasks.map(t => `<div class="time-block-task">· ${t}</div>`).join('') 
+      : '';
     el.innerHTML = `
       <button class="time-block-delete" onclick="event.stopPropagation();deleteBlockFromGrid('${key}',${block.id})">×</button>
       <div class="time-block-title">${cat.icon} ${cat.name}</div>
       <div class="time-block-time">${block.start} – ${block.end}</div>
       ${block.label ? `<div class="time-block-task">${block.label}</div>` : ''}
-      ${block.taskName ? `<div class="time-block-task">${block.taskName}</div>` : ''}
+      ${taskList}
     `;
     el.onclick = () => openModal(key, block.start, block.id);
     timeGrid.appendChild(el);
@@ -482,6 +499,27 @@ function renderWeekGrid() {
   grid.innerHTML = html;
 }
 
+
+const CAT_KEYWORDS = {
+  deep:    ['write','draft','essay','post','think','research','plan','strategy','outline'],
+  admin:   ['email','invoice','finance','bill','payhip','admin','send','reply','follow'],
+  build:   ['build','update','fix','deploy','wire','code','steep','pour','body','table','tool','launch','test'],
+  client:  ['call','client','meeting','zoom','consult','feedback'],
+  content: ['batch','content','note','substack','reel','caption','schedule','publish'],
+  home:    ['home','house','errand','grocery','kids','naliyah','emma','school','clean','appointment'],
+  self:    ['walk','movement','yoga','rest','sleep','doctor','dentist','self','health'],
+};
+
+function suggestTasksForCat(catId) {
+  const keywords = CAT_KEYWORDS[catId] || [];
+  return allTasks.filter(task => {
+    const name = task.name.toLowerCase();
+    return keywords.some(kw => name.includes(kw));
+  }).slice(0, 6);
+}
+
+let selectedTasks = [];
+
 // ── MODAL ──
 function openModal(dateK, slot, blockId=null) {
   editingBlockId = blockId;
@@ -510,7 +548,7 @@ function openModal(dateK, slot, blockId=null) {
 
 function closeModal() {
   document.getElementById('modalOverlay').style.display = 'none';
-  editingBlockId = null; selectedCat = null; modalContext = null;
+  editingBlockId = null; selectedCat = null; modalContext = null; selectedTasks = []; document.getElementById("taskSuggestions").innerHTML = ""; document.getElementById("suggestLabel").style.display = "none";
 }
 
 function handleOverlayClick(e) {
@@ -525,7 +563,7 @@ function saveBlock() {
   if(!start || !end) { showToast('set a time'); return; }
 
   const d = new Date(modalContext.dateK + 'T12:00:00');
-  addBlock(d, { cat: selectedCat, start, end, label });
+  addBlock(d, { cat: selectedCat, start, end, label, tasks: [...selectedTasks] });
   closeModal();
   renderGrid();
   showToast('block saved ☕');
@@ -575,6 +613,44 @@ function updateCatPicker() {
       btn.style.borderColor = 'rgba(255,255,255,0.08)';
       btn.style.background = 'rgba(255,255,255,0.03)';
     }
+  });
+  if(selectedCat) renderTaskSuggestions(selectedCat);
+}
+
+function renderTaskSuggestions(catId) {
+  const container = document.getElementById('taskSuggestions');
+  const label = document.getElementById('suggestLabel');
+  const suggested = suggestTasksForCat(catId);
+  
+  if(!suggested.length) {
+    label.style.display = 'none';
+    container.innerHTML = '';
+    return;
+  }
+  
+  label.style.display = 'block';
+  container.innerHTML = '';
+  selectedTasks = [];
+  
+  suggested.forEach(task => {
+    const el = document.createElement('div');
+    el.className = 'task-suggest-item';
+    el.innerHTML = `
+      <div class="task-suggest-check"></div>
+      <span class="task-suggest-name">${task.name}</span>
+      <span class="task-suggest-section">${task.project}</span>
+    `;
+    el.onclick = () => {
+      const isSelected = el.classList.toggle('selected');
+      if(isSelected) {
+        selectedTasks.push(task.name);
+        el.querySelector('.task-suggest-check').textContent = '✓';
+      } else {
+        selectedTasks = selectedTasks.filter(n => n !== task.name);
+        el.querySelector('.task-suggest-check').textContent = '';
+      }
+    };
+    container.appendChild(el);
   });
 }
 
