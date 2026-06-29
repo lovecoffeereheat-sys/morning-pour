@@ -105,19 +105,25 @@ const YEAR = 2026;
 
 async function loadCalendar() {
   try {
-    const res = await fetch('/.netlify/functions/asana-proxy?view=content_calendar');
-    const data = await res.json();
-    const tasks = (data.tasks || []).filter(t => {
+    const [calRes, notesRes] = await Promise.all([
+      fetch('/.netlify/functions/asana-proxy?view=content_calendar').then(r=>r.json()),
+      fetch('/.netlify/functions/asana-proxy?view=ro_notes').then(r=>r.json())
+    ]);
+    const tasks = (calRes.tasks || []).filter(t => {
       const d = new Date(t.due_on + 'T12:00:00');
       return d.getMonth() === MONTH && d.getFullYear() === YEAR;
     });
-    renderCalendar(tasks);
+    const notes = (notesRes.tasks || []).filter(t => {
+      const d = new Date(t.due_on + 'T12:00:00');
+      return d.getMonth() === MONTH && d.getFullYear() === YEAR;
+    });
+    renderCalendar(tasks, notes);
   } catch(e) {
-    renderCalendar([]);
+    renderCalendar([], []);
   }
 }
 
-function renderCalendar(tasks) {
+function renderCalendar(tasks, notes=[]) {
   const cal = document.getElementById('calendar');
   const taskMap = {};
   tasks.forEach(t => {
@@ -141,6 +147,10 @@ function renderCalendar(tasks) {
       html += '<div class="date' + (isPrev ? ' prev' : '') + '">' + date.getDate() + '</div>';
       dayTasks.forEach(t => {
         html += '<div class="pill pill-' + t.type + '" title="' + t.name + '">' + (t.name.length > 20 ? t.name.slice(0,20) + '…' : t.name) + '</div>';
+      });
+      const dayNotes = (notes || []).filter(n => n.due_on === dateStr);
+      dayNotes.forEach(n => {
+        html += '<div class="pill pill-note" title="' + n.name + ' (RO Content)">' + (n.name.length > 20 ? n.name.slice(0,20) + '…' : n.name) + '</div>';
       });
       html += '</div>';
     }

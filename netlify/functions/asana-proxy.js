@@ -414,6 +414,28 @@ exports.handler = async (event) => {
       }) };
     }
 
+
+    // ── RO NOTES (for content map notes row) ──
+    if (view === 'ro_notes') {
+      const today = new Date();
+      const monthStart = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0];
+      const monthEnd = new Date(today.getFullYear(), today.getMonth()+2, 0).toISOString().split('T')[0];
+      const res = await asanaGet(
+        `/projects/1215878207772169/tasks?opt_fields=name,due_on,completed&limit=100`
+      );
+      const tasks = (res.data || [])
+        .filter(t => !t.completed && t.due_on && t.name.toLowerCase().includes('note'))
+        .map(t => ({
+          gid: t.gid,
+          name: t.name,
+          due_on: t.due_on,
+          type: 'note',
+          project: 'RO Content'
+        }))
+        .sort((a,b) => a.due_on.localeCompare(b.due_on));
+      return { statusCode: 200, headers, body: JSON.stringify({ tasks }) };
+    }
+
     // ── CREATE TASK ──
     if (view === 'create_task' && event.httpMethod === 'POST') {
       const body = JSON.parse(event.body || '{}');
