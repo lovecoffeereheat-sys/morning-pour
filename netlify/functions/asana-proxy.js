@@ -184,8 +184,17 @@ exports.handler = async (event) => {
 
     // ── MY TASKS ──
     if (view === 'my_tasks') {
+      // First get the user's task list GID
+      const meRes = await asanaGet('/users/me?opt_fields=gid');
+      const userGid = meRes.data?.gid;
+      if (!userGid) return { statusCode: 200, headers, body: JSON.stringify({ tasks: [] }) };
+
+      const taskListRes = await asanaGet(`/users/${userGid}/user_task_list?workspace=1182497100078086&opt_fields=gid`);
+      const taskListGid = taskListRes.data?.gid;
+      if (!taskListGid) return { statusCode: 200, headers, body: JSON.stringify({ tasks: [] }) };
+
       const res = await asanaGet(
-        `/projects/1214131354603805/tasks?opt_fields=name,due_on,completed,memberships.section.name&limit=100`
+        `/user_task_lists/${taskListGid}/tasks?opt_fields=name,due_on,completed,memberships.section.name&limit=100&completed_since=now`
       );
       const tasks = (res.data || [])
         .filter(t => !t.completed)
@@ -196,7 +205,7 @@ exports.handler = async (event) => {
             name: t.name,
             due_on: t.due_on || null,
             project: section || 'My Tasks',
-            project_id: '1214131354603805'
+            project_id: taskListGid
           };
         })
         .sort((a,b) => {
