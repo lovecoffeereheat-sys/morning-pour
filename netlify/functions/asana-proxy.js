@@ -353,24 +353,29 @@ exports.handler = async (event) => {
 
     // ── IN PROGRESS CONTENT ──
     if (view === 'in_progress_content') {
-      const res = await asanaGet(
-        `/projects/1215878207772169/tasks?opt_fields=name,due_on,completed,notes,memberships.section.name&limit=100`
-      );
-      const tasks = (res.data || [])
-        .filter(t => !t.completed)
-        .map(t => {
-          const section = t.memberships?.[0]?.section?.name || '';
-          return {
+      // Only pull from Drafting and Ready sections — not Idea
+      const ACTIVE_SECTIONS = [
+        { gid: '1215878245764271', name: 'Drafting' },
+        { gid: '1215878207780841', name: 'Ready' },
+      ];
+      const allTasks = [];
+      for (const section of ACTIVE_SECTIONS) {
+        const res = await asanaGet(
+          `/sections/${section.gid}/tasks?opt_fields=name,due_on,completed&limit=50`
+        );
+        const tasks = (res.data || [])
+          .filter(t => !t.completed)
+          .map(t => ({
             gid: t.gid,
             name: t.name,
             due_on: t.due_on || null,
-            project: 'RO Content',
+            project: section.name,
             project_id: '1215878207772169',
-            section,
             type: detectContentType(t.name)
-          };
-        });
-      return { statusCode: 200, headers, body: JSON.stringify({ tasks }) };
+          }));
+        allTasks.push(...tasks);
+      }
+      return { statusCode: 200, headers, body: JSON.stringify({ tasks: allTasks }) };
     }
 
 
