@@ -441,6 +441,24 @@ exports.handler = async (event) => {
       return { statusCode: 200, headers, body: JSON.stringify({ tasks }) };
     }
 
+
+    // ── RO SOCIAL (Instagram ready to post) ──
+    if (view === 'ro_social') {
+      const res = await asanaGet(
+        `/sections/1216151688160593/tasks?opt_fields=name,due_on,completed&limit=20`
+      );
+      const tasks = (res.data || [])
+        .filter(t => !t.completed)
+        .map(t => ({
+          gid: t.gid,
+          name: t.name,
+          due_on: t.due_on || null,
+          project: 'RO Social',
+          project_id: '1216151688214211'
+        }));
+      return { statusCode: 200, headers, body: JSON.stringify({ tasks }) };
+    }
+
     // ── CREATE TASK ──
     if (view === 'create_task' && event.httpMethod === 'POST') {
       const body = JSON.parse(event.body || '{}');

@@ -100,17 +100,17 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;color:var(--text);min-heigh
 .coming-text{font-family:'Lora',serif;font-style:italic;font-size:13px;color:var(--text-faint)}
 
 /* EDIT MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(44,24,16,0.4);backdrop-filter:blur(4px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal-overlay{position:fixed;inset:0;background:rgba(44,24,16,0.6);backdrop-filter:blur(6px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
 .modal{background:var(--rose-card);border:1px solid var(--border);border-radius:14px;padding:24px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;box-shadow:0 16px 48px rgba(0,0,0,0.5)}
 .modal-title{font-family:'Playfair Display',serif;font-size:17px;color:var(--espresso);margin-bottom:6px}
-.modal-sub{font-family:'Lora',serif;font-style:italic;font-size:12px;color:var(--text-faint);margin-bottom:18px}
-.modal-section{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--rose-soft);margin:16px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.modal-sub{font-family:'Lora',serif;font-style:italic;font-size:12px;color:#caa6a6;margin-bottom:18px}
+.modal-section{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#c4a45a;margin:16px 0 10px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,0.1)}
 .m-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
 .m-field{display:flex;flex-direction:column;gap:5px}
-.m-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint)}
-.m-input{background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:7px;padding:8px 11px;font-size:13px;color:var(--text);font-family:'Lora',serif;outline:none;transition:border-color 0.15s;width:100%}
+.m-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:#caa6a6}
+.m-input{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:7px;padding:8px 11px;font-size:13px;color:#f5e8e4;font-family:'Lora',serif;outline:none;transition:border-color 0.15s;width:100%}
 .m-input:focus{border-color:var(--rose)}
-.m-input::placeholder{color:var(--text-faint);font-style:italic}
+.m-input::placeholder{color:rgba(202,166,166,0.6);font-style:italic}
 .modal-actions{display:flex;gap:8px;margin-top:18px}
 .m-btn-save{flex:1;background:var(--rose);color:#fff;border:none;border-radius:8px;padding:11px;font-size:13px;cursor:pointer;font-family:'Lora',serif;transition:opacity 0.15s}
 .m-btn-save:hover{opacity:0.88}
@@ -404,7 +404,7 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;color:var(--text);min-heigh
     <div class="modal-sub">sunday morning, 5 minutes. get it all in here.</div>
 
     <div class="modal-section">🎯 tool users</div>
-    <div style="font-family:DM Mono,monospace;font-size:9px;color:var(--text-faint);margin-bottom:10px;line-height:1.6">find in → payhip.com · each product listing · sales count</div>
+    <div style="font-family:DM Mono,monospace;font-size:9px;color:#b47b84;margin-bottom:10px;line-height:1.6">find in → payhip.com · each product listing · sales count</div>
     <div class="m-row">
       <div class="m-field"><span class="m-label">after the call · paid</span><input class="m-input" id="f-atcPaid" type="number" min="0" placeholder="0"></div>
       <div class="m-field"><span class="m-label">after the call · free</span><input class="m-input" id="f-atcFree" type="number" min="0" placeholder="0"></div>
@@ -419,7 +419,7 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;color:var(--text);min-heigh
     </div>
 
     <div class="modal-section">📧 substack</div>
-    <div style="font-family:DM Mono,monospace;font-size:9px;color:var(--text-faint);margin-bottom:10px;line-height:1.6">find in → substack.com/publish · stats tab · dashboard</div>
+    <div style="font-family:DM Mono,monospace;font-size:9px;color:#b47b84;margin-bottom:10px;line-height:1.6">find in → substack.com/publish · stats tab · dashboard</div>
     <div class="m-row">
       <div class="m-field"><span class="m-label">total subscribers</span><input class="m-input" id="f-substackSubs" type="number" min="0" placeholder="209"></div>
       <div class="m-field"><span class="m-label">new this week</span><input class="m-input" id="f-substackNew" type="number" placeholder="+0"></div>
@@ -434,7 +434,7 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;color:var(--text);min-heigh
     </div>
 
     <div class="modal-section">💰 revenue (CAD)</div>
-    <div style="font-family:DM Mono,monospace;font-size:9px;color:var(--text-faint);margin-bottom:10px;line-height:1.6">find in → payhip.com · sales · filter by date</div>
+    <div style="font-family:DM Mono,monospace;font-size:9px;color:#b47b84;margin-bottom:10px;line-height:1.6">find in → payhip.com · sales · filter by date</div>
     <div class="m-row">
       <div class="m-field"><span class="m-label">this month total</span><input class="m-input" id="f-revMonth" placeholder="$0.00"></div>
       <div class="m-field"><span class="m-label">sales this week</span><input class="m-input" id="f-revWeek" type="number" min="0" placeholder="0"></div>
@@ -445,7 +445,7 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;color:var(--text);min-heigh
     </div>
 
     <div class="modal-section">📱 instagram · @reheatedobviously</div>
-    <div style="font-family:DM Mono,monospace;font-size:9px;color:var(--text-faint);margin-bottom:10px;line-height:1.6">find in → instagram app · professional dashboard · insights</div>
+    <div style="font-family:DM Mono,monospace;font-size:9px;color:#b47b84;margin-bottom:10px;line-height:1.6">find in → instagram app · professional dashboard · insights</div>
     <div class="m-row">
       <div class="m-field"><span class="m-label">followers</span><input class="m-input" id="f-igFollowers" type="number" min="0" placeholder="0"></div>
       <div class="m-field"><span class="m-label">new this week</span><input class="m-input" id="f-igNew" placeholder="+0"></div>
@@ -625,9 +625,20 @@ async function loadContentThisWeek() {
     inProgress.slice(0,3).forEach(t => {
       const el = document.createElement('div');
       el.style.cssText = 'background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:10px 12px';
-      el.innerHTML = '<div style="font-family:DM Mono,monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint);margin-bottom:4px">in progress</div><div style="font-size:13px;color:var(--text-soft)">'+t.name+'</div>';
+      el.innerHTML = '<div style="font-family:DM Mono,monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint);margin-bottom:4px">in progress · '+t.project+'</div><div style="font-size:13px;color:var(--text-soft)">'+t.name+'</div>';
       container.appendChild(el);
     });
+
+    // RO Social — Ready to post
+    try {
+      const socialRes = await fetch('/.netlify/functions/asana-proxy?view=ro_social').then(r=>r.json());
+      (socialRes.tasks||[]).slice(0,3).forEach(t => {
+        const el = document.createElement('div');
+        el.style.cssText = 'background:rgba(193,53,132,0.08);border:1px solid rgba(193,53,132,0.2);border-radius:8px;padding:10px 12px';
+        el.innerHTML = '<div style="font-family:DM Mono,monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:#C13584;margin-bottom:4px">📱 instagram · ready to post</div><div style="font-size:13px;color:var(--text)">'+t.name+'</div>';
+        container.appendChild(el);
+      });
+    } catch(e) {}
   } catch(e) {
     container.innerHTML = '<div style="font-family:Lora,serif;font-style:italic;font-size:13px;color:var(--text-faint);padding:8px">could not load — check connection</div>';
   }
