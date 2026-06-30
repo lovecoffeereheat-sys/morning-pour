@@ -11,28 +11,28 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --navy:#16042d;--navy-light:#1e0d3a;--navy-card:#240f45;
+  --navy:#16042d;--navy-light:#f5f0e6;--navy-card:#fdf5f3;
   --rose:#944e63;--rose-mid:#b47b84;--rose-soft:#caa6a6;--rose-warm:#d6a39a;--rose-pale:#f6e6e3;
   --gold:#c4a45a;--cream:#f5f0e6;
   --border:rgba(255,255,255,0.08);--border-soft:rgba(255,255,255,0.05);
-  --text:#f5e8e4;--text-soft:#caa6a6;--text-faint:#6a5a6a;
+  --text:#2c1810;--text-soft:#9e7d68;--text-faint:#c4a898;
   --cat-deep:#944e63;--cat-admin:#b47b84;--cat-home:#d6a39a;
   --cat-self:#caa6a6;--cat-build:#c4a45a;--cat-client:#8a9ab8;--cat-content:#7a8a5a;
 }
-body{font-family:'Lora',Georgia,serif;font-size:15px;background:var(--navy);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+body{font-family:'Lora',Georgia,serif;font-size:15px;color:var(--text);min-height:100vh;display:flex;flex-direction:column}
 
 /* TOPBAR */
-.topbar{background:rgba(22,4,45,0.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;height:52px;position:sticky;top:0;z-index:100}
-.topbar-logo{font-family:'Anton',sans-serif;font-size:13px;letter-spacing:0.12em;color:var(--cream)}
+.topbar{background:var(--espresso);border-bottom:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;padding:0 20px;height:52px;position:sticky;top:0;z-index:100}
+.topbar-logo{font-family:'Anton',sans-serif;font-size:13px;letter-spacing:0.12em;color:var(--espresso)}
 .topbar-logo em{color:var(--rose);font-style:normal}
 .topbar-sep{width:1px;height:16px;background:var(--border);margin:0 12px}
-.topbar-sub{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-faint)}
+.topbar-sub{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.4)}
 .topbar-spacer{flex:1}
-.topbar-link{font-size:11px;color:var(--text-faint);text-decoration:none;display:flex;align-items:center;gap:4px;margin-left:8px;font-family:'DM Mono',monospace}
+.topbar-link{font-size:11px;color:rgba(255,255,255,0.4);text-decoration:none;display:flex;align-items:center;gap:4px;margin-left:8px;font-family:'DM Mono',monospace}
 .topbar-link:hover{color:var(--text-soft)}
 
 /* MODE TOGGLE */
-.mode-bar{background:var(--navy-light);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:10px}
+.mode-bar{background:var(--cream);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:10px}
 .mode-btn{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.08em;padding:6px 16px;border-radius:20px;border:1px solid var(--border);color:var(--text-faint);cursor:pointer;background:none;transition:all 0.15s}
 .mode-btn.active{background:var(--rose);border-color:var(--rose);color:#fff}
 .mode-sep{width:1px;height:16px;background:var(--border);margin:0 4px}
@@ -40,13 +40,13 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;background:var(--navy);colo
 .mode-nav-btn{background:none;border:1px solid var(--border);border-radius:6px;padding:5px 10px;color:var(--text-faint);cursor:pointer;font-size:13px;transition:all 0.15s}
 .mode-nav-btn:hover{border-color:var(--rose);color:var(--text-soft)}
 .mode-nav-label{font-family:'Lora',serif;font-style:italic;font-size:13px;color:var(--text-soft);min-width:160px;text-align:center}
-.mode-today-btn{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;padding:5px 12px;border-radius:20px;background:var(--navy-card);border:1px solid var(--border);color:var(--gold);cursor:pointer}
+.mode-today-btn{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;padding:5px 12px;border-radius:20px;background:var(--rose-card);border:1px solid var(--border);color:var(--gold);cursor:pointer}
 
 /* LAYOUT */
 .main{display:flex;flex:1;overflow:hidden}
 
 /* SIDEBAR */
-.sidebar{width:280px;flex-shrink:0;border-right:1px solid var(--border);display:flex;flex-direction:column;background:var(--navy-light)}
+.sidebar{width:280px;flex-shrink:0;border-right:1px solid var(--border);display:flex;flex-direction:column;background:var(--cream)}
 .sidebar-head{padding:14px 16px;border-bottom:1px solid var(--border)}
 .sidebar-head-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-faint);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
 .sidebar-count{color:var(--rose)}
@@ -108,7 +108,7 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;background:var(--navy);colo
 
 /* WEEK MODE */
 .week-grid{display:grid;grid-template-columns:56px repeat(7,1fr);min-width:700px}
-.week-day-head{padding:10px 6px;text-align:center;border-bottom:1px solid var(--border);border-left:1px solid var(--border-soft);position:sticky;top:0;background:var(--navy-light);z-index:10}
+.week-day-head{padding:10px 6px;text-align:center;border-bottom:1px solid var(--border);border-left:1px solid var(--border-soft);position:sticky;top:0;background:var(--cream);z-index:10}
 .week-day-head:first-child{border-left:none}
 .week-day-name{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-faint)}
 .week-day-date{font-size:15px;font-weight:500;margin-top:2px;color:var(--text)}
@@ -125,8 +125,8 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;background:var(--navy);colo
 .week-block-delete:hover{color:#fff}
 
 /* MODALS */
-.modal-overlay{position:fixed;inset:0;background:rgba(22,4,45,0.7);backdrop-filter:blur(4px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
-.modal{background:var(--navy-card);border:1px solid var(--border);border-radius:14px;padding:22px;width:100%;max-width:360px;box-shadow:0 16px 48px rgba(0,0,0,0.4)}
+.modal-overlay{position:fixed;inset:0;background:rgba(44,24,16,0.4);backdrop-filter:blur(4px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{background:var(--rose-card);border:1px solid var(--border);border-radius:14px;padding:22px;width:100%;max-width:360px;box-shadow:0 16px 48px rgba(0,0,0,0.4)}
 .modal-title{font-family:'Playfair Display',serif;font-size:16px;color:var(--text);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
 .modal-close{background:none;border:none;cursor:pointer;color:var(--text-faint);font-size:18px}
 .modal-close:hover{color:var(--text)}
@@ -163,14 +163,14 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;background:var(--navy);colo
 .time-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .m-select{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:13px;color:var(--text);font-family:'Lora',serif;outline:none;cursor:pointer}
 .m-select:focus{border-color:var(--rose)}
-.m-select option{background:var(--navy-card);color:var(--text)}
+.m-select option{background:var(--rose-card);color:var(--text)}
 
 .modal-actions{display:flex;gap:8px;margin-top:18px}
 .m-btn-save{flex:1;background:var(--rose);color:#fff;border:none;border-radius:8px;padding:11px;font-size:13px;cursor:pointer;font-family:'Lora',serif;transition:opacity 0.15s}
 .m-btn-save:hover{opacity:0.88}
 .m-btn-cancel{background:none;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--text-faint);cursor:pointer;font-family:'Lora',serif}
 
-.toast{position:fixed;bottom:24px;right:24px;background:var(--navy-card);border:1px solid var(--border);color:var(--cream);padding:11px 18px;border-radius:8px;font-size:13px;display:flex;align-items:center;gap:8px;opacity:0;transition:opacity 0.3s;pointer-events:none;z-index:999;font-family:'Lora',serif}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--rose-card);border:1px solid var(--border);color:var(--espresso);padding:11px 18px;border-radius:8px;font-size:13px;display:flex;align-items:center;gap:8px;opacity:0;transition:opacity 0.3s;pointer-events:none;z-index:999;font-family:'Lora',serif}
 .toast.show{opacity:1}
 .toast i{color:var(--gold)}
 </style>
@@ -467,7 +467,7 @@ function renderWeekGrid() {
 
   let html = '<div class="week-grid">';
   // Headers
-  html += '<div class="week-day-head" style="background:var(--navy-light)"></div>';
+  html += '<div class="week-day-head" style="background:var(--cream)"></div>';
   dates.forEach((d,i) => {
     html += `<div class="week-day-head">
       <div class="week-day-name">${DAY_SHORT[i]}</div>
