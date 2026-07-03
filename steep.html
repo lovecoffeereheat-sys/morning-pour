@@ -285,38 +285,46 @@ function setLogType(type) {
   buildCategorySelect();
 }
 
-// ── GAPI ──
+// ── GAPI — uses Google Identity Services (GIS), not deprecated auth2 ──
 function loadGAPI() {
-  const script = document.createElement('script');
-  script.src = 'https://apis.google.com/js/api.js';
-  script.onload = () => {
-    gapi.load('client:auth2', initGAPI);
+  // Step 1 — load gapi client library for Sheets API calls
+  const gapiScript = document.createElement('script');
+  gapiScript.src = 'https://apis.google.com/js/api.js';
+  gapiScript.onload = () => {
+    gapi.load('client', async () => {
+      await gapi.client.init({
+        discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+      });
+      gapiReady = true;
+    });
   };
-  document.head.appendChild(script);
+  document.head.appendChild(gapiScript);
+
+  // Step 2 — load GIS for token-based auth (replaces deprecated auth2)
+  const gisScript = document.createElement('script');
+  gisScript.src = 'https://accounts.google.com/gsi/client';
+  gisScript.onload = () => {
+    const tokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: GCAL_CLIENT_ID,
+      scope: SCOPES,
+      callback: (response) => {
+        if (response.error) {
+          console.error('GIS token error', response);
+          showOfflineState();
+          return;
+        }
+        gapi.client.setToken({ access_token: response.access_token });
+        gapiReady = true;
+        loadAll();
+      }
+    });
+    tokenClient.requestAccessToken({ prompt: '' });
+  };
+  document.head.appendChild(gisScript);
 }
 
 function initGAPI() {
-  gapi.client.init({
-    clientId: GCAL_CLIENT_ID,
-    scope: SCOPES,
-    discoveryDocs: [
-      'https://sheets.googleapis.com/$discovery/rest?version=v4',
-    ]
-  }).then(() => {
-    const auth = gapi.auth2.getAuthInstance();
-    if (auth.isSignedIn.get()) {
-      gapiReady = true;
-      loadAll();
-    } else {
-      auth.signIn().then(() => {
-        gapiReady = true;
-        loadAll();
-      });
-    }
-  }).catch(err => {
-    console.error('GAPI init error', err);
-    showOfflineState();
-  });
+  // no longer used — replaced by GIS token client
 }
 
 function showOfflineState() {
