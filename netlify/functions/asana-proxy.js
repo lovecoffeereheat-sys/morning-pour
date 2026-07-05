@@ -459,6 +459,109 @@ exports.handler = async (event) => {
       return { statusCode: 200, headers, body: JSON.stringify({ tasks }) };
     }
 
+
+    // ── CONTENT HUB BOARD (idea/drafting/ready/scheduled from RO Substack) ──
+    if (view === 'content_hub_board') {
+      const SECTIONS = {
+        idea: '1215878207769408',
+        drafting: '1215878245764271',
+        ready: '1215878207780841',
+        scheduled: '1215886119688372',
+      };
+      const columns = {};
+      for (const [key, sectionGid] of Object.entries(SECTIONS)) {
+        const res = await asanaGet(`/sections/${sectionGid}/tasks?opt_fields=name,due_on,completed&limit=30`);
+        columns[key] = (res.data || [])
+          .filter(t => !t.completed)
+          .map(t => ({ gid: t.gid, name: t.name, due_on: t.due_on || null }))
+          .sort((a,b) => (a.due_on||'').localeCompare(b.due_on||''));
+      }
+      return { statusCode: 200, headers, body: JSON.stringify({ columns }) };
+    }
+
+    // ── SCHEDULE TASK (set due date + multi-home to Content Calendar) ──
+    if (view === 'schedule_task' && method === 'POST') {
+      const { task_gid, due_on, section_gid, calendar_project_id } = body;
+      
+      // Set due date
+      await fetch(`https://app.asana.com/api/1.0/tasks/${task_gid}`, {
+        method: 'PUT',
+        headers: { 'Authorization': `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data: { due_on } })
+      });
+      
+      // Move to Scheduled section
+      if (section_gid) {
+        await fetch(`https://app.asana.com/api/1.0/sections/${section_gid}/addTask`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data: { task: task_gid } })
+        });
+      }
+      
+      // Multi-home to Content Calendar
+      if (calendar_project_id) {
+        await fetch(`https://app.asana.com/api/1.0/tasks/${task_gid}/addProject`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ data: { project: calendar_project_id } })
+        });
+      }
+      
+      return { statusCode: 200, headers, body: JSON.stringify({ success: true }) };
+    }
+
+
+    // ── BATCH & PUBLISH CADENCE (reference tasks from RO Substack) ──
+    if (view === 'batch_cadence') {
+      const res = await asanaGet(
+        `/sections/1216291260670842/tasks?opt_fields=name,notes,due_on,completed&limit=30`
+      );
+      const tasks = (res.data || [])
+        .map(t => ({
+          gid: t.gid,
+          name: t.name,
+          notes: t.notes || '',
+          due_on: t.due_on || null,
+          completed: t.completed
+        }));
+      return { statusCode: 200, headers, body: JSON.stringify({ tasks }) };
+    }
+
+
+    // ── RO PINTEREST (toggle-able content stream) ──
+    if (view === 'ro_pinterest') {
+      const SECTIONS = {
+        idea: '1216252193523980',
+        recording: '1216252281334547',
+        ready: '1216252434960536',
+        live: '1216252281385910',
+      };
+      const columns = {};
+      for (const [key, sectionGid] of Object.entries(SECTIONS)) {
+        const res = await asanaGet(`/sections/${sectionGid}/tasks?opt_fields=name,due_on,completed&limit=20`);
+        columns[key] = (res.data || [])
+          .filter(t => !t.completed)
+          .map(t => ({ gid: t.gid, name: t.name, due_on: t.due_on || null }));
+      }
+      return { statusCode: 200, headers, body: JSON.stringify({ columns }) };
+    }
+
+
+    // ── RO PINTEREST SCHEDULED (pins with due dates, for content map) ──
+    if (view === 'ro_pinterest_scheduled') {
+      const SECTIONS = ['1216252434960536', '1216252281385910']; // Ready to publish, Live
+      const allTasks = [];
+      for (const sectionGid of SECTIONS) {
+        const res = await asanaGet(`/sections/${sectionGid}/tasks?opt_fields=name,due_on,completed&limit=30`);
+        const tasks = (res.data || [])
+          .filter(t => !t.completed && t.due_on)
+          .map(t => ({ gid: t.gid, name: t.name, due_on: t.due_on, type: 'pinterest' }));
+        allTasks.push(...tasks);
+      }
+      return { statusCode: 200, headers, body: JSON.stringify({ tasks: allTasks }) };
+    }
+
     // ── CREATE TASK ──
     if (view === 'create_task' && event.httpMethod === 'POST') {
       const body = JSON.parse(event.body || '{}');

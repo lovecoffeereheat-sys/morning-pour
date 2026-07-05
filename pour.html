@@ -12,11 +12,11 @@
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --navy:#16042d;--navy-light:#f5f0e6;--navy-card:#fdf5f3;
-  --rose:#944e63;--rose-mid:#b47b84;--rose-soft:#caa6a6;--rose-warm:#d6a39a;--rose-pale:#f6e6e3;
+  --rose:#8b2252;--rose-mid:#b77d86;--rose-soft:#caa6a6;--rose-warm:#d6a39a;--rose-pale:#f6e6e3;
   --gold:#c4a45a;--cream:#f5f0e6;
   --border:rgba(255,255,255,0.08);--border-soft:rgba(255,255,255,0.05);
   --text:#2c1810;--text-soft:#9e7d68;--text-faint:#c4a898;
-  --cat-deep:#944e63;--cat-admin:#b47b84;--cat-home:#d6a39a;
+  --cat-deep:#8b2252;--cat-admin:#b77d86;--cat-home:#d6a39a;
   --cat-self:#caa6a6;--cat-build:#c4a45a;--cat-client:#8a9ab8;--cat-content:#7a8a5a;
 }
 body{font-family:'Lora',Georgia,serif;font-size:15px;color:var(--text);min-height:100vh;display:flex;flex-direction:column}
@@ -124,51 +124,51 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;color:var(--text);min-heigh
 .week-block-delete{position:absolute;top:3px;right:4px;background:none;border:none;font-size:11px;color:rgba(255,255,255,0.4);cursor:pointer;padding:0}
 .week-block-delete:hover{color:#fff}
 
-/* MODALS */
-.modal-overlay{position:fixed;inset:0;background:rgba(44,24,16,0.4);backdrop-filter:blur(4px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
-.modal{background:var(--rose-card);border:1px solid var(--border);border-radius:14px;padding:22px;width:100%;max-width:360px;box-shadow:0 16px 48px rgba(0,0,0,0.4)}
-.modal-title{font-family:'Playfair Display',serif;font-size:16px;color:var(--text);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
-.modal-close{background:none;border:none;cursor:pointer;color:var(--text-faint);font-size:18px}
-.modal-close:hover{color:var(--text)}
-.m-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-faint);margin:12px 0 6px;display:block}
-.m-input{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:14px;color:var(--text);font-family:'Lora',serif;outline:none;transition:border-color 0.15s}
-.m-input:focus{border-color:var(--rose)}
-.m-input::placeholder{color:var(--text-faint);font-style:italic}
+/* MODALS — dark espresso treatment for contrast against light theme */
+.modal-overlay{position:fixed;inset:0;background:rgba(44,24,16,0.6);backdrop-filter:blur(6px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{background:#2c1810;border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:22px;width:100%;max-width:360px;box-shadow:0 16px 48px rgba(0,0,0,0.4)}
+.modal-title{font-family:'Playfair Display',serif;font-size:16px;color:#f5e8e4;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.modal-close{background:none;border:none;cursor:pointer;color:#caa6a6;font-size:18px}
+.modal-close:hover{color:#f5e8e4}
+.m-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#caa6a6;margin:12px 0 6px;display:block}
+.m-input{width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:9px 12px;font-size:14px;color:#f5e8e4;font-family:'Lora',serif;outline:none;transition:border-color 0.15s}
+.m-input:focus{border-color:#b77d86}
+.m-input::placeholder{color:rgba(202,166,166,0.5);font-style:italic}
 
 /* CATEGORY PICKER IN MODAL */
 .cat-picker{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:4px}
-.cat-pick-btn{padding:9px 8px;border-radius:8px;border:1px solid var(--border);cursor:pointer;text-align:center;transition:all 0.15s;background:rgba(255,255,255,0.03)}
-.cat-pick-btn:hover{border-color:rgba(255,255,255,0.2)}
+.cat-pick-btn{padding:9px 8px;border-radius:8px;border:1px solid rgba(255,255,255,0.1);cursor:pointer;text-align:center;transition:all 0.15s;background:rgba(255,255,255,0.05)}
+.cat-pick-btn:hover{border-color:rgba(255,255,255,0.25)}
 .cat-pick-btn.selected{border-width:2px}
 .cat-pick-icon{font-size:16px;margin-bottom:3px}
-.cat-pick-name{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.05em;color:var(--text-soft)}
+.cat-pick-name{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.05em;color:#caa6a6}
 
 /* DURATION PICKER */
 
 .task-suggestions{margin-top:4px;display:flex;flex-direction:column;gap:4px;max-height:160px;overflow-y:auto}
-.task-suggest-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:6px;border:1px solid var(--border);cursor:pointer;transition:all 0.15s;background:rgba(255,255,255,0.02)}
-.task-suggest-item:hover{border-color:var(--rose);background:rgba(148,78,99,0.08)}
-.task-suggest-item.selected{border-color:var(--rose);background:rgba(148,78,99,0.12)}
+.task-suggest-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:6px;border:1px solid rgba(255,255,255,0.1);cursor:pointer;transition:all 0.15s;background:rgba(255,255,255,0.04)}
+.task-suggest-item:hover{border-color:#b77d86;background:rgba(139,34,82,0.15)}
+.task-suggest-item.selected{border-color:#b77d86;background:rgba(139,34,82,0.2)}
 .task-suggest-check{width:16px;height:16px;border-radius:4px;border:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px}
 .task-suggest-item.selected .task-suggest-check{background:var(--rose);border-color:var(--rose);color:#fff}
 .task-suggest-name{font-size:12px;color:var(--text-soft);flex:1;line-height:1.3}
 .task-suggest-section{font-family:'DM Mono',monospace;font-size:9px;color:var(--text-faint)}
-.no-suggestions{font-style:italic;font-size:12px;color:var(--text-faint);padding:6px 0;text-align:center}
+.no-suggestions{font-style:italic;font-size:12px;color:#caa6a6;padding:6px 0;text-align:center}
 .dur-row{display:flex;gap:6px;flex-wrap:wrap}
-.dur-btn{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.06em;padding:7px 14px;border-radius:20px;border:1px solid var(--border);color:var(--text-faint);cursor:pointer;background:none;transition:all 0.15s}
-.dur-btn:hover{border-color:var(--rose);color:var(--text-soft)}
-.dur-btn.selected{background:var(--rose);border-color:var(--rose);color:#fff}
+.dur-btn{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.06em;padding:7px 14px;border-radius:20px;border:1px solid rgba(255,255,255,0.15);color:#caa6a6;cursor:pointer;background:rgba(255,255,255,0.04);transition:all 0.15s}
+.dur-btn:hover{border-color:#b77d86;color:#f5e8e4}
+.dur-btn.selected{background:#8b2252;border-color:#8b2252;color:#fff}
 
 /* TIME PICKERS */
 .time-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.m-select{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:13px;color:var(--text);font-family:'Lora',serif;outline:none;cursor:pointer}
-.m-select:focus{border-color:var(--rose)}
-.m-select option{background:var(--rose-card);color:var(--text)}
+.m-select{width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:9px 12px;font-size:13px;color:#f5e8e4;font-family:'Lora',serif;outline:none;cursor:pointer}
+.m-select:focus{border-color:#b77d86}
+.m-select option{background:#2c1810;color:#f5e8e4}
 
 .modal-actions{display:flex;gap:8px;margin-top:18px}
-.m-btn-save{flex:1;background:var(--rose);color:#fff;border:none;border-radius:8px;padding:11px;font-size:13px;cursor:pointer;font-family:'Lora',serif;transition:opacity 0.15s}
+.m-btn-save{flex:1;background:#8b2252;color:#fff;border:none;border-radius:8px;padding:11px;font-size:13px;cursor:pointer;font-family:'Lora',serif;transition:opacity 0.15s}
 .m-btn-save:hover{opacity:0.88}
-.m-btn-cancel{background:none;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--text-faint);cursor:pointer;font-family:'Lora',serif}
+.m-btn-cancel{background:none;border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:10px 14px;font-size:13px;color:#caa6a6;cursor:pointer;font-family:'Lora',serif}
 
 .toast{position:fixed;bottom:24px;right:24px;background:var(--rose-card);border:1px solid var(--border);color:var(--espresso);padding:11px 18px;border-radius:8px;font-size:13px;display:flex;align-items:center;gap:8px;opacity:0;transition:opacity 0.3s;pointer-events:none;z-index:999;font-family:'Lora',serif}
 .toast.show{opacity:1}
@@ -273,14 +273,16 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;color:var(--text);min-heigh
 
 <script>
 const CATEGORIES = [
-  { id:'deep',    icon:'☕', name:'deep work',     desc:'writing, thinking', color:'#944e63' },
-  { id:'admin',   icon:'📋', name:'admin',          desc:'emails, finances',  color:'#b47b84' },
+  { id:'deep',    icon:'☕', name:'deep work',     desc:'writing, thinking', color:'#8b2252' },
+  { id:'admin',   icon:'📋', name:'admin',          desc:'emails, finances',  color:'#b77d86' },
   { id:'build',   icon:'🛠', name:'build',          desc:'tools, code',       color:'#c4a45a' },
-  { id:'client',  icon:'📞', name:'client work',    desc:'calls, deliverables',color:'#8a9ab8' },
-  { id:'content', icon:'✍️', name:'content batch',  desc:'batch writing',     color:'#7a8a5a' },
+  { id:'client',  icon:'📞', name:'client work',    desc:'calls, deliverables',color:'#16042d' },
+  { id:'content', icon:'✍️', name:'content batch',  desc:'batch writing',     color:'#caa6a6' },
   { id:'home',    icon:'🏠', name:'home & family',  desc:'errands, kids',     color:'#d6a39a' },
-  { id:'self',    icon:'🌿', name:'self',           desc:'movement, rest',    color:'#caa6a6' },
+  { id:'self',    icon:'🌿', name:'self',           desc:'movement, rest',    color:'#9e7d68' },
 ];
+
+const FREEFORM = { id:'freeform', icon:'✏️', name:'just write it', desc:'no category needed', color:'#c4a898' };
 
 const HOURS = [];
 for(let h=6;h<=19;h++){
@@ -437,7 +439,7 @@ function renderDayGrid() {
   const totalMins = (20-6) * 60;
 
   dayBlocks.forEach(block => {
-    const cat = CATEGORIES.find(c => c.id === block.cat) || CATEGORIES[0];
+    const cat = getCatById(block.cat);
     const startMins = timeToMins(block.start) - 6*60;
     const endMins = timeToMins(block.end) - 6*60;
     const topPct = (startMins / totalMins) * 100;
@@ -485,7 +487,7 @@ function renderWeekGrid() {
         const cellBlocks = (blocks[key]||[]).filter(b => b.start === timeStr);
         let cellHtml = '';
         cellBlocks.forEach(block => {
-          const cat = CATEGORIES.find(c => c.id === block.cat) || CATEGORIES[0];
+          const cat = getCatById(block.cat);
           cellHtml += `<div class="week-block" style="background:${cat.color}" onclick="openModal('${key}','${timeStr}',${block.id})">
             <button class="week-block-delete" onclick="event.stopPropagation();deleteBlockFromGrid('${key}',${block.id})">×</button>
             <div class="week-block-name">${cat.icon} ${cat.name}</div>
@@ -562,6 +564,7 @@ function saveBlock() {
   const end = document.getElementById('blockEnd').value;
   const label = document.getElementById('blockLabel').value.trim();
   if(!start || !end) { showToast('set a time'); return; }
+  if(selectedCat === FREEFORM.id && !label) { showToast('write what you\'re doing'); return; }
 
   const d = new Date(modalContext.dateK + 'T12:00:00');
   addBlock(d, { cat: selectedCat, start, end, label, tasks: [...selectedTasks] });
@@ -599,10 +602,20 @@ function buildCatPicker() {
     btn.onclick = () => { selectedCat = cat.id; updateCatPicker(); };
     picker.appendChild(btn);
   });
+  // Free-form option — no category needed, just write it
+  const freeBtn = document.createElement('div');
+  freeBtn.className = 'cat-pick-btn';
+  freeBtn.id = `catbtn-${FREEFORM.id}`;
+  freeBtn.innerHTML = `<div class="cat-pick-icon">${FREEFORM.icon}</div><div class="cat-pick-name">${FREEFORM.name}</div>`;
+  freeBtn.style.borderColor = 'rgba(255,255,255,0.08)';
+  freeBtn.style.gridColumn = '1 / -1';
+  freeBtn.onclick = () => { selectedCat = FREEFORM.id; updateCatPicker(); document.getElementById('blockLabel').focus(); };
+  picker.appendChild(freeBtn);
 }
 
 function updateCatPicker() {
-  CATEGORIES.forEach(cat => {
+  const ALL_OPTIONS = [...CATEGORIES, FREEFORM];
+  ALL_OPTIONS.forEach(cat => {
     const btn = document.getElementById(`catbtn-${cat.id}`);
     if(!btn) return;
     if(selectedCat === cat.id) {
@@ -615,7 +628,12 @@ function updateCatPicker() {
       btn.style.background = 'rgba(255,255,255,0.03)';
     }
   });
-  if(selectedCat) renderTaskSuggestions(selectedCat);
+  if(selectedCat && selectedCat !== FREEFORM.id) renderTaskSuggestions(selectedCat);
+  else { document.getElementById('taskSuggestions').innerHTML = ''; document.getElementById('suggestLabel').style.display = 'none'; }
+}
+
+function getCatById(id) {
+  return [...CATEGORIES, FREEFORM].find(c => c.id === id) || CATEGORIES[0];
 }
 
 function renderTaskSuggestions(catId) {
@@ -791,7 +809,7 @@ function makeTaskRow(task) {
 }
 
 // ── HELPERS ──
-function formatHour(h) { return h <= 12 ? `${h}am` : `${h-12}pm`; }
+function formatHour(h) { return h === 12 ? '12pm' : h < 12 ? `${h}am` : `${h-12}pm`; }
 function formatTime(t) {
   const [h,m] = t.split(':').map(Number);
   const ampm = h < 12 ? 'am' : 'pm';

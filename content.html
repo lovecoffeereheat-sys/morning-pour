@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>content hub · morning pour</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☕</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400&family=Anton&display=swap">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --rose:#8b2252;--rose-mid:#b77d86;--rose-soft:#caa6a6;
+  --rose-warm:#d6a39a;--rose-pale:#f6e6e3;--rose-card:#fdf5f3;
+  --gold:#c4a45a;--cream:#f5f0e6;--espresso:#2c1810;
+  --border:#e8cfc9;--text:#2c1810;--text-soft:#9e7d68;--text-faint:#c4a898;
+  --magenta:#c1358c;
+}
+body{font-family:'Lora',Georgia,serif;font-size:15px;background:var(--rose-pale);color:var(--text);min-height:100vh}
+
+.topbar{background:var(--espresso);display:flex;align-items:center;padding:0 24px;height:52px;position:sticky;top:0;z-index:100}
+.topbar-logo{font-family:'Anton',sans-serif;font-size:13px;letter-spacing:0.12em;color:#f5e8e4}
+.topbar-logo em{color:var(--rose-warm);font-style:normal}
+.topbar-sep{width:1px;height:16px;background:rgba(255,255,255,0.15);margin:0 14px}
+.topbar-sub{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.4)}
+.topbar-spacer{flex:1}
+.topbar-link{font-size:11px;color:rgba(255,255,255,0.4);text-decoration:none;font-family:'DM Mono',monospace}
+.topbar-link:hover{color:#f5e8e4}
+
+.hero{padding:32px 28px 24px;max-width:1100px;margin:0 auto}
+.hero-eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--rose);margin-bottom:10px}
+.hero-title{font-family:'Playfair Display',serif;font-size:32px;color:var(--espresso)}
+.hero-title em{font-style:italic;color:var(--rose)}
+.hero-sub{font-family:'Lora',serif;font-style:italic;font-size:14px;color:var(--text-soft);margin-top:6px}
+
+.capture-row{max-width:1100px;margin:0 auto;padding:0 28px 20px;display:flex;gap:8px;flex-wrap:wrap}
+.capture-input{flex:1;min-width:240px;background:var(--rose-card);border:1px solid var(--border);border-radius:10px;padding:12px 16px;font-size:14px;color:var(--text);font-family:'Lora',serif;outline:none;transition:border-color 0.15s}
+.capture-input:focus{border-color:var(--rose)}
+.capture-select{background:var(--rose-card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--text-soft);font-family:'DM Mono',monospace;cursor:pointer}
+.capture-btn{background:var(--rose);color:#fff;border:none;border-radius:10px;padding:12px 22px;font-size:14px;cursor:pointer;font-family:'Lora',serif;transition:opacity 0.15s}
+.capture-btn:hover{opacity:0.88}
+
+.board{max-width:1100px;margin:0 auto;padding:0 28px 40px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.column{background:var(--rose-card);border:1px solid var(--border);border-radius:12px;overflow:hidden;min-height:200px}
+.column-head{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.column-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-soft)}
+.column-count{font-family:'DM Mono',monospace;font-size:10px;color:var(--rose);background:rgba(139,34,82,0.1);padding:2px 8px;border-radius:20px}
+.column-body{padding:10px;display:flex;flex-direction:column;gap:8px;min-height:100px}
+.column.idea .column-head{background:rgba(196,164,90,0.1)}
+.column.drafting .column-head{background:rgba(139,34,82,0.08)}
+.column.ready .column-head{background:rgba(74,124,89,0.1)}
+.column.scheduled .column-head{background:rgba(193,53,140,0.08)}
+
+.card{background:#fff;border:1px solid var(--border);border-radius:8px;padding:10px 12px;cursor:pointer;transition:all 0.15s}
+.card:hover{border-color:var(--rose-mid);box-shadow:0 2px 8px rgba(139,34,82,0.08)}
+.card-name{font-size:13px;color:var(--text);line-height:1.4;margin-bottom:6px}
+.card-actions{display:flex;gap:4px;flex-wrap:wrap}
+.card-move-btn{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.04em;padding:3px 8px;border-radius:12px;border:1px solid var(--border);color:var(--text-faint);cursor:pointer;background:none;transition:all 0.15s}
+.card-move-btn:hover{border-color:var(--rose);color:var(--rose)}
+.card-date{font-family:'DM Mono',monospace;font-size:9px;color:var(--gold);margin-top:4px}
+.empty-col{font-family:'Lora',serif;font-style:italic;font-size:12px;color:var(--text-faint);text-align:center;padding:20px 10px}
+
+.date-modal-overlay{position:fixed;inset:0;background:rgba(44,24,16,0.6);backdrop-filter:blur(6px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.date-modal{background:#2c1810;border-radius:14px;padding:22px;width:100%;max-width:320px}
+.date-modal-title{font-family:'Playfair Display',serif;font-size:15px;color:#f5e8e4;margin-bottom:12px}
+.date-modal input{width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:9px 12px;color:#f5e8e4;font-family:'Lora',serif;font-size:14px;margin-bottom:14px}
+.date-modal-actions{display:flex;gap:8px}
+.date-modal-save{flex:1;background:var(--rose);color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;font-family:'Lora',serif}
+.date-modal-cancel{background:none;border:1px solid rgba(255,255,255,0.15);color:#caa6a6;border-radius:8px;padding:10px 14px;cursor:pointer;font-family:'Lora',serif}
+
+@media (max-width: 900px) { .board{grid-template-columns:1fr 1fr} }
+@media (max-width: 560px) { .board{grid-template-columns:1fr} }
+
+.toast{position:fixed;bottom:24px;right:24px;background:var(--espresso);color:#f5e8e4;padding:11px 18px;border-radius:8px;font-size:13px;opacity:0;transition:opacity 0.3s;pointer-events:none;z-index:999;font-family:'Lora',serif}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-logo">REHEATED,<em> </em>OBVIOUSLY</span>
+  <div class="topbar-sep"></div>
+  <span class="topbar-sub">content hub</span>
+  <div class="topbar-spacer"></div>
+  <a href="index.html" class="topbar-link">← hub</a>
+</div>
+
+<div class="hero">
+  <div class="hero-eyebrow">RO Substack · idea to published, without opening Asana</div>
+  <div class="hero-title">content <em>hub</em></div>
+  <div class="hero-sub">capture it here, move it along, schedule it — Asana just quietly keeps score.</div>
+</div>
+
+<div class="capture-row">
+  <input class="capture-input" id="captureInput" placeholder="type a new idea..." onkeydown="if(event.key==='Enter')captureIdea()">
+  <select class="capture-select" id="captureType">
+    <option value="post">post</option>
+    <option value="note">note</option>
+    <option value="tool">tool post</option>
+  </select>
+  <button class="capture-btn" onclick="captureIdea()">+ capture</button>
+</div>
+
+<div class="cadence-ref" id="cadenceRef" style="max-width:1100px;margin:0 auto;padding:0 28px 16px">
+  <div style="background:var(--rose-card);border:1px solid var(--border);border-radius:10px;padding:12px 16px;font-size:12px;color:var(--text-soft);font-family:'Lora',serif;font-style:italic" id="cadenceContent">
+    loading cadence...
+  </div>
+</div>
+
+<div class="board">
+  <div class="column idea">
+    <div class="column-head"><span class="column-title">idea</span><span class="column-count" id="countIdea">0</span></div>
+    <div class="column-body" id="colIdea"></div>
+  </div>
+  <div class="column drafting">
+    <div class="column-head"><span class="column-title">drafting</span><span class="column-count" id="countDrafting">0</span></div>
+    <div class="column-body" id="colDrafting"></div>
+  </div>
+  <div class="column ready">
+    <div class="column-head"><span class="column-title">ready</span><span class="column-count" id="countReady">0</span></div>
+    <div class="column-body" id="colReady"></div>
+  </div>
+  <div class="column scheduled">
+    <div class="column-head"><span class="column-title">scheduled</span><span class="column-count" id="countScheduled">0</span></div>
+    <div class="column-body" id="colScheduled"></div>
+  </div>
+</div>
+
+<div class="date-modal-overlay" id="dateModalOverlay">
+  <div class="date-modal">
+    <div class="date-modal-title">☕ schedule this piece</div>
+    <input type="date" id="scheduleDate">
+    <div class="date-modal-actions">
+      <button class="date-modal-save" onclick="confirmSchedule()">schedule it</button>
+      <button class="date-modal-cancel" onclick="closeDateModal()">cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span id="toastMsg"></span></div>
+
+<script>
+const SECTIONS = {
+  idea: '1215878207769408',
+  drafting: '1215878245764271',
+  ready: '1215878207780841',
+  scheduled: '1215886119688372',
+};
+const RO_SUBSTACK_PROJECT = '1215878207772169';
+const CONTENT_CALENDAR_PROJECT = '1215878381563758';
+
+let allTasks = { idea: [], drafting: [], ready: [], scheduled: [] };
+let pendingScheduleTask = null;
+
+async function loadBoard() {
+  try {
+    const res = await fetch('/.netlify/functions/asana-proxy?view=content_hub_board');
+    const data = await res.json();
+    allTasks = data.columns || { idea: [], drafting: [], ready: [], scheduled: [] };
+    renderBoard();
+  } catch(e) {
+    showToast('could not load — check connection');
+  }
+}
+
+function renderBoard() {
+  ['idea','drafting','ready','scheduled'].forEach(col => {
+    const container = document.getElementById(`col${col.charAt(0).toUpperCase()+col.slice(1)}`);
+    const tasks = allTasks[col] || [];
+    document.getElementById(`count${col.charAt(0).toUpperCase()+col.slice(1)}`).textContent = tasks.length;
+    
+    if(!tasks.length) {
+      container.innerHTML = '<div class="empty-col">nothing here</div>';
+      return;
+    }
+    
+    container.innerHTML = '';
+    tasks.slice(0, 15).forEach(task => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      
+      let actions = '';
+      if(col === 'idea') actions = `<button class="card-move-btn" onclick="moveTask('${task.gid}','drafting')">→ drafting</button>`;
+      if(col === 'drafting') actions = `<button class="card-move-btn" onclick="moveTask('${task.gid}','idea')">← idea</button><button class="card-move-btn" onclick="moveTask('${task.gid}','ready')">→ ready</button>`;
+      if(col === 'ready') actions = `<button class="card-move-btn" onclick="moveTask('${task.gid}','drafting')">← drafting</button><button class="card-move-btn" onclick="openDateModal('${task.gid}','${task.name.replace(/'/g,"\\'")}')">📅 schedule</button>`;
+      if(col === 'scheduled') actions = `<div class="card-date">${task.due_on || ''}</div>`;
+      
+      card.innerHTML = `<div class="card-name">${task.name}</div><div class="card-actions">${actions}</div>`;
+      container.appendChild(card);
+    });
+  });
+}
+
+async function captureIdea() {
+  const input = document.getElementById('captureInput');
+  const name = input.value.trim();
+  const type = document.getElementById('captureType').value;
+  if(!name) return;
+  
+  const prefix = type === 'note' ? 'RO NOTE — ' : type === 'tool' ? 'RO TOOL POST — ' : 'RO POST — ';
+  const fullName = name.startsWith('RO ') ? name : prefix + name;
+  
+  try {
+    await fetch('/.netlify/functions/asana-proxy?view=create_task', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: fullName,
+        project_id: RO_SUBSTACK_PROJECT,
+        section_id: SECTIONS.idea
+      })
+    });
+    input.value = '';
+    showToast('captured ☕');
+    loadBoard();
+loadCadence();
+
+async function loadCadence() {
+  try {
+    const res = await fetch('/.netlify/functions/asana-proxy?view=batch_cadence');
+    const data = await res.json();
+    const tasks = (data.tasks || []).filter(t => !t.completed);
+    const container = document.getElementById('cadenceContent');
+    if(!tasks.length) {
+      container.innerHTML = '☕ batch & publish cadence — nothing set yet';
+      return;
+    }
+    container.innerHTML = '☕ <strong>batch & publish cadence</strong> — ' + tasks.map(t => t.name).join(' · ');
+  } catch(e) {
+    document.getElementById('cadenceContent').innerHTML = '☕ batch & publish cadence — could not load';
+  }
+}
+  } catch(e) {
+    showToast('could not save — check connection');
+  }
+}
+
+async function moveTask(taskGid, toSection) {
+  try {
+    await fetch('/.netlify/functions/asana-proxy?view=move_task', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ task_gid: taskGid, section_gid: SECTIONS[toSection] })
+    });
+    showToast(`moved to ${toSection} ☕`);
+    loadBoard();
+loadCadence();
+
+async function loadCadence() {
+  try {
+    const res = await fetch('/.netlify/functions/asana-proxy?view=batch_cadence');
+    const data = await res.json();
+    const tasks = (data.tasks || []).filter(t => !t.completed);
+    const container = document.getElementById('cadenceContent');
+    if(!tasks.length) {
+      container.innerHTML = '☕ batch & publish cadence — nothing set yet';
+      return;
+    }
+    container.innerHTML = '☕ <strong>batch & publish cadence</strong> — ' + tasks.map(t => t.name).join(' · ');
+  } catch(e) {
+    document.getElementById('cadenceContent').innerHTML = '☕ batch & publish cadence — could not load';
+  }
+}
+  } catch(e) {
+    showToast('could not move — check connection');
+  }
+}
+
+function openDateModal(taskGid, taskName) {
+  pendingScheduleTask = taskGid;
+  document.getElementById('scheduleDate').value = new Date().toISOString().split('T')[0];
+  document.getElementById('dateModalOverlay').style.display = 'flex';
+}
+
+function closeDateModal() {
+  document.getElementById('dateModalOverlay').style.display = 'none';
+  pendingScheduleTask = null;
+}
+
+async function confirmSchedule() {
+  const date = document.getElementById('scheduleDate').value;
+  if(!date || !pendingScheduleTask) return;
+  
+  try {
+    await fetch('/.netlify/functions/asana-proxy?view=schedule_task', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        task_gid: pendingScheduleTask,
+        due_on: date,
+        section_gid: SECTIONS.scheduled,
+        calendar_project_id: CONTENT_CALENDAR_PROJECT
+      })
+    });
+    closeDateModal();
+    showToast('scheduled ☕ — now on the content map');
+    loadBoard();
+loadCadence();
+
+async function loadCadence() {
+  try {
+    const res = await fetch('/.netlify/functions/asana-proxy?view=batch_cadence');
+    const data = await res.json();
+    const tasks = (data.tasks || []).filter(t => !t.completed);
+    const container = document.getElementById('cadenceContent');
+    if(!tasks.length) {
+      container.innerHTML = '☕ batch & publish cadence — nothing set yet';
+      return;
+    }
+    container.innerHTML = '☕ <strong>batch & publish cadence</strong> — ' + tasks.map(t => t.name).join(' · ');
+  } catch(e) {
+    document.getElementById('cadenceContent').innerHTML = '☕ batch & publish cadence — could not load';
+  }
+}
+  } catch(e) {
+    showToast('could not schedule — check connection');
+  }
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+loadBoard();
+loadCadence();
+
+async function loadCadence() {
+  try {
+    const res = await fetch('/.netlify/functions/asana-proxy?view=batch_cadence');
+    const data = await res.json();
+    const tasks = (data.tasks || []).filter(t => !t.completed);
+    const container = document.getElementById('cadenceContent');
+    if(!tasks.length) {
+      container.innerHTML = '☕ batch & publish cadence — nothing set yet';
+      return;
+    }
+    container.innerHTML = '☕ <strong>batch & publish cadence</strong> — ' + tasks.map(t => t.name).join(' · ');
+  } catch(e) {
+    document.getElementById('cadenceContent').innerHTML = '☕ batch & publish cadence — could not load';
+  }
+}
+</script>
+</body>
+</html>

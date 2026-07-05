@@ -11,7 +11,7 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --rose:#944e63;--rose-mid:#b47b84;--rose-soft:#caa6a6;
+  --rose:#8b2252;--rose-mid:#b77d86;--rose-soft:#caa6a6;
   --rose-warm:#d6a39a;--rose-bg:#f6e6e3;--card:#fdf5f3;
   --navy:#16042d;--espresso:#2c1810;--cream:#e8d5c4;
   --amber:#c4a45a;--border:#e8cfc9;--border-soft:#ede6df;
@@ -278,9 +278,14 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--rose-bg);color:va
     </div>
   </div>
 
-  <a href="https://docs.google.com/spreadsheets/d/1lzeOBYmLYdG22SmghuVz4L92AZDU-EGPYvZ6pO13s4E" target="_blank" class="sheets-link">
-    <i class="ti ti-external-link"></i> open the daily grind
-  </a>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+    <a href="https://docs.google.com/spreadsheets/d/1lzeOBYmLYdG22SmghuVz4L92AZDU-EGPYvZ6pO13s4E" target="_blank" class="sheets-link" style="flex:1">
+      <i class="ti ti-external-link"></i> open the daily grind
+    </a>
+    <button onclick="connectSheets()" class="sheets-link" id="sheetConnectBtn" style="flex:1;border:none;cursor:pointer;background:var(--card)">
+      <i class="ti ti-plug"></i> <span id="sheetConnectLabel">connect sheet</span>
+    </button>
+  </div>
 
 </div>
 
@@ -290,6 +295,78 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--rose-bg);color:va
 const GRACE_SYMPTOMS = ['cramps','bloating','fatigue','hot flash','brain fog','insomnia','anxiety','perimenopause','headache','tender'];
 const KIDS_SYMPTOMS = ['cramps','bloating','fatigue','headache','mood swings','tender'];
 const WELLNESS_SYMPTOMS = ['headache','fatigue','nausea','back pain','joint pain','bloating','brain fog','anxiety','low energy','poor sleep'];
+
+// ── GOOGLE SHEETS CONNECTION (Daily Grind sheet) ──
+const GCAL_CLIENT_ID = '92608631753-p371cgkjm1cv23c44qtttvrgkt9el48n.apps.googleusercontent.com';
+const SHEET_SCOPES = 'https://www.googleapis.com/auth/spreadsheets';
+const DAILY_GRIND_SHEET_ID = '1lzeOBYmLYdG22SmghuVz4L92AZDU-EGPYvZ6pO13s4E';
+let sheetsReady = false;
+let sheetsAccessToken = null;
+
+function connectSheets() {
+  const gapiScript = document.createElement('script');
+  gapiScript.src = 'https://apis.google.com/js/api.js';
+  gapiScript.onload = () => {
+    gapi.load('client', async () => {
+      await gapi.client.init({
+        discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+      });
+    });
+  };
+  document.head.appendChild(gapiScript);
+
+  const gisScript = document.createElement('script');
+  gisScript.src = 'https://accounts.google.com/gsi/client';
+  gisScript.onload = () => {
+    const tokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: GCAL_CLIENT_ID,
+      scope: SHEET_SCOPES,
+      callback: (response) => {
+        if (response.error) { showToast('could not connect to sheet'); return; }
+        sheetsAccessToken = response.access_token;
+        gapi.client.setToken({ access_token: sheetsAccessToken });
+        sheetsReady = true;
+        localStorage.setItem('mp_sheets_connected', 'true');
+        showToast('connected to daily grind sheet ☕');
+      }
+    });
+    tokenClient.requestAccessToken({ prompt: localStorage.getItem('mp_sheets_connected') ? '' : 'consent' });
+  };
+  document.head.appendChild(gisScript);
+}
+
+async function writeToSheet(log) {
+  if (!sheetsReady) return false;
+  try {
+    const moodMap = { heavy: 'heavy', okay: 'okay', good: 'good', great: 'great' };
+    const row = [[
+      log.date,
+      moodMap[log.mood] || '',
+      '', // energy (not currently a separate field in body.html)
+      log.sleep.hours || '',
+      log.movement.mins || '',
+      log.movement.type || '',
+      log.water || 0,
+      log.coffee || 0,
+      '', // sugar grams - not yet in body.html UI
+      '', // tsp
+      '', // tbsp
+      log.symptoms.join(', '),
+      '', // wellness score - auto-calculated by sheet formula
+      log.notes || ''
+    ]];
+    await gapi.client.sheets.spreadsheets.values.append({
+      spreadsheetId: DAILY_GRIND_SHEET_ID,
+      range: 'Daily Log!A:N',
+      valueInputOption: 'USER_ENTERED',
+      resource: { values: row }
+    });
+    return true;
+  } catch(e) {
+    console.error('sheet write error', e);
+    return false;
+  }
+}
 
 let selectedMood = null;
 let waterCount = 0;
@@ -310,6 +387,11 @@ buildSymptoms();
 buildCycleSymptoms();
 loadLogs();
 renderHistory();
+
+// Auto-reconnect sheets if previously authorized
+if (localStorage.getItem('mp_sheets_connected') === 'true') {
+  connectSheets();
+}
 
 // ── MOOD ──
 function selectMood(mood) {
@@ -469,6 +551,11 @@ async function saveLog() {
   localStorage.setItem('mp_body_logs', JSON.stringify(logs));
   renderHistory();
 
+  // Write to Daily Grind Google Sheet
+  if (sheetsReady) {
+    writeToSheet(log);
+  }
+
   // Build Asana task notes
   const moodIcon = { heavy:'☁️ heavy', okay:'🌥 okay', good:'🌤 good', great:'☀️ great' };
   const dateLabel = today.toLocaleDateString('en-CA',{weekday:'long',month:'long',day:'numeric'});
@@ -508,7 +595,7 @@ async function saveLog() {
     });
     const data = await res.json();
     if (data.task) {
-      showToast('logged + saved to asana ☕');
+      showToast(sheetsReady ? 'logged · asana + sheet ☕' : 'logged + saved to asana ☕');
     } else {
       showToast('logged locally · asana sync failed');
     }

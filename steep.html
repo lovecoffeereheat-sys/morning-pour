@@ -11,7 +11,7 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --rose:#944e63;--rose-mid:#b47b84;--rose-soft:#caa6a6;
+  --rose:#8b2252;--rose-mid:#b77d86;--rose-soft:#caa6a6;
   --rose-warm:#d6a39a;--rose-bg:#f6e6e3;--card:#fdf5f3;
   --navy:#16042d;--espresso:#2c1810;--cream:#e8d5c4;
   --amber:#c4a45a;--amber-bg:#f5f0e4;
@@ -132,8 +132,8 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--text);min-height:100vh
       <rect x="10" y="35" width="60" height="50" rx="8" fill="#2c1810"/>
       <path d="M70 45 Q85 45 85 57 Q85 69 70 69" stroke="#2c1810" stroke-width="5" stroke-linecap="round" fill="none"/>
       <rect x="5" y="85" width="70" height="7" rx="3" fill="#2c1810" opacity="0.5"/>
-      <path d="M25 33 Q23 25 27 18 Q31 11 25 5" stroke="#944e63" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.4"/>
-      <path d="M40 33 Q38 23 42 15 Q46 7 40 1" stroke="#944e63" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.4"/>
+      <path d="M25 33 Q23 25 27 18 Q31 11 25 5" stroke="#8b2252" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.4"/>
+      <path d="M40 33 Q38 23 42 15 Q46 7 40 1" stroke="#8b2252" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.4"/>
     </svg>
   </div>
   <div class="hero-eyebrow">💰 the other pot · finances</div>
@@ -246,13 +246,13 @@ const EXPENSE_CATS = {
   '🏦 debt & savings': ['Credit card payment','Loan payment','TFSA contribution','Emergency fund','Other savings'],
 };
 
-const INCOME_CATS = ['Payhip sales — Reheated, Obviously','Services / client work','Other income'];
+const INCOME_CATS = ['Substack — The Fourth Reheat','Tool sales — Coffee & Conditions','Sun Life Benefits','MVA Benefits','GST Credit','Canada Child Benefit (CCB)','1:1 Client work','Speaking / consulting','Other income'];
 
 // ── INIT ──
 document.getElementById('monthLabel').textContent = `${currentMonth} ${currentYear}`;
 document.getElementById('spendingMonth').textContent = currentMonth;
 buildCategorySelect();
-loadGAPI();
+showOfflineState(); // show connect button — user clicks to authenticate
 
 function buildCategorySelect() {
   const sel = document.getElementById('logCategory');

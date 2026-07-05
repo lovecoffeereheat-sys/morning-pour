@@ -10,43 +10,43 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Inter', sans-serif; background: #f6e6e3; color: #1e2433; padding: 2.5rem; max-width: 1000px; margin: 0 auto; }
   header { border-bottom: 1.5px solid #1e2433; padding-bottom: 1.25rem; margin-bottom: 1.5rem; }
-  .brand { font-family: 'Playfair Display', serif; font-size: 13px; color: #944e63; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+  .brand { font-family: 'Playfair Display', serif; font-size: 13px; color: #8b2252; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
   h1 { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: #1e2433; line-height: 1.2; margin-bottom: 4px; }
   .sub { font-size: 13px; color: #3d4a5c; }
   .milestones { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.5rem; }
   .milestone-card { background: #1e2433; border-radius: 8px; padding: 12px 14px; }
   .milestone-card .m-label { font-size: 10px; font-weight: 600; color: #c4a45a; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px; }
   .milestone-card .m-val { font-family: 'Playfair Display', serif; font-size: 15px; color: #f6e6e3; margin-bottom: 2px; }
-  .milestone-card .m-sub { font-size: 11px; color: #b47b84; }
+  .milestone-card .m-sub { font-size: 11px; color: #b77d86; }
   .legend { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 1.25rem; align-items: center; }
   .legend-title { font-size: 11px; font-weight: 600; color: #3d4a5c; text-transform: uppercase; letter-spacing: 0.06em; }
   .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #1e2433; }
   .legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
-  .dot-batch { background: #3d4a5c; } .dot-post { background: #944e63; } .dot-tool { background: #c4a45a; } .dot-note { background: #b47b84; }
+  .dot-batch { background: #3d4a5c; } .dot-post { background: #8b2252; } .dot-tool { background: #c4a45a; } .dot-note { background: #b77d86; }
   .calendar { border: 1px solid #1e2433; border-radius: 10px; overflow: hidden; }
   .cal-header { display: grid; grid-template-columns: 70px repeat(7, 1fr); background: #1e2433; }
   .cal-header div { font-size: 11px; font-weight: 600; color: #c4a45a; text-align: center; padding: 8px 4px; letter-spacing: 0.05em; text-transform: uppercase; }
-  .cal-header div:first-child { color: #b47b84; font-size: 10px; }
+  .cal-header div:first-child { color: #b77d86; font-size: 10px; }
   .week { display: grid; grid-template-columns: 70px repeat(7, 1fr); border-top: 0.5px solid rgba(44,24,16,0.2); }
   .week:nth-child(odd) { background: rgba(255,255,255,0.3); }
   .week:nth-child(even) { background: rgba(255,255,255,0.15); }
-  .week-label { display: flex; align-items: center; justify-content: flex-end; padding: 10px; font-size: 10px; font-weight: 600; color: #944e63; text-transform: uppercase; letter-spacing: 0.05em; border-right: 0.5px solid rgba(44,24,16,0.15); }
+  .week-label { display: flex; align-items: center; justify-content: flex-end; padding: 10px; font-size: 10px; font-weight: 600; color: #8b2252; text-transform: uppercase; letter-spacing: 0.05em; border-right: 0.5px solid rgba(44,24,16,0.15); }
   .day-cell { padding: 8px 4px; border-right: 0.5px solid rgba(44,24,16,0.1); min-height: 72px; display: flex; flex-direction: column; gap: 3px; }
   .day-cell:last-child { border-right: none; }
   .date { font-size: 11px; color: #3d4a5c; font-weight: 500; margin-bottom: 2px; text-align: center; }
-  .date.prev { color: #b47b84; opacity: 0.5; }
+  .date.prev { color: #b77d86; opacity: 0.5; }
   .pill { border-radius: 4px; padding: 3px 5px; font-size: 9.5px; font-weight: 500; line-height: 1.4; text-align: center; cursor: pointer; }
   .pill-batch { background: #3d4a5c; color: #f6e6e3; }
-  .pill-post { background: #944e63; color: #f6e6e3; }
+  .pill-post { background: #8b2252; color: #f6e6e3; }
   .pill-tool { background: #c4a45a; color: #1e2433; }
-  .pill-note { background: rgba(180,123,132,0.25); color: #944e63; border: 0.5px solid #b47b84; }
+  .pill-note { background: rgba(180,123,132,0.25); color: #8b2252; border: 0.5px solid #b77d86; }
   .loading { text-align: center; padding: 40px; font-family: 'Playfair Display', serif; font-style: italic; color: #9e7d68; }
   .asana-badge { display: inline-flex; align-items: center; gap: 6px; background: #1e2433; color: #c4a45a; border-radius: 20px; padding: 4px 12px; font-size: 11px; margin-bottom: 1rem; text-decoration: none; }
   .month-nav { display: flex; gap: 8px; margin-bottom: 1.5rem; }
   .month-pill { font-size: 11px; padding: 5px 14px; border-radius: 20px; border: 0.5px solid #1e2433; color: #3d4a5c; text-decoration: none; cursor: pointer; }
   .month-pill.active { background: #1e2433; color: #c4a45a; }
   .guardrails { margin-top: 1.25rem; border: 0.5px solid rgba(44,24,16,0.25); border-radius: 8px; padding: 12px 16px; background: rgba(255,255,255,0.4); }
-  .guardrails-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: #944e63; margin-bottom: 8px; }
+  .guardrails-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: #8b2252; margin-bottom: 8px; }
   .guardrails-list { display: flex; flex-wrap: wrap; gap: 6px 20px; }
   .guardrail-item { font-size: 11px; color: #1e2433; display: flex; align-items: center; gap: 5px; }
   .guardrail-item::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: #c4a45a; flex-shrink: 0; }

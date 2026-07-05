@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>the house · morning pour</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧹</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400&family=Anton&display=swap">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --rose:#8b2252;--rose-mid:#b77d86;--rose-soft:#caa6a6;
+  --rose-warm:#d6a39a;--rose-pale:#f6e6e3;--rose-card:#fdf5f3;
+  --gold:#c4a45a;--cream:#f5f0e6;--espresso:#2c1810;
+  --border:#e8cfc9;--text:#2c1810;--text-soft:#9e7d68;--text-faint:#c4a898;
+}
+body{font-family:'Lora',Georgia,serif;font-size:15px;background:var(--rose-pale);color:var(--text);min-height:100vh}
+
+.topbar{background:var(--espresso);display:flex;align-items:center;padding:0 24px;height:52px;position:sticky;top:0;z-index:100}
+.topbar-logo{font-family:'Anton',sans-serif;font-size:13px;letter-spacing:0.12em;color:#f5e8e4}
+.topbar-logo em{color:var(--rose-warm);font-style:normal}
+.topbar-sep{width:1px;height:16px;background:rgba(255,255,255,0.15);margin:0 14px}
+.topbar-sub{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.4)}
+.topbar-spacer{flex:1}
+.topbar-print{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;padding:5px 12px;border-radius:20px;background:none;border:1px solid rgba(255,255,255,0.2);color:var(--gold);cursor:pointer;transition:all 0.15s}
+.topbar-print:hover{border-color:var(--gold)}
+.topbar-link{font-size:11px;color:rgba(255,255,255,0.4);text-decoration:none;font-family:'DM Mono',monospace;margin-left:12px}
+.topbar-link:hover{color:#f5e8e4}
+
+.hero{padding:32px 28px 20px;max-width:900px;margin:0 auto}
+.hero-eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--rose);margin-bottom:10px}
+.hero-title{font-family:'Playfair Display',serif;font-size:32px;color:var(--espresso)}
+.hero-title em{font-style:italic;color:var(--rose)}
+.hero-sub{font-family:'Lora',serif;font-style:italic;font-size:14px;color:var(--text-soft);margin-top:6px}
+.hero-date{font-family:'DM Mono',monospace;font-size:11px;color:var(--text-faint);margin-top:10px}
+
+.controls{max-width:900px;margin:0 auto;padding:0 28px 16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.filter-btn{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.06em;padding:6px 14px;border-radius:20px;border:1px solid var(--border);color:var(--text-soft);cursor:pointer;background:var(--rose-card);transition:all 0.15s}
+.filter-btn.active{background:var(--rose);border-color:var(--rose);color:#fff}
+.add-btn{margin-left:auto;background:var(--rose);color:#fff;border:none;border-radius:20px;padding:7px 16px;font-size:12px;cursor:pointer;font-family:'Lora',serif;transition:opacity 0.15s}
+.add-btn:hover{opacity:0.88}
+
+.content{max-width:900px;margin:0 auto;padding:0 28px 60px}
+.freq-group{margin-bottom:20px}
+.freq-head{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--rose);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.chore-row{display:flex;align-items:center;gap:12px;background:var(--rose-card);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:6px}
+.chore-check{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--rose-mid);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.15s}
+.chore-check.done{background:var(--rose);border-color:var(--rose);color:#fff}
+.chore-name{flex:1;font-size:14px;color:var(--text)}
+.chore-name.done{text-decoration:line-through;color:var(--text-faint)}
+.chore-who{font-family:'DM Mono',monospace;font-size:10px;color:var(--gold);background:rgba(196,164,90,0.12);padding:3px 9px;border-radius:20px}
+.chore-area{font-family:'DM Mono',monospace;font-size:9px;color:var(--text-faint);text-transform:uppercase;letter-spacing:0.05em}
+.chore-del{background:none;border:none;color:var(--text-faint);cursor:pointer;font-size:14px;padding:2px 6px}
+.chore-del:hover{color:var(--rose)}
+.empty-state{font-family:'Lora',serif;font-style:italic;color:var(--text-faint);text-align:center;padding:30px}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(44,24,16,0.6);backdrop-filter:blur(6px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.modal{background:#2c1810;border-radius:14px;padding:22px;width:100%;max-width:380px}
+.modal-title{font-family:'Playfair Display',serif;font-size:16px;color:#f5e8e4;margin-bottom:14px}
+.m-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:#caa6a6;margin:10px 0 5px;display:block}
+.m-input,.m-select{width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px 11px;font-size:13px;color:#f5e8e4;font-family:'Lora',serif;outline:none}
+.m-select option{background:#2c1810}
+.chip-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+.who-chip{font-family:'DM Mono',monospace;font-size:10px;padding:5px 10px;border-radius:20px;border:1px solid rgba(255,255,255,0.15);color:#caa6a6;cursor:pointer;background:none}
+.who-chip.selected{background:var(--rose);border-color:var(--rose);color:#fff}
+.modal-actions{display:flex;gap:8px;margin-top:16px}
+.m-btn-save{flex:1;background:var(--rose);color:#fff;border:none;border-radius:8px;padding:10px;cursor:pointer;font-family:'Lora',serif}
+.m-btn-cancel{background:none;border:1px solid rgba(255,255,255,0.15);color:#caa6a6;border-radius:8px;padding:10px 14px;cursor:pointer;font-family:'Lora',serif}
+
+.toast{position:fixed;bottom:24px;right:24px;background:var(--espresso);color:#f5e8e4;padding:11px 18px;border-radius:8px;font-size:13px;opacity:0;transition:opacity 0.3s;pointer-events:none;z-index:999}
+.toast.show{opacity:1}
+
+.print-only{display:none}
+@media print {
+  .topbar,.controls,.chore-del,.chore-check,.hero{display:none!important}
+  .print-only{display:block!important}
+  body{background:#fff}
+  .content{padding:0;max-width:100%}
+  @page{margin:1.2cm;size:letter landscape}
+}
+.print-header{text-align:center;margin-bottom:20px}
+.print-title{font-family:'Playfair Display',serif;font-style:italic;font-size:32px;color:#8b2252;margin-bottom:4px}
+.print-sub{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#9e7d68}
+.print-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:20px}
+.print-day-col{border:1px solid #e8cfc9;border-radius:8px;overflow:hidden}
+.print-day-head{background:#8b2252;color:#fff;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;text-align:center;padding:6px 4px}
+.print-day-body{padding:8px 6px;min-height:100px}
+.print-day-item{display:flex;align-items:flex-start;gap:5px;font-size:10px;color:#2c1810;margin-bottom:5px;line-height:1.3}
+.print-day-check{width:9px;height:9px;border:1px solid #8b2252;border-radius:2px;flex-shrink:0;margin-top:1px}
+.print-tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.print-tier{border:1px solid #e8cfc9;border-radius:8px;overflow:hidden}
+.print-tier-head{background:#caa6a6;color:#2c1810;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;text-align:center;padding:6px}
+.print-tier-body{padding:8px 10px}
+.print-tier-item{display:flex;align-items:center;gap:6px;font-size:11px;color:#2c1810;padding:3px 0;border-bottom:1px solid #f2e6e0}
+.print-tier-item:last-child{border-bottom:none}
+.print-tier-check{width:11px;height:11px;border:1.2px solid #8b2252;border-radius:3px;flex-shrink:0}
+@media print {
+  .topbar,.controls,.chore-del,.chore-check{display:none!important}
+  body{background:#fff}
+  .hero{padding:20px 0}
+  .hero-title{color:var(--espresso)}
+  .content{padding:0}
+  .chore-row{background:#fff;border:1px solid #ddd;page-break-inside:avoid}
+  .print-checkbox{display:inline-block!important;width:14px;height:14px;border:1.5px solid var(--rose);border-radius:3px;margin-right:8px}
+  @page{margin:2cm;size:letter portrait}
+}
+.print-checkbox{display:none}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-logo">THE OTHER<em> </em>POT</span>
+  <div class="topbar-sep"></div>
+  <span class="topbar-sub">the house</span>
+  <div class="topbar-spacer"></div>
+  <button class="topbar-print" onclick="window.print()">🖨 print chart</button>
+  <a href="index.html" class="topbar-link">← hub</a>
+</div>
+
+<div class="hero">
+  <div class="hero-eyebrow">the other pot · household rhythm</div>
+  <div class="hero-title">the <em>house</em></div>
+  <div class="hero-sub">not glamorous. just done — and shared.</div>
+  <div class="hero-date" id="heroDate"></div>
+</div>
+
+<div class="controls">
+  <button class="filter-btn active" data-freq="all" onclick="setFilter('all')">all</button>
+  <button class="filter-btn" data-freq="daily" onclick="setFilter('daily')">daily</button>
+  <button class="filter-btn" data-freq="weekly" onclick="setFilter('weekly')">weekly</button>
+  <button class="filter-btn" data-freq="monthly" onclick="setFilter('monthly')">monthly</button>
+  <button class="filter-btn" data-freq="seasonal" onclick="setFilter('seasonal')">seasonal</button>
+  <button class="add-btn" onclick="openModal()">+ add chore</button>
+</div>
+
+<div class="content" id="content"></div>
+
+<div class="print-only">
+  <div class="print-header">
+    <div class="print-title">the house</div>
+    <div class="print-sub">household rhythm · week of <span id="printWeekDate"></span></div>
+  </div>
+  <div class="print-grid" id="printGrid"></div>
+  <div class="print-tiers" id="printTiers"></div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-title">🧹 add a chore</div>
+    <span class="m-label">chore</span>
+    <input class="m-input" id="choreName" placeholder="e.g. wipe counters">
+    <span class="m-label">area</span>
+    <select class="m-select" id="choreArea">
+      <option value="kitchen">kitchen</option>
+      <option value="bathroom">bathroom</option>
+      <option value="bedrooms">bedrooms</option>
+      <option value="living">living</option>
+      <option value="laundry">laundry</option>
+      <option value="outdoor">outdoor</option>
+      <option value="yard">yard</option>
+    </select>
+    <span class="m-label">frequency</span>
+    <select class="m-select" id="choreFreq">
+      <option value="daily">daily</option>
+      <option value="weekly">weekly</option>
+      <option value="biweekly">biweekly</option>
+      <option value="monthly">monthly</option>
+      <option value="seasonal">seasonal</option>
+    </select>
+    <span class="m-label">day (optional — for weekly items)</span>
+    <select class="m-select" id="choreDay">
+      <option value="">no specific day</option>
+      <option value="Sun">Sunday</option>
+      <option value="Mon">Monday</option>
+      <option value="Tue">Tuesday</option>
+      <option value="Wed">Wednesday</option>
+      <option value="Thu">Thursday</option>
+      <option value="Fri">Friday</option>
+      <option value="Sat">Saturday</option>
+    </select>
+    <span class="m-label">who</span>
+    <div class="chip-row" id="whoChips"></div>
+    <div class="modal-actions">
+      <button class="m-btn-save" onclick="saveChore()">add it</button>
+      <button class="m-btn-cancel" onclick="closeModal()">cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><span id="toastMsg"></span></div>
+
+<script>
+const WHO_OPTIONS = ['Momma','Papa','Tyler','Jaden','Naliyah','Emma','everyone','rotating'];
+const FREQ_ORDER = ['daily','weekly','biweekly','monthly','seasonal'];
+const FREQ_LABELS = { daily:'daily', weekly:'weekly', biweekly:'every 2 weeks', monthly:'monthly', seasonal:'seasonal' };
+
+let chores = [];
+let activeFilter = 'all';
+let selectedWho = [];
+
+function loadChores() {
+  try {
+    const s = localStorage.getItem('mp_house_chores');
+    chores = s ? JSON.parse(s) : defaultChores();
+  } catch(e) { chores = defaultChores(); }
+  saveChores();
+}
+
+function defaultChores() {
+  return [
+    { id: 1, name: 'dishes', area: 'kitchen', freq: 'daily', who: ['everyone'], day: null, done: false },
+    { id: 2, name: 'wipe counters', area: 'kitchen', freq: 'daily', who: ['Momma'], day: null, done: false },
+    { id: 3, name: 'make beds', area: 'bedrooms', freq: 'daily', who: ['everyone'], day: null, done: false },
+    { id: 4, name: 'bathrooms', area: 'bathroom', freq: 'weekly', who: ['rotating'], day: 'Sat', done: false },
+    { id: 5, name: 'vacuum', area: 'living', freq: 'weekly', who: ['Papa'], day: 'Sat', done: false },
+    { id: 6, name: 'laundry', area: 'laundry', freq: 'weekly', who: ['Momma'], day: 'Mon', done: false },
+    { id: 7, name: 'grocery shopping', area: 'kitchen', freq: 'weekly', who: ['Momma'], day: 'Sun', done: false },
+    { id: 8, name: 'fridge clean out', area: 'kitchen', freq: 'monthly', who: ['everyone'], day: null, done: false },
+    { id: 9, name: 'change bedsheets', area: 'bedrooms', freq: 'weekly', who: ['everyone'], day: 'Sun', done: false },
+  ];
+}
+
+function saveChores() {
+  localStorage.setItem('mp_house_chores', JSON.stringify(chores));
+}
+
+function setFilter(f) {
+  activeFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.freq === f));
+  render();
+}
+
+function toggleDone(id) {
+  const chore = chores.find(c => c.id === id);
+  if(chore) chore.done = !chore.done;
+  saveChores();
+  render();
+}
+
+function deleteChore(id) {
+  chores = chores.filter(c => c.id !== id);
+  saveChores();
+  render();
+  renderPrint();
+  showToast('removed');
+}
+
+function render() {
+  const container = document.getElementById('content');
+  const filtered = activeFilter === 'all' ? chores : chores.filter(c => c.freq === activeFilter);
+
+  if(!filtered.length) {
+    container.innerHTML = '<div class="empty-state">nothing here — add a chore to get started ☕</div>';
+    return;
+  }
+
+  const freqsToShow = activeFilter === 'all' ? FREQ_ORDER : [activeFilter];
+  let html = '';
+
+  freqsToShow.forEach(freq => {
+    const items = filtered.filter(c => c.freq === freq);
+    if(!items.length) return;
+    html += `<div class="freq-group"><div class="freq-head">${FREQ_LABELS[freq]}</div>`;
+    items.forEach(c => {
+      html += `<div class="chore-row">
+        <div class="print-checkbox"></div>
+        <div class="chore-check ${c.done?'done':''}" onclick="toggleDone(${c.id})">${c.done?'✓':''}</div>
+        <span class="chore-name ${c.done?'done':''}">${c.name}</span>
+        <span class="chore-area">${c.area}</span>
+        <span class="chore-who">${c.who.join(', ')}</span>
+        <button class="chore-del" onclick="deleteChore(${c.id})">×</button>
+      </div>`;
+    });
+    html += '</div>';
+  });
+
+  container.innerHTML = html;
+}
+
+function openModal() {
+  selectedWho = [];
+  document.getElementById('choreName').value = '';
+  buildWhoChips();
+  document.getElementById('modalOverlay').style.display = 'flex';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').style.display = 'none';
+}
+
+function buildWhoChips() {
+  const container = document.getElementById('whoChips');
+  container.innerHTML = '';
+  WHO_OPTIONS.forEach(w => {
+    const chip = document.createElement('button');
+    chip.className = 'who-chip';
+    chip.textContent = w;
+    chip.onclick = () => {
+      if(selectedWho.includes(w)) { selectedWho = selectedWho.filter(x=>x!==w); chip.classList.remove('selected'); }
+      else { selectedWho.push(w); chip.classList.add('selected'); }
+    };
+    container.appendChild(chip);
+  });
+}
+
+function saveChore() {
+  const name = document.getElementById('choreName').value.trim();
+  if(!name) { showToast('name it first'); return; }
+  const area = document.getElementById('choreArea').value;
+  const freq = document.getElementById('choreFreq').value;
+  const day = document.getElementById('choreDay').value || null;
+  chores.push({ id: Date.now(), name, area, freq, who: selectedWho.length ? selectedWho : ['everyone'], day, done: false });
+  saveChores();
+  closeModal();
+  render();
+  renderPrint();
+  showToast('added ☕');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+document.getElementById('heroDate').textContent = 'week of ' + new Date().toLocaleDateString('en-CA',{month:'long',day:'numeric',year:'numeric'});
+document.getElementById('printWeekDate').textContent = new Date().toLocaleDateString('en-CA',{month:'long',day:'numeric',year:'numeric'});
+loadChores();
+render();
+renderPrint();
+
+function renderPrint() {
+  const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const gridContainer = document.getElementById('printGrid');
+  gridContainer.innerHTML = '';
+
+  DAYS.forEach(day => {
+    const dayChores = chores.filter(c => c.day === day);
+    const col = document.createElement('div');
+    col.className = 'print-day-col';
+    let itemsHtml = dayChores.map(c => `
+      <div class="print-day-item">
+        <div class="print-day-check"></div>
+        <span>${c.name}</span>
+      </div>
+    `).join('');
+    col.innerHTML = `<div class="print-day-head">${day}</div><div class="print-day-body">${itemsHtml || ''}</div>`;
+    gridContainer.appendChild(col);
+  });
+
+  // Tiers — daily, monthly, seasonal (things without a specific day)
+  const tiersContainer = document.getElementById('printTiers');
+  const tierDefs = [
+    { key: 'daily', label: 'everyday' },
+    { key: 'monthly', label: 'monthly' },
+    { key: 'seasonal', label: 'seasonal' },
+  ];
+  tiersContainer.innerHTML = '';
+  tierDefs.forEach(tier => {
+    const items = chores.filter(c => c.freq === tier.key);
+    if(!items.length) return;
+    const tierEl = document.createElement('div');
+    tierEl.className = 'print-tier';
+    let itemsHtml = items.map(c => `
+      <div class="print-tier-item">
+        <div class="print-tier-check"></div>
+        <span>${c.name}</span>
+      </div>
+    `).join('');
+    tierEl.innerHTML = `<div class="print-tier-head">${tier.label}</div><div class="print-tier-body">${itemsHtml}</div>`;
+    tiersContainer.appendChild(tierEl);
+  });
+}
+</script>
+</body>
+</html>
