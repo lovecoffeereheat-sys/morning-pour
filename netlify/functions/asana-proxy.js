@@ -562,6 +562,66 @@ exports.handler = async (event) => {
       return { statusCode: 200, headers, body: JSON.stringify({ tasks: allTasks }) };
     }
 
+
+    // ── UPCOMING CONTENT (Content Calendar + RO Substack + Podcast & Lives combined) ──
+    if (view === 'upcoming_content') {
+      const [calRes, substackRes, podcastRes] = await Promise.all([
+        asanaGet('/projects/1215878381563758/tasks?opt_fields=name,due_on,completed&limit=50'),
+        asanaGet('/sections/1215878207780841/tasks?opt_fields=name,due_on,completed&limit=30'),
+        asanaGet('/sections/1216151688160593/tasks?opt_fields=name,due_on,completed&limit=30')
+      ]);
+      
+      const cal = (calRes.data || []).filter(t => !t.completed).map(t => ({ gid: t.gid, name: t.name, due_on: t.due_on || null, source: 'Content Calendar' }));
+      const substack = (substackRes.data || []).filter(t => !t.completed).map(t => ({ gid: t.gid, name: t.name, due_on: t.due_on || null, source: 'RO Substack' }));
+      const podcast = (podcastRes.data || []).filter(t => !t.completed).map(t => ({ gid: t.gid, name: t.name, due_on: t.due_on || null, source: 'RO Podcast & Lives' }));
+      
+      const all = [...cal, ...substack, ...podcast];
+      return { statusCode: 200, headers, body: JSON.stringify({ tasks: all }) };
+    }
+
+
+    // ── ON THE BURNER (personal someday/maybe, this week section) ──
+    if (view === 'on_the_burner') {
+      const res = await asanaGet(`/sections/1216089007775673/tasks?opt_fields=name,due_on,completed&limit=30`);
+      const tasks = (res.data || [])
+        .filter(t => !t.completed)
+        .map(t => ({ gid: t.gid, name: t.name, due_on: t.due_on || null }));
+      return { statusCode: 200, headers, body: JSON.stringify({ tasks }) };
+    }
+
+    // ── PODCAST & LIVES COUNTS (ideas/ready/posted) ──
+    if (view === 'podcast_lives_counts') {
+      const SECTIONS = { ideas: '1216147070087510', ready: '1216151688160593', posted: '1216149601680788' };
+      const counts = {};
+      for (const [key, gid] of Object.entries(SECTIONS)) {
+        const res = await asanaGet(`/sections/${gid}/tasks?opt_fields=completed&limit=50`);
+        counts[key] = (res.data || []).filter(t => !t.completed).length;
+      }
+      return { statusCode: 200, headers, body: JSON.stringify(counts) };
+    }
+
+
+    // ── RECOVERY: GET ALL RO SUBSTACK TASKS WITH FULL NOTES (one-time data recovery) ──
+    if (view === 'recovery_get_all_notes') {
+      const SECTIONS = {
+        idea: '1215878207769408',
+        drafting: '1215878245764271',
+        ready: '1215878207780841',
+        scheduled: '1215886119688372',
+        published: '1215878045434601',
+        archive: '1215878207780777',
+        burner: '1216279318302929',
+      };
+      const allItems = [];
+      for (const [key, sectionGid] of Object.entries(SECTIONS)) {
+        const res = await asanaGet(`/sections/${sectionGid}/tasks?opt_fields=name,notes,completed&limit=100`);
+        (res.data || []).forEach(t => {
+          allItems.push({ name: t.name, notes: t.notes || '', section: key });
+        });
+      }
+      return { statusCode: 200, headers, body: JSON.stringify({ items: allItems }) };
+    }
+
     // ── CREATE TASK ──
     if (view === 'create_task' && event.httpMethod === 'POST') {
       const body = JSON.parse(event.body || '{}');

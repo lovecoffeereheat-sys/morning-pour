@@ -155,36 +155,45 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;color:var(--text);min-heigh
   <!-- NORTH STAR -->
   <div class="north-star">
     <div class="ns-head">
-      <span class="ns-title">🎯 north star · tool users</span>
+      <span class="ns-title">🎯 north star · land the 1:1 engagement</span>
       <span class="ns-deadline" id="daysLeft"></span>
     </div>
     <div class="ns-goal-row">
-      <span class="ns-current" id="totalUsers">0</span>
-      <span class="ns-of">of</span>
-      <span class="ns-target">10</span>
-      <span class="ns-label">users by september 30</span>
+      <span class="ns-current" id="engagementStatus" style="font-size:22px">not yet landed</span>
+      <span class="ns-label" style="margin-left:0">one bounded, deliverable-based client engagement by sep 30 — proof of concept for the cold cup framework</span>
     </div>
-    <div class="ns-bar-wrap">
-      <div class="ns-bar" id="goalBar" style="width:0%"></div>
-    </div>
-    <div class="ns-tools">
-      <div class="ns-tool">
-        <div class="ns-tool-name">after the call</div>
-        <div class="ns-tool-count paid" id="atcPaid">0</div>
-        <div class="ns-tool-free" id="atcFree">0 free</div>
+    <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(196,164,90,0.2)">
+      <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-faint);margin-bottom:8px">supporting metric · not the primary goal</div>
+      <div class="ns-goal-row" style="margin-bottom:6px">
+        <span class="ns-current" id="totalUsers" style="font-size:32px">0</span>
+        <span class="ns-of">of</span>
+        <span class="ns-target" style="font-size:20px">5</span>
+        <span class="ns-label">paid subscribers to the fourth reheat · 10 is next quarter's stretch</span>
       </div>
-      <div class="ns-tool">
-        <div class="ns-tool-name">before monday</div>
-        <div class="ns-tool-count paid" id="bmPaid">0</div>
-        <div class="ns-tool-free" id="bmFree">0 free</div>
-      </div>
-      <div class="ns-tool">
-        <div class="ns-tool-name">draft & sips</div>
-        <div class="ns-tool-count" id="dsPaid">0</div>
-        <div class="ns-tool-free" id="dsFree">free tool</div>
+      <div class="ns-bar-wrap">
+        <div class="ns-bar" id="goalBar" style="width:0%"></div>
       </div>
     </div>
     <div class="ns-days-left" id="daysLeftBottom"></div>
+  </div>
+
+  <!-- IN THE POT — client pipeline preview -->
+  <div class="platform-card" style="margin-bottom:14px">
+    <div class="platform-head">
+      <div class="platform-icon" style="background:rgba(139,34,82,0.12)">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+          <path d="M4 8h14v9a2 2 0 01-2 2H6a2 2 0 01-2-2V8z" stroke="#8b2252" stroke-width="1.5" fill="none"/>
+          <path d="M4 8l1.5-4h9L16 8" stroke="#8b2252" stroke-width="1.5" fill="none"/>
+        </svg>
+      </div>
+      <div>
+        <div class="platform-name">in the pot</div>
+        <div class="platform-handle">client pipeline · notion</div>
+      </div>
+    </div>
+    <div style="padding:14px 18px">
+      <div style="font-family:'Lora',serif;font-style:italic;font-size:13px;color:var(--text-faint)">tracked in Notion — <a href="https://app.notion.com/p/3905b934f724805eb12ceb60eb677e97" target="_blank" style="color:var(--rose)">open The Back Shelf →</a></div>
+    </div>
   </div>
 
   <!-- WEEKLY UPDATE ROW -->
@@ -250,15 +259,15 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;color:var(--text);min-heigh
     <!-- REVENUE -->
     <div class="platform-card">
       <div class="platform-head">
-        <div class="platform-icon" style="background:rgba(74,124,89,0.15)">
+        <div class="platform-icon" style="background:rgba(139,34,82,0.12)">
           <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-            <circle cx="11" cy="11" r="9" stroke="#4a7c59" stroke-width="1.5" fill="none"/>
-            <text x="11" y="15" text-anchor="middle" font-size="11" fill="#4a7c59" font-family="DM Mono" font-weight="bold">$</text>
+            <circle cx="11" cy="11" r="9" stroke="#8b2252" stroke-width="1.5" fill="none"/>
+            <text x="11" y="15" text-anchor="middle" font-size="11" fill="#8b2252" font-family="DM Mono" font-weight="bold">$</text>
           </svg>
         </div>
         <div>
-          <div class="platform-name">revenue · payhip</div>
-          <div class="platform-handle">payhip.com/reheated</div>
+          <div class="platform-name">revenue · the fourth reheat</div>
+          <div class="platform-handle">reheatedobviously.substack.com</div>
         </div>
         <span class="platform-status status-active">active</span>
       </div>
@@ -295,48 +304,33 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;color:var(--text);min-heigh
       </div>
     </div>
 
-    <!-- INSTAGRAM -->
+    <!-- PODCAST & LIVES -->
     <div class="platform-card">
       <div class="platform-head">
-        <div class="platform-icon" style="background:rgba(193,53,132,0.15)">
+        <div class="platform-icon" style="background:rgba(196,164,90,0.15)">
           <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-            <rect x="2" y="2" width="18" height="18" rx="5" stroke="#C13584" stroke-width="1.5" fill="none"/>
-            <circle cx="11" cy="11" r="4" stroke="#C13584" stroke-width="1.5" fill="none"/>
-            <circle cx="16.5" cy="5.5" r="1.2" fill="#C13584"/>
+            <circle cx="11" cy="11" r="4" stroke="#c4a45a" stroke-width="1.5" fill="none"/>
+            <path d="M11 3v2M11 17v2M3 11h2M17 11h2" stroke="#c4a45a" stroke-width="1.5" stroke-linecap="round"/>
           </svg>
         </div>
         <div>
-          <div class="platform-name">instagram</div>
-          <div class="platform-handle">@reheatedobviously</div>
+          <div class="platform-name">podcast & lives</div>
+          <div class="platform-handle">RO Podcast & Lives · Asana</div>
         </div>
         <span class="platform-status status-active">active</span>
       </div>
       <div class="platform-body wide">
         <div class="metric">
-          <div class="metric-label">followers</div>
-          <div class="metric-value rose" id="igFollowers">—</div>
-          <div class="metric-trend" id="igFollowersTrend"></div>
+          <div class="metric-label">ideas</div>
+          <div class="metric-value rose" id="podIdeas">—</div>
         </div>
         <div class="metric">
-          <div class="metric-label">new this week</div>
-          <div class="metric-value" id="igNew">—</div>
+          <div class="metric-label">ready</div>
+          <div class="metric-value" id="podReady">—</div>
         </div>
         <div class="metric">
-          <div class="metric-label">posts this week</div>
-          <div class="metric-value" id="igPosts">—</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">avg reach</div>
-          <div class="metric-value" id="igReach">—</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">avg engagement</div>
-          <div class="metric-value" id="igEngagement">—</div>
-          <div class="metric-sub">likes + comments</div>
-        </div>
-        <div class="metric">
-          <div class="metric-label">stories this week</div>
-          <div class="metric-value" id="igStories">—</div>
+          <div class="metric-label">posted this month</div>
+          <div class="metric-value" id="podPosted">—</div>
         </div>
       </div>
     </div>
@@ -403,14 +397,25 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;color:var(--text);min-heigh
           </svg>
         </div>
         <div>
-          <div class="platform-name">squarespace</div>
-          <div class="platform-handle">coffeeandconditions.com</div>
+          <div class="platform-name">gracesarah.ca</div>
+          <div class="platform-handle">squarespace · live</div>
         </div>
-        <span class="platform-status status-soon">building soon</span>
+        <span class="platform-status status-active">active</span>
       </div>
-      <div class="coming-overlay">
-        <div class="coming-icon">🌐</div>
-        <div class="coming-text">landing page coming soon<br>page views and referrals will track here</div>
+      <div class="platform-body wide">
+        <div class="metric">
+          <div class="metric-label">page views</div>
+          <div class="metric-value" id="siteViews">—</div>
+          <div class="metric-sub">this week</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">visitors</div>
+          <div class="metric-value" id="siteVisitors">—</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">top referrer</div>
+          <div class="metric-value" id="siteReferrer" style="font-size:13px">—</div>
+        </div>
       </div>
     </div>
 
@@ -430,8 +435,8 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;color:var(--text);min-heigh
     <div class="modal-title">☕ update numbers</div>
     <div class="modal-sub">sunday morning, 5 minutes. get it all in here.</div>
 
-    <div class="modal-section">🎯 tool users</div>
-    <div style="font-family:DM Mono,monospace;font-size:9px;color:#b77d86;margin-bottom:10px;line-height:1.6">find in → payhip.com · each product listing · sales count</div>
+    <div class="modal-section">🛠 tool users · context, not the goal</div>
+    <div style="font-family:DM Mono,monospace;font-size:9px;color:#b77d86;margin-bottom:10px;line-height:1.6">find in → substack.com/publish · manual tracking, secondary metric</div>
     <div class="m-row">
       <div class="m-field"><span class="m-label">after the call · paid</span><input class="m-input" id="f-atcPaid" type="number" min="0" placeholder="0"></div>
       <div class="m-field"><span class="m-label">after the call · free</span><input class="m-input" id="f-atcFree" type="number" min="0" placeholder="0"></div>
@@ -461,7 +466,7 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;color:var(--text);min-heigh
     </div>
 
     <div class="modal-section">💰 revenue (CAD)</div>
-    <div style="font-family:DM Mono,monospace;font-size:9px;color:#b77d86;margin-bottom:10px;line-height:1.6">find in → payhip.com · sales · filter by date</div>
+    <div style="font-family:DM Mono,monospace;font-size:9px;color:#b77d86;margin-bottom:10px;line-height:1.6">find in → substack.com/publish · earnings tab</div>
     <div class="m-row">
       <div class="m-field"><span class="m-label">this month total</span><input class="m-input" id="f-revMonth" placeholder="$0.00"></div>
       <div class="m-field"><span class="m-label">sales this week</span><input class="m-input" id="f-revWeek" type="number" min="0" placeholder="0"></div>
@@ -471,19 +476,14 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;color:var(--text);min-heigh
       <div class="m-field"><span class="m-label">q3 total (jul-sep)</span><input class="m-input" id="f-revQ3" placeholder="$0.00"></div>
     </div>
 
-    <div class="modal-section">📱 instagram · @reheatedobviously</div>
-    <div style="font-family:DM Mono,monospace;font-size:9px;color:#b77d86;margin-bottom:10px;line-height:1.6">find in → instagram app · professional dashboard · insights</div>
+    <div class="modal-section">🌐 gracesarah.ca</div>
+    <div style="font-family:DM Mono,monospace;font-size:9px;color:#b77d86;margin-bottom:10px;line-height:1.6">find in → squarespace · analytics tab</div>
     <div class="m-row">
-      <div class="m-field"><span class="m-label">followers</span><input class="m-input" id="f-igFollowers" type="number" min="0" placeholder="0"></div>
-      <div class="m-field"><span class="m-label">new this week</span><input class="m-input" id="f-igNew" placeholder="+0"></div>
+      <div class="m-field"><span class="m-label">page views this week</span><input class="m-input" id="f-siteViews" type="number" min="0" placeholder="0"></div>
+      <div class="m-field"><span class="m-label">visitors this week</span><input class="m-input" id="f-siteVisitors" type="number" min="0" placeholder="0"></div>
     </div>
     <div class="m-row">
-      <div class="m-field"><span class="m-label">posts this week</span><input class="m-input" id="f-igPosts" type="number" min="0" placeholder="0"></div>
-      <div class="m-field"><span class="m-label">stories this week</span><input class="m-input" id="f-igStories" type="number" min="0" placeholder="0"></div>
-    </div>
-    <div class="m-row">
-      <div class="m-field"><span class="m-label">avg reach</span><input class="m-input" id="f-igReach" placeholder="0"></div>
-      <div class="m-field"><span class="m-label">avg engagement</span><input class="m-input" id="f-igEngagement" placeholder="0"></div>
+      <div class="m-field" style="grid-column:1/-1"><span class="m-label">top referrer</span><input class="m-input" id="f-siteReferrer" placeholder="e.g. Substack, Google, Instagram"></div>
     </div>
 
     <div class="modal-section">📝 weekly notes</div>
@@ -512,7 +512,7 @@ function saveData() {
   const fields = ['atcPaid','atcFree','bmPaid','bmFree','dsFree',
     'substackSubs','substackNew','substackOpen','substackPaid','substackNotes','substackRestacks',
     'revMonth','revWeek','revTotal','revQ3',
-    'igFollowers','igNew','igPosts','igStories','igReach','igEngagement',
+    'siteViews','siteVisitors','siteReferrer',
     'notes'];
   
   fields.forEach(f => {
@@ -534,27 +534,16 @@ function renderDashboard() {
   document.getElementById('lastUpdated').textContent = `last updated: ${dateStr}`;
   document.getElementById('updateDate').textContent = dateStr;
 
-  // Tool users
-  const atcP = parseInt(data.atcPaid||0);
-  const atcF = parseInt(data.atcFree||0);
-  const bmP  = parseInt(data.bmPaid||0);
-  const bmF  = parseInt(data.bmFree||0);
-  const dsF  = parseInt(data.dsFree||0);
-  const total = atcP + bmP;
-
+  // Supporting metric — paid subscribers to The Fourth Reheat (goal: 5, not primary)
+  const total = parseInt(data.substackPaid||0);
   document.getElementById('totalUsers').textContent = total;
-  document.getElementById('goalBar').style.width = Math.min((total/10)*100,100) + '%';
-  document.getElementById('atcPaid').textContent = atcP;
-  document.getElementById('atcFree').textContent = atcF + ' free';
-  document.getElementById('bmPaid').textContent = bmP;
-  document.getElementById('bmFree').textContent = bmF + ' free';
-  document.getElementById('dsPaid').textContent = dsF;
+  document.getElementById('goalBar').style.width = Math.min((total/5)*100,100) + '%';
 
   // Days left
   const sep30 = new Date('2026-09-30');
   const daysLeft = Math.ceil((sep30 - new Date()) / (1000*60*60*24));
   document.getElementById('daysLeft').textContent = `${daysLeft} days left`;
-  document.getElementById('daysLeftBottom').textContent = `${10 - total} more users needed · ${daysLeft} days to go`;
+  document.getElementById('daysLeftBottom').textContent = `${daysLeft} days to land the engagement`;
 
   // Substack
   if(data.substackSubs) document.getElementById('substackSubs').textContent = parseInt(data.substackSubs).toLocaleString();
@@ -585,20 +574,17 @@ function renderDashboard() {
   // Notes
   if(data.notes) document.getElementById('weeklyNotes').textContent = data.notes;
 
-  // Instagram
-  if(data.igFollowers) document.getElementById('igFollowers').textContent = parseInt(data.igFollowers).toLocaleString();
-  if(data.igNew) { const n=parseInt(data.igNew); document.getElementById('igNew').textContent = (n>=0?'+':'')+n; document.getElementById('igFollowersTrend').innerHTML = n>0?'<span class="trend-up">↑ growing</span>':''; }
-  if(data.igPosts) document.getElementById('igPosts').textContent = data.igPosts;
-  if(data.igStories) document.getElementById('igStories').textContent = data.igStories;
-  if(data.igReach) document.getElementById('igReach').textContent = data.igReach;
-  if(data.igEngagement) document.getElementById('igEngagement').textContent = data.igEngagement;
+  // gracesarah.ca
+  if(data.siteViews) document.getElementById('siteViews').textContent = data.siteViews;
+  if(data.siteVisitors) document.getElementById('siteVisitors').textContent = data.siteVisitors;
+  if(data.siteReferrer) document.getElementById('siteReferrer').textContent = data.siteReferrer;
 }
 
 function populateModal() {
   const fields = ['atcPaid','atcFree','bmPaid','bmFree','dsFree',
     'substackSubs','substackNew','substackOpen','substackPaid','substackNotes','substackRestacks',
     'revMonth','revWeek','revTotal','revQ3',
-    'igFollowers','igNew','igPosts','igStories','igReach','igEngagement',
+    'siteViews','siteVisitors','siteReferrer',
     'notes'];
   fields.forEach(f => {
     const el = document.getElementById(`f-${f}`);
@@ -629,46 +615,45 @@ function showToast(msg) {
 async function loadContentThisWeek() {
   const container = document.getElementById('contentThisWeek');
   try {
-    const [calRes, notesRes] = await Promise.all([
-      fetch('/.netlify/functions/asana-proxy?view=publishing_this_week').then(r=>r.json()),
-      fetch('/.netlify/functions/asana-proxy?view=in_progress_content').then(r=>r.json())
-    ]);
-    const publishing = calRes.tasks || [];
-    const inProgress = (notesRes.tasks || []).slice(0,4);
+    const res = await fetch('/.netlify/functions/notion-proxy?view=get_content_calendar').then(r=>r.json());
+    const items = res.items || [];
+
+    // Window: past 3 days through next 10 days
+    const now = new Date();
+    const windowStart = new Date(now); windowStart.setDate(now.getDate() - 3);
+    const windowEnd = new Date(now); windowEnd.setDate(now.getDate() + 10);
+    const inWindow = items.filter(t => {
+      const d = new Date(t.date + 'T12:00:00');
+      return d >= windowStart && d <= windowEnd;
+    });
+
     container.innerHTML = '';
 
-    if(!publishing.length && !inProgress.length) {
-      container.innerHTML = '<div style="font-family:Lora,serif;font-style:italic;font-size:13px;color:var(--text-faint);padding:8px">nothing scheduled this week</div>';
+    if(!inWindow.length) {
+      container.innerHTML = '<div style="font-family:Lora,serif;font-style:italic;font-size:13px;color:var(--text-faint);padding:8px">nothing scheduled or published this window</div>';
       return;
     }
 
-    publishing.forEach(t => {
+    inWindow.forEach(t => {
+      const isPodcast = t.source === 'Podcast';
+      const color = isPodcast ? '#5a3d7a' : '#8b2252';
       const el = document.createElement('div');
-      el.style.cssText = 'background:rgba(148,78,99,0.08);border:1px solid rgba(148,78,99,0.2);border-radius:8px;padding:10px 12px';
-      el.innerHTML = '<div style="font-family:DM Mono,monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--rose-mid);margin-bottom:4px">publishing · '+t.due_on+'</div><div style="font-size:13px;color:var(--text)">'+t.name+'</div>';
+      el.style.cssText = `background:rgba(${isPodcast?'90,61,122':'139,34,82'},0.08);border:1px solid rgba(${isPodcast?'90,61,122':'139,34,82'},0.2);border-radius:8px;padding:10px 12px;margin-bottom:6px`;
+      el.innerHTML = `<div style="font-family:DM Mono,monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:${color};margin-bottom:4px">${t.status.toLowerCase()} · ${t.source.toLowerCase()} · ${t.date}</div><div style="font-size:13px;color:var(--text)">${t.name}</div>`;
       container.appendChild(el);
     });
-
-    inProgress.slice(0,3).forEach(t => {
-      const el = document.createElement('div');
-      el.style.cssText = 'background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;padding:10px 12px';
-      el.innerHTML = '<div style="font-family:DM Mono,monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint);margin-bottom:4px">in progress · '+t.project+'</div><div style="font-size:13px;color:var(--text-soft)">'+t.name+'</div>';
-      container.appendChild(el);
-    });
-
-    // RO Social — Ready to post
-    try {
-      const socialRes = await fetch('/.netlify/functions/asana-proxy?view=ro_social').then(r=>r.json());
-      (socialRes.tasks||[]).slice(0,3).forEach(t => {
-        const el = document.createElement('div');
-        el.style.cssText = 'background:rgba(193,53,132,0.08);border:1px solid rgba(193,53,132,0.2);border-radius:8px;padding:10px 12px';
-        el.innerHTML = '<div style="font-family:DM Mono,monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:#C13584;margin-bottom:4px">📱 instagram · ready to post</div><div style="font-size:13px;color:var(--text)">'+t.name+'</div>';
-        container.appendChild(el);
-      });
-    } catch(e) {}
   } catch(e) {
     container.innerHTML = '<div style="font-family:Lora,serif;font-style:italic;font-size:13px;color:var(--text-faint);padding:8px">could not load — check connection</div>';
   }
+}
+
+async function loadPodcastCounts() {
+  try {
+    const res = await fetch('/.netlify/functions/asana-proxy?view=podcast_lives_counts').then(r=>r.json());
+    document.getElementById('podIdeas').textContent = res.ideas ?? '—';
+    document.getElementById('podReady').textContent = res.ready ?? '—';
+    document.getElementById('podPosted').textContent = res.posted ?? '—';
+  } catch(e) {}
 }
 
 // Init
@@ -679,11 +664,12 @@ document.getElementById('heroDate') && (document.getElementById('heroDate').text
 const sep30 = new Date('2026-09-30');
 const daysLeft = Math.ceil((sep30 - today) / (1000*60*60*24));
 document.getElementById('daysLeft').textContent = `${daysLeft} days left`;
-document.getElementById('daysLeftBottom').textContent = `10 users needed · ${daysLeft} days to go`;
+document.getElementById('daysLeftBottom').textContent = `${daysLeft} days to land the engagement`;
 
 loadData();
 renderDashboard();
 loadContentThisWeek();
+loadPodcastCounts();
 initPinterestToggle();
 
 function initPinterestToggle() {

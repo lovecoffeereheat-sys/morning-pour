@@ -210,9 +210,9 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;color:var(--text);min-heigh
     </div>
     <div class="sidebar-tabs" id="sidebarTabs">
       <div class="sidebar-tab active" id="tabAll" onclick="switchTab('all')">all</div>
-      <div class="sidebar-tab" id="tabToday" onclick="switchTab('TODAY')">today</div>
-      <div class="sidebar-tab" id="tabWeek" onclick="switchTab('THIS WEEK')">this week</div>
-      <div class="sidebar-tab" id="tabNext" onclick="switchTab('NEXT WEEK')">next week</div>
+      <div class="sidebar-tab" id="tabToday" onclick="switchTab('Today')">today</div>
+      <div class="sidebar-tab" id="tabWeek" onclick="switchTab('This Week')">this week</div>
+      <div class="sidebar-tab" id="tabNext" onclick="switchTab('Next Week')">next week</div>
     </div>
     <div class="sidebar-tasks" id="sidebarContent"></div>
   </div>
@@ -298,7 +298,7 @@ let mode = 'today';
 let dayOffset = 0;
 let weekOffset = 0;
 let blocks = {}; // { 'YYYY-MM-DD': [{id,cat,label,start,end,taskName}] }
-let allTasks = [], roTasks = [], personalTasks = [];
+let allTasks = [];
 let activeTab = 'all';
 let searchTerm = '';
 let modalContext = null; // {date, slot, blockId}
@@ -713,30 +713,17 @@ function setDuration(hrs) {
   document.getElementById('blockEnd').value = addMins(start, hrs * 60);
 }
 
-// ── TASKS ──
+// ── TASKS (Notion) ──
 async function loadTasks() {
   try {
-    const res = await fetch('/.netlify/functions/asana-proxy?view=my_tasks');
+    const res = await fetch('/.netlify/functions/notion-proxy?view=get_tasks');
     const data = await res.json();
-    allTasks = (data.tasks||[]).map(t => ({
-      ...t,
-      lane: guessLane(t),
-      asanaUrl: `https://app.asana.com/0/${t.project_id}/${t.gid}`
-    }));
-    roTasks = allTasks.filter(t => t.lane === 'ro');
-    personalTasks = allTasks.filter(t => t.lane === 'personal');
+    allTasks = (data.tasks||[]).filter(t => !t.done);
     document.getElementById('taskCount').textContent = allTasks.length;
     renderSidebar();
   } catch(e) {
-    document.getElementById('sidebarContent').innerHTML = '<div class="sidebar-empty">could not load tasks</div>';
+    document.getElementById('sidebarContent').innerHTML = '<div class="sidebar-empty">could not load — check connection</div>';
   }
-}
-
-function guessLane(task) {
-  const section = (task.project||'').toLowerCase();
-  if(section.includes('home')||section.includes('school')||section.includes('personal')||
-     section.includes('burner')||section.includes('family')) return 'personal';
-  return 'ro';
 }
 
 function switchTab(tab) {
@@ -760,7 +747,7 @@ function renderSidebar() {
   
   let tasks = allTasks;
   if(activeTab !== 'all') {
-    tasks = allTasks.filter(t => t.project === activeTab);
+    tasks = allTasks.filter(t => t.status === activeTab);
   }
   
   const filtered = searchTerm ? tasks.filter(t => t.name.toLowerCase().includes(searchTerm)) : tasks;
@@ -773,10 +760,10 @@ function renderSidebar() {
   container.innerHTML = '';
 
   if(activeTab === 'all') {
-    // Group by section
-    const sections = ['TODAY', 'THIS WEEK', 'NEXT WEEK'];
+    // Group by status
+    const sections = ['Today', 'This Week', 'Next Week', 'Brain Dump', 'Later'];
     sections.forEach(section => {
-      const sectionTasks = filtered.filter(t => t.project === section);
+      const sectionTasks = filtered.filter(t => t.status === section);
       if(!sectionTasks.length) return;
       const head = document.createElement('div');
       head.className = 'sidebar-section ro';
@@ -795,7 +782,7 @@ function makeTaskRow(task) {
   const dueStr = task.due_on ? `<span class="task-row-due">${task.due_on}</span>` : '';
   row.innerHTML = `
     <div class="task-row-name">${task.name}</div>
-    <div class="task-row-meta">${dueStr}<span>${task.project||''}</span></div>
+    <div class="task-row-meta">${dueStr}<span>${task.status||''}</span></div>
   `;
   row.onclick = () => {
     // In today mode, clicking a task pre-fills the modal label

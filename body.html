@@ -303,21 +303,34 @@ const DAILY_GRIND_SHEET_ID = '1lzeOBYmLYdG22SmghuVz4L92AZDU-EGPYvZ6pO13s4E';
 let sheetsReady = false;
 let sheetsAccessToken = null;
 
-function connectSheets() {
-  const gapiScript = document.createElement('script');
-  gapiScript.src = 'https://apis.google.com/js/api.js';
-  gapiScript.onload = () => {
-    gapi.load('client', async () => {
-      await gapi.client.init({
-        discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
-      });
-    });
-  };
-  document.head.appendChild(gapiScript);
+let gapiClientReady = false;
 
-  const gisScript = document.createElement('script');
-  gisScript.src = 'https://accounts.google.com/gsi/client';
-  gisScript.onload = () => {
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src;
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
+async function connectSheets() {
+  try {
+    if (!gapiClientReady) {
+      await loadScript('https://apis.google.com/js/api.js');
+      await new Promise((resolve) => {
+        gapi.load('client', async () => {
+          await gapi.client.init({
+            discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+          });
+          gapiClientReady = true;
+          resolve();
+        });
+      });
+      await loadScript('https://accounts.google.com/gsi/client');
+    }
+
     const tokenClient = google.accounts.oauth2.initTokenClient({
       client_id: GCAL_CLIENT_ID,
       scope: SHEET_SCOPES,
@@ -331,8 +344,9 @@ function connectSheets() {
       }
     });
     tokenClient.requestAccessToken({ prompt: localStorage.getItem('mp_sheets_connected') ? '' : 'consent' });
-  };
-  document.head.appendChild(gisScript);
+  } catch(e) {
+    showToast('could not load google connection — check network');
+  }
 }
 
 async function writeToSheet(log) {
@@ -551,56 +565,12 @@ async function saveLog() {
   localStorage.setItem('mp_body_logs', JSON.stringify(logs));
   renderHistory();
 
-  // Write to Daily Grind Google Sheet
+  // Write to Daily Grind Google Sheet — the ledger, silent and automatic
   if (sheetsReady) {
-    writeToSheet(log);
-  }
-
-  // Build Asana task notes
-  const moodIcon = { heavy:'☁️ heavy', okay:'🌥 okay', good:'🌤 good', great:'☀️ great' };
-  const dateLabel = today.toLocaleDateString('en-CA',{weekday:'long',month:'long',day:'numeric'});
-  
-  let notes = `body log · ${dateLabel}\n`;
-  notes += '─────────────────────────\n';
-  if (selectedMood) notes += `mood: ${moodIcon[selectedMood] || selectedMood}\n`;
-  if (sleepHours) notes += `sleep: ${sleepHours}hrs${sleepQuality ? ' · ' + sleepQuality + ' quality' : ''}\n`;
-  if (movementType) notes += `movement: ${movementType}${movementMins ? ' ' + movementMins + 'min' : ''}\n`;
-  if (waterCount) notes += `water: ${waterCount} glass${waterCount !== 1 ? 'es' : ''}\n`;
-  if (coffeeCount) notes += `coffee: ${coffeeCount} cup${coffeeCount !== 1 ? 's' : ''} ☕\n`;
-  if (activeSymptoms.size) notes += `symptoms: ${[...activeSymptoms].join(', ')}\n`;
-  else notes += `symptoms: none\n`;
-  if (energyNote) notes += `energy: ${energyNote}\n`;
-  if (generalNote) notes += `notes: ${generalNote}\n`;
-  
-  // Cycle section
-  if (selectedFlow || cycleSymptoms.size || cycleNote) {
-    notes += `\ncycle · ${activePerson}:\n`;
-    if (selectedFlow) notes += `  flow: ${selectedFlow}\n`;
-    if (cycleSymptoms.size) notes += `  symptoms: ${[...cycleSymptoms].join(', ')}\n`;
-    if (cycleNote) notes += `  notes: ${cycleNote}\n`;
-  }
-
-  const taskName = `reheated · ${today.toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric'})}`;
-
-  try {
-    const res = await fetch('/.netlify/functions/asana-proxy?view=create_task', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: taskName,
-        project_id: '1216084098293531',
-        notes: notes,
-        due_on: dateKey
-      })
-    });
-    const data = await res.json();
-    if (data.task) {
-      showToast(sheetsReady ? 'logged · asana + sheet ☕' : 'logged + saved to asana ☕');
-    } else {
-      showToast('logged locally · asana sync failed');
-    }
-  } catch(e) {
-    showToast('logged locally · check connection');
+    const ok = await writeToSheet(log);
+    showToast(ok ? 'logged ☕ saved to the daily grind' : 'logged locally · sheet write failed');
+  } else {
+    showToast('logged locally — tap "connect sheet" to save permanently');
   }
 }
 

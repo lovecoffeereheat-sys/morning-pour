@@ -50,7 +50,7 @@ h1{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:#1e
 .legend-title{font-size:11px;font-weight:600;color:#3d4a5c;text-transform:uppercase;letter-spacing:0.06em;font-family:'DM Mono',monospace}
 .legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:#1e2433}
 .legend-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0}
-.dot-batch{background:#3d4a5c}.dot-post{background:#8b2252}.dot-tool{background:#c4a45a}.dot-note{background:#b77d86}.dot-pinterest{background:#E60023}
+.dot-batch{background:#3d4a5c}.dot-post{background:#8b2252}.dot-tool{background:#c4a45a}.dot-note{background:#b77d86}.dot-pinterest{background:#E60023}.dot-podcast{background:#5a3d7a}
 
 /* CALENDAR */
 .calendar{border:1px solid #1e2433;border-radius:10px;overflow:hidden;margin-bottom:14px}
@@ -73,6 +73,7 @@ h1{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:#1e
 .pill-tool{background:#c4a45a;color:#1e2433}
 .pill-note{background:rgba(180,123,132,0.25);color:#8b2252;border:0.5px solid #b77d86}
 .pill-pinterest{background:rgba(230,0,35,0.12);color:#E60023;border:0.5px solid #E60023}
+.pill-podcast{background:rgba(90,61,122,0.12);color:#5a3d7a;border:0.5px solid #5a3d7a}
 .loading{text-align:center;padding:40px;font-family:'Lora',serif;font-style:italic;color:#9e7d68}
 .asana-badge{display:inline-flex;align-items:center;gap:6px;background:#1e2433;color:#c4a45a;border-radius:20px;padding:4px 12px;font-size:11px;margin-bottom:12px;text-decoration:none;font-family:'DM Mono',monospace}
 
@@ -98,7 +99,7 @@ footer{padding:14px 28px;display:flex;justify-content:space-between;align-items:
 <header>
   <div class="brand">Reheated, Obviously · 2026</div>
   <h1>content map</h1>
-  <div class="sub">Season: Growing &nbsp;·&nbsp; North Star: 10 users by September 30 &nbsp;·&nbsp; Posts publish Tuesday 7–8am CDT</div>
+  <div class="sub">Season: Growing &nbsp;·&nbsp; North Star: Land one Rhythm Map engagement ($225 CAD, 2 weeks) by Sep 30 &nbsp;·&nbsp; Posts publish Tuesday 7–8am CDT</div>
 </header>
 
 <div class="quarter-tabs">
@@ -122,6 +123,7 @@ footer{padding:14px 28px;display:flex;justify-content:space-between;align-items:
     <div class="legend-item"><div class="legend-dot dot-tool"></div>Tool post</div>
     <div class="legend-item"><div class="legend-dot dot-note"></div>Notes day</div>
     <div class="legend-item"><div class="legend-dot dot-pinterest"></div>Pinterest</div>
+    <div class="legend-item"><div class="legend-dot dot-podcast"></div>Podcast</div>
   </div>
 
   <div id="calendar" class="calendar"><div class="loading">loading from asana...</div></div>
@@ -130,11 +132,11 @@ footer{padding:14px 28px;display:flex;justify-content:space-between;align-items:
     <div class="guardrails-title">Q3 guardrails</div>
     <div class="guardrails-list">
       <div class="guardrail-item">No new tools until existing ones earn it</div>
-      <div class="guardrail-item">No Payhip — tools live in The Stash (paid-only Substack post)</div>
+      <div class="guardrail-item">No Payhip — tools live in The Stash, subscriber-access only</div>
       <div class="guardrail-item">No new platforms in Q3 — Substack only</div>
-      <div class="guardrail-item">Morning Pour back-end is fair game</div>
+      <div class="guardrail-item">The Thirty ($47 CAD) feeds the Rhythm Map pipeline</div>
+      <div class="guardrail-item">Founding tier disabled — no 1:1 bundled into subscriptions</div>
       <div class="guardrail-item">Every shiny idea goes through the bouncer first</div>
-      <div class="guardrail-item">Plan for worst-day-Grace, not best-day-Grace</div>
     </div>
   </div>
 </div>
@@ -159,26 +161,18 @@ const today = new Date();
 const QUARTER_MILESTONES = {
   1: [{label:'Q1 focus',val:'Content foundation',sub:'Build the writing habit'},{label:'Q1 goal',val:'Consistent notes',sub:'3+ per week'},{label:'Q1 rhythm',val:'Batch Sundays',sub:'Publish Tuesdays'}],
   2: [{label:'Q2 focus',val:'Audience building',sub:'Grow the list'},{label:'Q2 goal',val:'First paid users',sub:'After the Call or Before Monday'},{label:'Q2 rhythm',val:'Notes + essays',sub:'Find your voice again'}],
-  3: [{label:'July milestone',val:'First paid sale',sub:'After the Call or Before Monday'},{label:'Q3 north star',val:'10 users by Sep 30',sub:'Draft & Sips free · 2 paid tools'},{label:'Notes rhythm',val:'5+ per week',sub:'Tue / Wed / Thu core · Mon & Sat bonus'}],
+  3: [{label:'Q3 north star',val:'Land the Rhythm Map',sub:'$225 CAD · 2 weeks · by Sep 30'},{label:'Supporting metric',val:'5 paid subscribers',sub:'Fourth Reheat · funnel, not the goal'},{label:'The Thirty',val:'$47 CAD · 30 min',sub:'On "the knot" · feeds the pipeline'}],
   4: [{label:'Q4 focus',val:'The Sunday Pour launch',sub:'Mid-Aug soft launch'},{label:'Q4 goal',val:'15 total users',sub:'Build into winter'},{label:'Q4 rhythm',val:'Deepen + convert',sub:'Less acquisition, more depth'}],
 };
 
 let activeQuarter = 3;
 let activeMonth = 6; // July
-let allTasks = [];
-let allNotes = [];
-let allPins = [];
+let allContent = [];
 
 async function loadAllContent() {
   try {
-    const [calRes, notesRes, pinsRes] = await Promise.all([
-      fetch('/.netlify/functions/asana-proxy?view=content_calendar').then(r=>r.json()),
-      fetch('/.netlify/functions/asana-proxy?view=ro_notes').then(r=>r.json()),
-      fetch('/.netlify/functions/asana-proxy?view=ro_pinterest_scheduled').then(r=>r.json())
-    ]);
-    allTasks = calRes.tasks || [];
-    allNotes = notesRes.tasks || [];
-    allPins = pinsRes.tasks || [];
+    const res = await fetch('/.netlify/functions/notion-proxy?view=get_content_calendar').then(r=>r.json());
+    allContent = res.items || [];
     renderAll();
   } catch(e) {
     document.getElementById('calendar').innerHTML = '<div class="loading">could not load — check connection</div>';
@@ -239,17 +233,14 @@ function renderCalendar() {
   const cal = document.getElementById('calendar');
   
   const taskMap = {};
-  allTasks.forEach(t => {
-    if(!taskMap[t.due_on]) taskMap[t.due_on] = [];
-    taskMap[t.due_on].push(t);
-  });
-  allNotes.forEach(t => {
-    if(!taskMap[t.due_on]) taskMap[t.due_on] = [];
-    taskMap[t.due_on].push({...t, type:'note'});
-  });
-  allPins.forEach(t => {
-    if(!taskMap[t.due_on]) taskMap[t.due_on] = [];
-    taskMap[t.due_on].push({...t, type:'pinterest'});
+  allContent.forEach(t => {
+    if(!taskMap[t.date]) taskMap[t.date] = [];
+    const mappedType = t.source === 'Podcast' ? 'podcast'
+      : t.type === 'Note' ? 'note'
+      : t.type === 'Tool post' ? 'tool'
+      : t.type === 'Essay' ? 'post'
+      : 'post';
+    taskMap[t.date].push({ name: t.name, due_on: t.date, type: mappedType });
   });
 
   let html = '<div class="cal-header"><div></div><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div>';

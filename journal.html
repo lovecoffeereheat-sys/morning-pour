@@ -482,7 +482,7 @@ function buildWordChips() {
 }
 
 // ── SAVE ──
-function saveEntry() {
+async function saveEntry() {
   const passage = activeTheme ? PASSAGES[activeTheme][currentPassageIdx] : null;
   const entry = {
     id: Date.now(),
@@ -507,7 +507,28 @@ function saveEntry() {
   entries = entries.slice(0, 365);
   localStorage.setItem('mp_journal_entries', JSON.stringify(entries));
   renderEntries();
-  showToast('steeped ☕ entry saved');
+  showToast('steeped ☕ saving...');
+
+  try {
+    await fetch('/.netlify/functions/notion-proxy?view=add_journal_entry', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        date: entry.date,
+        theme: entry.theme,
+        scripture: entry.ref,
+        translation: entry.translation,
+        observation: entry.observation,
+        application: entry.application,
+        gratitude: entry.gratitude,
+        prayer: entry.prayer,
+        oneWord: entry.oneWord,
+      }),
+    });
+    showToast('steeped ☕ saved to notion');
+  } catch(e) {
+    showToast('steeped ☕ saved locally · notion sync failed');
+  }
 }
 
 // ── ENTRIES ──

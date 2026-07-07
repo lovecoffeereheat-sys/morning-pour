@@ -41,6 +41,15 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;background:var(--rose-pale)
 .capture-btn:hover{opacity:0.88}
 
 .board{max-width:1100px;margin:0 auto;padding:0 28px 40px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.view-tab{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.06em;padding:7px 16px;border-radius:20px;border:1px solid var(--border);color:var(--text-soft);cursor:pointer;background:var(--rose-card);transition:all 0.15s}
+.view-tab.active{background:var(--rose);border-color:var(--rose);color:#fff}
+.src-filter{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.05em;padding:5px 12px;border-radius:20px;border:1px solid var(--border);color:var(--text-faint);cursor:pointer;background:none;transition:all 0.15s}
+.src-filter.active{background:var(--rose);border-color:var(--rose);color:#fff}
+.upcoming-sort{margin-left:auto;font-family:'DM Mono',monospace;font-size:10px;padding:5px 10px;border-radius:8px;border:1px solid var(--border);color:var(--text-soft);background:var(--rose-card);cursor:pointer}
+.upcoming-item{display:flex;align-items:center;gap:12px;padding:11px 14px;background:#fff;border:1px solid var(--border);border-radius:8px;margin-bottom:6px}
+.upcoming-name{flex:1;font-size:13px;color:var(--text)}
+.upcoming-date{font-family:'DM Mono',monospace;font-size:10px;color:var(--rose)}
+.upcoming-src{font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;color:var(--text-faint);background:var(--rose-pale);padding:3px 9px;border-radius:20px}
 .column{background:var(--rose-card);border:1px solid var(--border);border-radius:12px;overflow:hidden;min-height:200px}
 .column-head{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .column-title{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-soft)}
@@ -107,6 +116,26 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;background:var(--rose-pale)
   </div>
 </div>
 
+<div style="max-width:1100px;margin:0 auto;padding:0 28px 12px;display:flex;gap:8px">
+  <button class="view-tab active" id="tabBoard" onclick="switchView('board')">board</button>
+  <button class="view-tab" id="tabUpcoming" onclick="switchView('upcoming')">upcoming — all sources</button>
+</div>
+
+<div id="upcomingView" style="display:none;max-width:1100px;margin:0 auto;padding:0 28px 40px">
+  <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center">
+    <button class="src-filter active" data-src="all" onclick="filterUpcoming('all')">all sources</button>
+    <button class="src-filter" data-src="Content Calendar" onclick="filterUpcoming('Content Calendar')">content calendar</button>
+    <button class="src-filter" data-src="RO Substack" onclick="filterUpcoming('RO Substack')">RO substack</button>
+    <button class="src-filter" data-src="RO Podcast & Lives" onclick="filterUpcoming('RO Podcast & Lives')">podcast & lives</button>
+    <select class="upcoming-sort" id="upcomingSort" onchange="renderUpcoming()">
+      <option value="date">sort: date</option>
+      <option value="source">sort: source</option>
+      <option value="name">sort: name</option>
+    </select>
+  </div>
+  <div id="upcomingList"></div>
+</div>
+
 <div class="board">
   <div class="column idea">
     <div class="column-head"><span class="column-title">idea</span><span class="column-count" id="countIdea">0</span></div>
@@ -115,6 +144,10 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;background:var(--rose-pale)
   <div class="column drafting">
     <div class="column-head"><span class="column-title">drafting</span><span class="column-count" id="countDrafting">0</span></div>
     <div class="column-body" id="colDrafting"></div>
+  </div>
+  <div class="column burner">
+    <div class="column-head"><span class="column-title">on the burner</span><span class="column-count" id="countBurner">0</span></div>
+    <div class="column-body" id="colBurner"></div>
   </div>
   <div class="column ready">
     <div class="column-head"><span class="column-title">ready</span><span class="column-count" id="countReady">0</span></div>
@@ -140,23 +173,32 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;background:var(--rose-pale)
 <div class="toast" id="toast"><span id="toastMsg"></span></div>
 
 <script>
-const SECTIONS = {
-  idea: '1215878207769408',
-  drafting: '1215878245764271',
-  ready: '1215878207780841',
-  scheduled: '1215886119688372',
+const STATUS_MAP = {
+  idea: 'Idea',
+  drafting: 'Drafting',
+  burner: 'ON THE BURNER',
+  ready: 'Ready',
+  scheduled: 'Scheduled',
 };
-const RO_SUBSTACK_PROJECT = '1215878207772169';
-const CONTENT_CALENDAR_PROJECT = '1215878381563758';
 
-let allTasks = { idea: [], drafting: [], ready: [], scheduled: [] };
+let allTasks = { idea: [], drafting: [], burner: [], ready: [], scheduled: [] };
 let pendingScheduleTask = null;
+let upcomingData = [];
+let upcomingFilter = 'all';
 
+// ── BOARD ──
 async function loadBoard() {
   try {
-    const res = await fetch('/.netlify/functions/asana-proxy?view=content_hub_board');
+    const res = await fetch('/.netlify/functions/notion-proxy?view=get_pipeline_board');
     const data = await res.json();
-    allTasks = data.columns || { idea: [], drafting: [], ready: [], scheduled: [] };
+    const cols = data.columns || {};
+    allTasks = {
+      idea: cols['Idea'] || [],
+      drafting: cols['Drafting'] || [],
+      burner: cols['ON THE BURNER'] || [],
+      ready: cols['Ready'] || [],
+      scheduled: cols['Scheduled'] || [],
+    };
     renderBoard();
   } catch(e) {
     showToast('could not load — check connection');
@@ -164,110 +206,80 @@ async function loadBoard() {
 }
 
 function renderBoard() {
-  ['idea','drafting','ready','scheduled'].forEach(col => {
-    const container = document.getElementById(`col${col.charAt(0).toUpperCase()+col.slice(1)}`);
+  ['idea','drafting','burner','ready','scheduled'].forEach(col => {
+    const idKey = col.charAt(0).toUpperCase()+col.slice(1);
+    const container = document.getElementById(`col${idKey}`);
     const tasks = allTasks[col] || [];
-    document.getElementById(`count${col.charAt(0).toUpperCase()+col.slice(1)}`).textContent = tasks.length;
-    
+    document.getElementById(`count${idKey}`).textContent = tasks.length;
+
     if(!tasks.length) {
       container.innerHTML = '<div class="empty-col">nothing here</div>';
       return;
     }
-    
+
     container.innerHTML = '';
     tasks.slice(0, 15).forEach(task => {
       const card = document.createElement('div');
       card.className = 'card';
-      
+
       let actions = '';
-      if(col === 'idea') actions = `<button class="card-move-btn" onclick="moveTask('${task.gid}','drafting')">→ drafting</button>`;
-      if(col === 'drafting') actions = `<button class="card-move-btn" onclick="moveTask('${task.gid}','idea')">← idea</button><button class="card-move-btn" onclick="moveTask('${task.gid}','ready')">→ ready</button>`;
-      if(col === 'ready') actions = `<button class="card-move-btn" onclick="moveTask('${task.gid}','drafting')">← drafting</button><button class="card-move-btn" onclick="openDateModal('${task.gid}','${task.name.replace(/'/g,"\\'")}')">📅 schedule</button>`;
+      if(col === 'idea') actions = `<button class="card-move-btn" onclick="moveTask('${task.id}','drafting')">→ drafting</button>`;
+      if(col === 'drafting') actions = `<button class="card-move-btn" onclick="moveTask('${task.id}','idea')">← idea</button><button class="card-move-btn" onclick="moveTask('${task.id}','burner')">→ burner</button><button class="card-move-btn" onclick="moveTask('${task.id}','ready')">→ ready</button>`;
+      if(col === 'burner') actions = `<button class="card-move-btn" onclick="moveTask('${task.id}','drafting')">← drafting</button><button class="card-move-btn" onclick="openDateModal('${task.id}','${task.name.replace(/'/g,"\\'")}')">📅 schedule</button>`;
+      if(col === 'ready') actions = `<button class="card-move-btn" onclick="moveTask('${task.id}','drafting')">← drafting</button><button class="card-move-btn" onclick="openDateModal('${task.id}','${task.name.replace(/'/g,"\\'")}')">📅 schedule</button>`;
       if(col === 'scheduled') actions = `<div class="card-date">${task.due_on || ''}</div>`;
-      
+
       card.innerHTML = `<div class="card-name">${task.name}</div><div class="card-actions">${actions}</div>`;
       container.appendChild(card);
     });
   });
 }
 
+// ── CAPTURE ──
 async function captureIdea() {
   const input = document.getElementById('captureInput');
   const name = input.value.trim();
   const type = document.getElementById('captureType').value;
   if(!name) return;
-  
-  const prefix = type === 'note' ? 'RO NOTE — ' : type === 'tool' ? 'RO TOOL POST — ' : 'RO POST — ';
-  const fullName = name.startsWith('RO ') ? name : prefix + name;
-  
+
+  const typeMap = { note: 'Note', tool: 'Tool post', post: 'Essay' };
+
   try {
-    await fetch('/.netlify/functions/asana-proxy?view=create_task', {
+    await fetch('/.netlify/functions/notion-proxy?view=add_pipeline_item', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        name: fullName,
-        project_id: RO_SUBSTACK_PROJECT,
-        section_id: SECTIONS.idea
+        name,
+        type: typeMap[type] || 'Essay',
+        status: 'Idea'
       })
     });
     input.value = '';
     showToast('captured ☕');
     loadBoard();
-loadCadence();
-
-async function loadCadence() {
-  try {
-    const res = await fetch('/.netlify/functions/asana-proxy?view=batch_cadence');
-    const data = await res.json();
-    const tasks = (data.tasks || []).filter(t => !t.completed);
-    const container = document.getElementById('cadenceContent');
-    if(!tasks.length) {
-      container.innerHTML = '☕ batch & publish cadence — nothing set yet';
-      return;
-    }
-    container.innerHTML = '☕ <strong>batch & publish cadence</strong> — ' + tasks.map(t => t.name).join(' · ');
-  } catch(e) {
-    document.getElementById('cadenceContent').innerHTML = '☕ batch & publish cadence — could not load';
-  }
-}
   } catch(e) {
     showToast('could not save — check connection');
   }
 }
 
-async function moveTask(taskGid, toSection) {
+// ── MOVE ──
+async function moveTask(taskId, toColumn) {
   try {
-    await fetch('/.netlify/functions/asana-proxy?view=move_task', {
+    await fetch('/.netlify/functions/notion-proxy?view=update_pipeline_status', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ task_gid: taskGid, section_gid: SECTIONS[toSection] })
+      body: JSON.stringify({ page_id: taskId, status: STATUS_MAP[toColumn] })
     });
-    showToast(`moved to ${toSection} ☕`);
+    showToast(`moved to ${toColumn} ☕`);
     loadBoard();
-loadCadence();
-
-async function loadCadence() {
-  try {
-    const res = await fetch('/.netlify/functions/asana-proxy?view=batch_cadence');
-    const data = await res.json();
-    const tasks = (data.tasks || []).filter(t => !t.completed);
-    const container = document.getElementById('cadenceContent');
-    if(!tasks.length) {
-      container.innerHTML = '☕ batch & publish cadence — nothing set yet';
-      return;
-    }
-    container.innerHTML = '☕ <strong>batch & publish cadence</strong> — ' + tasks.map(t => t.name).join(' · ');
-  } catch(e) {
-    document.getElementById('cadenceContent').innerHTML = '☕ batch & publish cadence — could not load';
-  }
-}
   } catch(e) {
     showToast('could not move — check connection');
   }
 }
 
-function openDateModal(taskGid, taskName) {
-  pendingScheduleTask = taskGid;
+// ── SCHEDULE MODAL ──
+function openDateModal(taskId, taskName) {
+  pendingScheduleTask = taskId;
   document.getElementById('scheduleDate').value = new Date().toISOString().split('T')[0];
   document.getElementById('dateModalOverlay').style.display = 'flex';
 }
@@ -280,23 +292,72 @@ function closeDateModal() {
 async function confirmSchedule() {
   const date = document.getElementById('scheduleDate').value;
   if(!date || !pendingScheduleTask) return;
-  
+
   try {
-    await fetch('/.netlify/functions/asana-proxy?view=schedule_task', {
+    await fetch('/.netlify/functions/notion-proxy?view=update_pipeline_status', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        task_gid: pendingScheduleTask,
-        due_on: date,
-        section_gid: SECTIONS.scheduled,
-        calendar_project_id: CONTENT_CALENDAR_PROJECT
-      })
+      body: JSON.stringify({ page_id: pendingScheduleTask, status: 'Scheduled', due_on: date })
     });
     closeDateModal();
-    showToast('scheduled ☕ — now on the content map');
+    showToast('scheduled ☕ — now on the content calendar');
     loadBoard();
-loadCadence();
+  } catch(e) {
+    showToast('could not schedule — check connection');
+  }
+}
 
+// ── UPCOMING VIEW (all scheduled/published, both sources) ──
+function switchView(view) {
+  document.getElementById('tabBoard').classList.toggle('active', view === 'board');
+  document.getElementById('tabUpcoming').classList.toggle('active', view === 'upcoming');
+  document.querySelector('.board').style.display = view === 'board' ? 'grid' : 'none';
+  document.getElementById('upcomingView').style.display = view === 'upcoming' ? 'block' : 'none';
+  if(view === 'upcoming' && !upcomingData.length) loadUpcoming();
+}
+
+async function loadUpcoming() {
+  const container = document.getElementById('upcomingList');
+  container.innerHTML = '<div style="font-family:Lora,serif;font-style:italic;font-size:13px;color:var(--text-faint);text-align:center;padding:20px">loading from notion...</div>';
+  try {
+    const res = await fetch('/.netlify/functions/notion-proxy?view=get_content_calendar').then(r=>r.json());
+    upcomingData = (res.items || []).map(t => ({ name: t.name, due_on: t.date, source: t.source }));
+    renderUpcoming();
+  } catch(e) {
+    container.innerHTML = '<div style="font-family:Lora,serif;font-style:italic;font-size:13px;color:var(--text-faint);text-align:center;padding:20px">could not load — check connection</div>';
+  }
+}
+
+function filterUpcoming(src) {
+  upcomingFilter = src;
+  document.querySelectorAll('.src-filter').forEach(b => b.classList.toggle('active', b.dataset.src === src));
+  renderUpcoming();
+}
+
+function renderUpcoming() {
+  const container = document.getElementById('upcomingList');
+  const sortBy = document.getElementById('upcomingSort').value;
+  let tasks = upcomingFilter === 'all' ? upcomingData : upcomingData.filter(t => t.source === upcomingFilter);
+
+  if(sortBy === 'date') tasks = [...tasks].sort((a,b) => (a.due_on||'9999').localeCompare(b.due_on||'9999'));
+  else if(sortBy === 'source') tasks = [...tasks].sort((a,b) => a.source.localeCompare(b.source));
+  else if(sortBy === 'name') tasks = [...tasks].sort((a,b) => a.name.localeCompare(b.name));
+
+  if(!tasks.length) {
+    container.innerHTML = '<div style="font-family:Lora,serif;font-style:italic;font-size:13px;color:var(--text-faint);text-align:center;padding:20px">nothing here ☕</div>';
+    return;
+  }
+
+  container.innerHTML = tasks.map(t => `
+    <div class="upcoming-item">
+      <span class="upcoming-name">${t.name}</span>
+      ${t.due_on ? `<span class="upcoming-date">${t.due_on}</span>` : '<span class="upcoming-date" style="opacity:0.4">no date</span>'}
+      <span class="upcoming-src">${t.source}</span>
+    </div>
+  `).join('');
+}
+
+// ── BATCH & PUBLISH CADENCE (reference, still in Asana for now) ──
 async function loadCadence() {
   try {
     const res = await fetch('/.netlify/functions/asana-proxy?view=batch_cadence');
@@ -310,10 +371,6 @@ async function loadCadence() {
     container.innerHTML = '☕ <strong>batch & publish cadence</strong> — ' + tasks.map(t => t.name).join(' · ');
   } catch(e) {
     document.getElementById('cadenceContent').innerHTML = '☕ batch & publish cadence — could not load';
-  }
-}
-  } catch(e) {
-    showToast('could not schedule — check connection');
   }
 }
 
@@ -326,22 +383,6 @@ function showToast(msg) {
 
 loadBoard();
 loadCadence();
-
-async function loadCadence() {
-  try {
-    const res = await fetch('/.netlify/functions/asana-proxy?view=batch_cadence');
-    const data = await res.json();
-    const tasks = (data.tasks || []).filter(t => !t.completed);
-    const container = document.getElementById('cadenceContent');
-    if(!tasks.length) {
-      container.innerHTML = '☕ batch & publish cadence — nothing set yet';
-      return;
-    }
-    container.innerHTML = '☕ <strong>batch & publish cadence</strong> — ' + tasks.map(t => t.name).join(' · ');
-  } catch(e) {
-    document.getElementById('cadenceContent').innerHTML = '☕ batch & publish cadence — could not load';
-  }
-}
 </script>
 </body>
 </html>
