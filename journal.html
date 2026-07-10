@@ -257,7 +257,7 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;background:var(--rose-pale)
   <div class="save-row">
     <button class="btn-save" onclick="saveEntry()">☕ steep it · save today's entry</button>
     <button class="btn-print" onclick="window.print()">🖨 print</button>
-    <a href="https://docs.google.com/spreadsheets/d/1gYv3ViVpWIkTx6tFxFFCPFr9i_OAOn8P3RjTK68AJnw" target="_blank" class="btn-print" style="text-decoration:none">📖 open sheet</a>
+    <a href="https://app.notion.com/p/3945b934f7248086a420000bf9049731" target="_blank" class="btn-print" style="text-decoration:none">📖 open in notion</a>
   </div>
 
   <!-- PAST ENTRIES -->
@@ -414,8 +414,8 @@ const today = new Date();
 document.getElementById('heroDate').textContent = today.toLocaleDateString('en-CA',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
 buildThemeGrid();
 buildWordChips();
-loadEntries();
-renderEntries();
+loadEntries(); // async — renders entries when Notion responds
+renderEntries(); // show cached or empty state immediately
 
 // ── TRANSLATION ──
 function setTranslation(t) {
@@ -532,11 +532,22 @@ async function saveEntry() {
 }
 
 // ── ENTRIES ──
-function loadEntries() {
+async function loadEntries() {
+  // Load from localStorage first (instant cache)
   try {
     const s = localStorage.getItem('mp_journal_entries');
-    if(s) entries = JSON.parse(s);
+    if(s) { entries = JSON.parse(s); renderEntries(); }
   } catch(e){}
+  // Then fetch from Notion (source of truth)
+  try {
+    const res = await fetch('/.netlify/functions/notion-proxy?view=get_journal');
+    const data = await res.json();
+    if(data.entries?.length) {
+      entries = data.entries;
+      localStorage.setItem('mp_journal_entries', JSON.stringify(entries));
+      renderEntries();
+    }
+  } catch(e) { console.log('notion fetch failed, using local cache'); }
 }
 
 function renderEntries() {

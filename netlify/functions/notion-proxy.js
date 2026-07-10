@@ -3,7 +3,8 @@ const NOTION_VERSION = '2022-06-28';
 
 const DATABASES = {
   table: '3935b934-f724-804a-b86e-e9fc94014d58',
-  journal: '3945b934-f724-8058-9206-ce629dcc1051',
+  journal: '3945b934-f724-8086-a420-000bf9049731',
+  tasks: 'cc2b3915-10c2-41d1-ae9c-d6440919da2a',
 };
 
 async function notionFetch(path, options = {}) {
@@ -106,13 +107,19 @@ exports.handler = async function (event) {
         const p = page.properties;
         return {
           id: page.id,
-          date: p.Date?.title?.[0]?.plain_text || p.Date?.date?.start || '',
-          theme: p.Theme?.select?.name || '',
-          scripture: p['Scripture reference']?.rich_text?.[0]?.plain_text || '',
-          translation: p.Translation?.select?.name || '',
-          observation: p["What's here"]?.rich_text?.[0]?.plain_text || '',
-          application: p.Application?.rich_text?.[0]?.plain_text || '',
-          oneWord: p['One word']?.rich_text?.[0]?.plain_text || '',
+          date: p.date?.title?.[0]?.plain_text || p.date?.date?.start || '',
+          theme: p.theme?.select?.name || '',
+          scripture: p['scripture reference']?.rich_text?.[0]?.plain_text || '',
+          translation: p.translation?.select?.name || '',
+          observation: p.observation?.rich_text?.[0]?.plain_text || '',
+          application: p.application?.rich_text?.[0]?.plain_text || '',
+          gratitude: [
+            p['gratitude 1']?.rich_text?.[0]?.plain_text || '',
+            p['gratitude 2']?.rich_text?.[0]?.plain_text || '',
+            p['gratitude 3']?.rich_text?.[0]?.plain_text || '',
+          ].filter(Boolean),
+          prayer: p.prayer?.rich_text?.[0]?.plain_text || '',
+          oneWord: p['one word']?.rich_text?.[0]?.plain_text || '',
         };
       });
       return { statusCode: 200, headers, body: JSON.stringify({ entries }) };
