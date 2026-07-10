@@ -315,7 +315,7 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;color:var(--text);min-heigh
         </div>
         <div>
           <div class="platform-name">podcast & lives</div>
-          <div class="platform-handle">RO Podcast & Lives · Asana</div>
+          <div class="platform-handle">RO Podcast & Lives · Notion</div>
         </div>
         <span class="platform-status status-active">active</span>
       </div>
@@ -347,13 +347,13 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;color:var(--text);min-heigh
         </div>
         <div>
           <div class="platform-name">content this week</div>
-          <div class="platform-handle">live from asana · content calendar + ro content</div>
+          <div class="platform-handle">live from notion · content calendar + ro content</div>
         </div>
         <span class="platform-status status-active">live</span>
       </div>
       <div style="padding:16px 18px">
         <div id="contentThisWeek" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px">
-          <div style="font-family:Lora,serif;font-style:italic;font-size:13px;color:var(--text-faint);padding:8px">loading from asana...</div>
+          <div style="font-family:Lora,serif;font-style:italic;font-size:13px;color:var(--text-faint);padding:8px">loading from notion...</div>
         </div>
       </div>
     </div>
@@ -649,7 +649,7 @@ async function loadContentThisWeek() {
 
 async function loadPodcastCounts() {
   try {
-    const res = await fetch('/.netlify/functions/asana-proxy?view=podcast_lives_counts').then(r=>r.json());
+    const res = await fetch('/.netlify/functions/notion-proxy?view=podcast_lives_counts').then(r=>r.json());
     document.getElementById('podIdeas').textContent = res.ideas ?? '—';
     document.getElementById('podReady').textContent = res.ready ?? '—';
     document.getElementById('podPosted').textContent = res.posted ?? '—';
@@ -693,7 +693,7 @@ function togglePinterest() {
 async function loadPinterest() {
   const container = document.getElementById('pinterestContent');
   try {
-    const res = await fetch('/.netlify/functions/asana-proxy?view=ro_pinterest');
+    const res = await fetch('/.netlify/functions/notion-proxy?view=ro_pinterest');
     const data = await res.json();
     const cols = data.columns || {};
     const total = Object.values(cols).reduce((sum, arr) => sum + arr.length, 0);

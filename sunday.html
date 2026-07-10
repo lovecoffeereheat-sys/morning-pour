@@ -377,7 +377,7 @@ textarea:focus,input.text-input:focus{border-color:var(--rose)}
 
   <div class="card">
     <div class="card-title">my tasks — this week</div>
-    <div class="card-desc">everything due, sortable and filterable — no need to open Asana.</div>
+    <div class="card-desc">everything due, sortable and filterable — no need to open Notion.</div>
     <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap">
       <button class="mytasks-filter active" data-filter="all" onclick="filterMyTasks('all')">all</button>
       <button class="mytasks-filter" data-filter="Today" onclick="filterMyTasks('Today')">today</button>
@@ -480,7 +480,7 @@ textarea:focus,input.text-input:focus{border-color:var(--rose)}
         <div class="lane-dot" style="background:var(--amber)"></div>
         <span class="lane-label">content & build · RO</span>
       </div>
-      <div id="roTasksContainer"><div class="lane-loading">loading from asana...</div></div>
+      <div id="roTasksContainer"><div class="lane-loading">loading...</div></div>
       <button class="lane-add" onclick="addManualTask('ro')"><i class="ti ti-plus"></i> add a task</button>
     </div>
     <div class="lane lane-personal">
@@ -488,7 +488,7 @@ textarea:focus,input.text-input:focus{border-color:var(--rose)}
         <div class="lane-dot" style="background:var(--rose)"></div>
         <span class="lane-label">personal & mom life</span>
       </div>
-      <div id="personalTasksContainer"><div class="lane-loading">loading from asana...</div></div>
+      <div id="personalTasksContainer"><div class="lane-loading">loading...</div></div>
       <button class="lane-add" onclick="addManualTask('personal')"><i class="ti ti-plus"></i> add a task</button>
     </div>
   </div>
@@ -507,14 +507,14 @@ textarea:focus,input.text-input:focus{border-color:var(--rose)}
     <div class="card-title">what's in the inbox?</div>
     <div class="card-desc">sort each one — today, this week, later, or delete. what stays unprocessed owns you.</div>
     <div class="brain-dump-list" id="brainDumpList">
-      <div class="brain-dump-loading">loading from asana...</div>
+      <div class="brain-dump-loading">loading...</div>
     </div>
   </div>
 
   <!-- CAPTURE NEW -->
   <div class="card" style="margin-top:12px">
     <div class="card-title">anything else?</div>
-    <div class="card-desc">capture it and send it to your brain dump section in asana.</div>
+    <div class="card-desc">capture it and send it to your brain dump in Notion.</div>
     <div class="dump-input-row">
       <input class="dump-input" id="dumpInput" placeholder="type a task or idea..." onkeydown="if(event.key==='Enter')quickCapture()">
     </div>
@@ -847,7 +847,7 @@ async function loadMapBanner(){
   document.getElementById('mapViewLink').href=mapFiles[key]||'#';
   document.getElementById('mapViewLink').textContent='view full '+key+' map →';
   const container=document.getElementById('mapItems');
-  container.innerHTML='<div style="color:#7a8a9e;font-style:italic;font-size:15px;padding:8px 0">loading from asana...</div>';
+  container.innerHTML='<div style="color:#7a8a9e;font-style:italic;font-size:15px;padding:8px 0">loading from notion...</div>';
 
   // Load milestones from hardcoded data (these don't change)
   if(map){
@@ -856,7 +856,7 @@ async function loadMapBanner(){
   }
 
   try {
-    const res=await fetch('/.netlify/functions/asana-proxy?view=content_calendar');
+    const res=await fetch('/.netlify/functions/notion-proxy?view=get_content_calendar');
     const data=await res.json();
     const today=new Date();
     const weekStart=new Date(today);
@@ -866,28 +866,28 @@ async function loadMapBanner(){
     const startStr=weekStart.toISOString().split('T')[0];
     const endStr=weekEnd.toISOString().split('T')[0];
 
-    const weekTasks=(data.tasks||[]).filter(t=>t.due_on>=startStr&&t.due_on<=endStr);
+    const weekTasks=(data.items||[]).filter(t=>t.date>=startStr&&t.date<=endStr);
     weekMapItems=weekTasks.map(t=>({
-      date:t.due_on, type:t.type, text:t.name, angle:null
+      date:t.date, type:t.type, text:t.name, angle:null
     }));
 
     container.innerHTML='';
-    const dotMap={batch:'dot-batch',post:'dot-post',tool:'dot-tool',note:'dot-note'};
+    const dotMap={batch:'dot-batch',essay:'dot-post',note:'dot-note',chat:'dot-tool',restack:'dot-note'};
 
     if(!weekTasks.length){
-      container.innerHTML='<div style="color:#7a8a9e;font-style:italic;font-size:15px;padding:8px 0">no content scheduled this week in asana · add tasks with due dates this week</div>';
+      container.innerHTML='<div style="color:#7a8a9e;font-style:italic;font-size:15px;padding:8px 0">no content scheduled this week · add items with dates in notion</div>';
       return;
     }
 
     weekTasks.forEach((task,i)=>{
-      const d=new Date(task.due_on+'T12:00:00');
+      const d=new Date(task.date+'T12:00:00');
       const dateStr=d.toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'});
       const el=document.createElement('div');el.className='map-item';
       el.innerHTML=`<div class="map-item-dot ${dotMap[task.type]||'dot-post'}"></div><div class="map-item-date">${dateStr}</div><div style="flex:1"><div class="map-item-text">${task.name}</div></div><span class="map-item-badge badge-add" id="mapbadge${i}" onclick="addMapItemToLane(${i})">+ add to lane</span>`;
       container.appendChild(el);
     });
   } catch(e) {
-    container.innerHTML='<div style="color:#7a8a9e;font-style:italic;font-size:15px;padding:8px 0">could not load from asana — check connection</div>';
+    container.innerHTML='<div style="color:#7a8a9e;font-style:italic;font-size:15px;padding:8px 0">could not load from notion — check connection</div>';
   }
 }
 
@@ -906,15 +906,15 @@ function addMapTaskToLane(item,silent){
   container.insertBefore(el,container.firstChild);
 }
 
-// ── ASANA TASKS ──
+// ── NOTION TASKS ──
 async function loadTasks(){
   try{
     const[publishingRes, inProgressRes, personalRes]=await Promise.all([
-      fetch('/.netlify/functions/asana-proxy?view=publishing_this_week').then(r=>r.json()),
-      fetch('/.netlify/functions/asana-proxy?view=in_progress_content').then(r=>r.json()),
-      fetch('/.netlify/functions/asana-proxy?view=personal_tasks').then(r=>r.json())
+      fetch('/.netlify/functions/notion-proxy?view=publishing_this_week').then(r=>r.json()),
+      fetch('/.netlify/functions/notion-proxy?view=in_progress_content').then(r=>r.json()),
+      fetch('/.netlify/functions/notion-proxy?view=get_tasks').then(r=>r.json())
     ]);
-    renderContentLane(publishingRes.tasks||[], inProgressRes.tasks||[]);
+    renderContentLane(publishingRes.items||[], inProgressRes.items||[]);
     renderTasks('personalTasksContainer',personalRes.tasks||[],'personal');
   }catch(e){
     document.getElementById('roTasksContainer').innerHTML='<div class="lane-loading">could not load — check connection</div>';
@@ -969,28 +969,28 @@ function renderContentLane(publishing, inProgress) {
 }
 
 function makeTaskRow(task, lane) {
-  const asanaUrl = `https://app.asana.com/0/${task.project_id}/${task.gid}`;
-  const rowId = 'task-' + task.gid;
-  const expandId = 'expand-' + task.gid;
+  const notionUrl = `https://app.notion.com/p/${task.id?.replace(/-/g,'')}`;
+  const rowId = 'task-' + task.id;
+  const expandId = 'expand-' + task.id;
 
   const row = document.createElement('div');
   row.className = 'task-row';
   row.id = rowId;
   row.innerHTML = `
     <i class="ti ti-grip-vertical drag"></i>
-    <span class="task-row-text">${task.name}${task.due_on ? `<small>due ${task.due_on}</small>` : ''}</span>
-    <span class="task-tag">${task.project}</span>
+    <span class="task-row-text">${task.name}${task.date ? `<small>due ${task.date}</small>` : ''}</span>
+    <span class="task-tag">${task.type || task.status || ''}</span>
   `;
-  row.onclick = () => toggleTaskExpand(task.gid, asanaUrl, task.name, task.notes||'', task.due_on||'');
+  row.onclick = () => toggleTaskExpand(task.id, notionUrl, task.name, '', task.date||'');
 
   const expand = document.createElement('div');
   expand.className = 'task-expand';
   expand.id = expandId;
   expand.innerHTML = `
-    <div class="task-expand-meta">${task.due_on ? 'due ' + task.due_on : 'no due date'} · ${task.project}</div>
+    <div class="task-expand-meta">${task.date ? 'due ' + task.date : 'no due date'} · ${task.type || task.status || ''}</div>
     <div class="task-expand-actions">
       <button class="task-action-btn" onclick="copyTaskName('${escapeStr(task.name)}',event)"><i class="ti ti-clipboard"></i> copy name</button>
-      <button class="task-action-btn" onclick="openInAsana('${asanaUrl}',event)"><i class="ti ti-external-link"></i> open in asana</button>
+      <button class="task-action-btn" onclick="openInNotion('${notionUrl}',event)"><i class="ti ti-external-link"></i> open in notion</button>
     </div>
   `;
 
@@ -1007,22 +1007,22 @@ function renderTasks(containerId,tasks,lane){
     container.appendChild(empty);return;
   }
   tasks.slice(0,10).forEach(task=>{
-    const rowId='task-'+task.gid;
-    const expandId='expand-'+task.gid;
-    const asanaUrl=`https://app.asana.com/0/${task.project_id}/${task.gid}`;
+    const rowId='task-'+task.id;
+    const expandId='expand-'+task.id;
+    const notionUrl=`https://app.notion.com/p/${task.id?.replace(/-/g,'')}`;
     const el=document.createElement('div');
     el.innerHTML=`
-      <div class="task-row" id="${rowId}" onclick="toggleTaskExpand('${task.gid}','${asanaUrl}','${escapeStr(task.name)}','${escapeStr(task.notes||'')}','${task.due_on||''}')">
+      <div class="task-row" id="${rowId}" onclick="toggleTaskExpand('${task.id}','${notionUrl}','${escapeStr(task.name)}','${escapeStr(task.notes||'')}','${task.due_on||''}')">
         <i class="ti ti-grip-vertical drag"></i>
         <span class="task-row-text">${task.name}</span>
-        <span class="task-tag">${task.project}</span>
+        <span class="task-tag">${task.status||''}</span>
       </div>
       <div class="task-expand" id="${expandId}">
         ${task.notes?`<div class="task-expand-notes">${task.notes}</div>`:''}
-        <div class="task-expand-meta">${task.due_on?'due '+task.due_on:'no due date'} · ${task.project}</div>
+        <div class="task-expand-meta">${task.due_on?'due '+task.due_on:'no due date'} · ${task.status||''}</div>
         <div class="task-expand-actions">
           <button class="task-action-btn" onclick="copyTaskName('${escapeStr(task.name)}',event)"><i class="ti ti-clipboard"></i> copy name</button>
-          <button class="task-action-btn" onclick="openInAsana('${asanaUrl}',event)"><i class="ti ti-external-link"></i> open in asana</button>
+          <button class="task-action-btn" onclick="openInNotion('${notionUrl}',event)"><i class="ti ti-external-link"></i> open in notion</button>
         </div>
       </div>
     `;
@@ -1046,7 +1046,7 @@ function copyTaskName(name,e){
   navigator.clipboard.writeText(name).then(()=>showToast('copied ☕')).catch(()=>showToast('could not copy'));
 }
 
-function openInAsana(url,e){
+function openInNotion(url,e){
   e.stopPropagation();
   window.open(url,'_blank');
 }
@@ -1099,19 +1099,19 @@ function removeDumpItem(i){
   if(!dumpQueue.length){document.getElementById('dumpSendRow').style.display='none';document.getElementById('dumpNoSend').style.display='flex';}
 }
 
-async function sendDumpToAsana(){
+async function sendDumpToNotion(){
   if(!dumpQueue.length)return;
-  showToast('sending to asana...');let sent=0;
+  showToast('sending to notion...');let sent=0;
   for(const item of dumpQueue){
     try{
-      await fetch('/.netlify/functions/asana-proxy?view=create_task',{
+      await fetch('/.netlify/functions/notion-proxy?view=add_task',{
         method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({name:item.name,project_id:item.project_id})
+        body:JSON.stringify({name:item.name,status:'Brain Dump'})
       });sent++;
     }catch(e){}
   }
   dumpQueue=[];renderDumpQueue();
-  showToast(`${sent} task${sent!==1?'s':''} sent to asana ☕`);
+  showToast(`${sent} task${sent!==1?'s':''} sent to notion ☕`);
   document.getElementById('dumpSendRow').style.display='none';
   document.getElementById('dumpNoSend').style.display='flex';
   setTimeout(()=>goToStep(5),800);

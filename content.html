@@ -95,9 +95,9 @@ body{font-family:'Lora',Georgia,serif;font-size:15px;background:var(--rose-pale)
 </div>
 
 <div class="hero">
-  <div class="hero-eyebrow">RO Substack · idea to published, without opening Asana</div>
+  <div class="hero-eyebrow">RO Substack · idea to published, without opening Notion</div>
   <div class="hero-title">content <em>hub</em></div>
-  <div class="hero-sub">capture it here, move it along, schedule it — Asana just quietly keeps score.</div>
+  <div class="hero-sub">capture it here, move it along, schedule it — Notion quietly keeps score.</div>
 </div>
 
 <div class="capture-row">
@@ -357,21 +357,10 @@ function renderUpcoming() {
   `).join('');
 }
 
-// ── BATCH & PUBLISH CADENCE (reference, still in Asana for now) ──
+// ── BATCH & PUBLISH CADENCE (reference) ──
 async function loadCadence() {
-  try {
-    const res = await fetch('/.netlify/functions/asana-proxy?view=batch_cadence');
-    const data = await res.json();
-    const tasks = (data.tasks || []).filter(t => !t.completed);
-    const container = document.getElementById('cadenceContent');
-    if(!tasks.length) {
-      container.innerHTML = '☕ batch & publish cadence — nothing set yet';
-      return;
-    }
-    container.innerHTML = '☕ <strong>batch & publish cadence</strong> — ' + tasks.map(t => t.name).join(' · ');
-  } catch(e) {
-    document.getElementById('cadenceContent').innerHTML = '☕ batch & publish cadence — could not load';
-  }
+  const container = document.getElementById('cadenceContent');
+  container.innerHTML = '☕ <strong>batch & publish cadence</strong> — essays batch-written in energy bursts, ~2/month drip · notes 3–5x/week from existing batch · restacks as gap-fillers';
 }
 
 function showToast(msg) {

@@ -5,6 +5,9 @@ const DATABASES = {
   table: '3935b934-f724-804a-b86e-e9fc94014d58',
   journal: '3945b934-f724-8086-a420-000bf9049731',
   tasks: 'cc2b3915-10c2-41d1-ae9c-d6440919da2a',
+  content: '3965b934-f724-80ee-853f-000b39d87c8d',
+  podcast: '0b1cdbab-7b2c-4733-aa14-714d4714280c',
+  pinterest: '04250405-6f03-43f5-85b4-20f3dd1cc88f',
 };
 
 async function notionFetch(path, options = {}) {
@@ -205,32 +208,32 @@ exports.handler = async function (event) {
     }
 
 
-    // ── GET CONTENT CALENDAR (combined Content Pipeline + Podcast & Lives, by date) ──
+    // ── GET CONTENT CALENDAR (combined RO_SUBSTACK + Podcast & Lives, by date) ──
     if (view === 'get_content_calendar') {
-      const [pipelineRes, podcastRes] = await Promise.all([
-        notionFetch(`/data_sources/906e3640-d4d5-460a-a265-9bf7059c74e0/query`, {
+      const [contentRes, podcastRes] = await Promise.all([
+        notionFetch(`/data_sources/${DATABASES.content}/query`, {
           method: 'POST',
           body: JSON.stringify({ page_size: 100 }),
         }),
-        notionFetch(`/data_sources/0b1cdbab-7b2c-4733-aa14-714d4714280c/query`, {
+        notionFetch(`/data_sources/${DATABASES.podcast}/query`, {
           method: 'POST',
           body: JSON.stringify({ page_size: 100 }),
         }),
       ]);
 
-      const pipelineItems = (pipelineRes.results || [])
+      const contentItems = (contentRes.results || [])
         .map(page => {
           const p = page.properties;
           return {
             id: page.id,
-            name: p.Title?.title?.[0]?.plain_text || '',
-            date: p['Due Date']?.date?.start || null,
-            status: p.Status?.select?.name || '',
-            type: p.Type?.select?.name || '',
+            name: p.Name?.title?.[0]?.plain_text || '',
+            date: p['post date']?.rich_text?.[0]?.plain_text || p['post date']?.date?.start || null,
+            status: p.Status?.select?.name || p['Section/Column']?.select?.name || '',
+            type: p.type?.select?.name || '',
             source: 'Substack',
           };
         })
-        .filter(t => t.date && ['Scheduled', 'Published'].includes(t.status));
+        .filter(t => t.date && ['Ready', 'Scheduled', 'Published'].includes(t.status));
 
       const podcastItems = (podcastRes.results || [])
         .map(page => {
@@ -246,38 +249,38 @@ exports.handler = async function (event) {
         })
         .filter(t => t.date && ['Ready', 'Published'].includes(t.status));
 
-      const combined = [...pipelineItems, ...podcastItems].sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+      const combined = [...contentItems, ...podcastItems].sort((a, b) => (a.date || '').localeCompare(b.date || ''));
       return { statusCode: 200, headers, body: JSON.stringify({ items: combined }) };
     }
 
 
-    // ── GET PIPELINE BOARD (Content Pipeline grouped by Status) ──
+    // ── GET PIPELINE BOARD (RO_SUBSTACK grouped by Status) ──
     if (view === 'get_pipeline_board') {
-      const res = await notionFetch(`/data_sources/906e3640-d4d5-460a-a265-9bf7059c74e0/query`, {
+      const res = await notionFetch(`/data_sources/${DATABASES.content}/query`, {
         method: 'POST',
         body: JSON.stringify({ page_size: 100 }),
       });
-      const columns = { Idea: [], Drafting: [], 'ON THE BURNER': [], Ready: [], Scheduled: [], Published: [] };
+      const columns = { Idea: [], Drafting: [], 'On the Burner': [], Ready: [], Published: [], Archived: [] };
       (res.results || []).forEach(page => {
         const p = page.properties;
-        const status = p.Status?.select?.name;
+        const status = p.Status?.select?.name || p['Section/Column']?.select?.name;
         if (!columns[status]) return;
         columns[status].push({
           id: page.id,
-          name: p.Title?.title?.[0]?.plain_text || '',
-          due_on: p['Due Date']?.date?.start || null,
-          type: p.Type?.select?.name || '',
+          name: p.Name?.title?.[0]?.plain_text || '',
+          due_on: p['post date']?.rich_text?.[0]?.plain_text || null,
+          type: p.type?.select?.name || '',
         });
       });
       return { statusCode: 200, headers, body: JSON.stringify({ columns }) };
     }
 
-    // ── UPDATE PIPELINE STATUS (move status, optionally set due date) ──
+    // ── UPDATE PIPELINE STATUS ──
     if (view === 'update_pipeline_status' && method === 'POST') {
       const { page_id, status, due_on } = body;
       const properties = {};
       if (status) properties['Status'] = { select: { name: status } };
-      if (due_on) properties['Due Date'] = { date: { start: due_on } };
+      if (due_on) properties['post date'] = { rich_text: richText(due_on) };
       await notionFetch(`/pages/${page_id}`, {
         method: 'PATCH',
         body: JSON.stringify({ properties }),
@@ -285,21 +288,103 @@ exports.handler = async function (event) {
       return { statusCode: 200, headers, body: JSON.stringify({ success: true }) };
     }
 
-    // ── ADD PIPELINE ITEM (new idea, straight into Content Pipeline) ──
+    // ── ADD PIPELINE ITEM ──
     if (view === 'add_pipeline_item' && method === 'POST') {
       const { name, type, status } = body;
       const res = await notionFetch('/pages', {
         method: 'POST',
         body: JSON.stringify({
-          parent: { data_source_id: '906e3640-d4d5-460a-a265-9bf7059c74e0' },
+          parent: { data_source_id: DATABASES.content },
           properties: {
-            Title: { title: richText(name) },
+            Name: { title: richText(name) },
             Status: { select: { name: status || 'Idea' } },
-            ...(type ? { Type: { select: { name: type } } } : {}),
+            ...(type ? { type: { select: { name: type } } } : {}),
           },
         }),
       });
       return { statusCode: 200, headers, body: JSON.stringify({ success: true, page: res }) };
+    }
+
+    // ── PODCAST & LIVES COUNTS ──
+    if (view === 'podcast_lives_counts') {
+      const res = await notionFetch(`/data_sources/${DATABASES.podcast}/query`, {
+        method: 'POST',
+        body: JSON.stringify({ page_size: 100 }),
+      });
+      const counts = { ideas: 0, ready: 0, posted: 0 };
+      (res.results || []).forEach(page => {
+        const status = page.properties?.Status?.select?.name || '';
+        if (status === 'Idea') counts.ideas++;
+        else if (status === 'Ready') counts.ready++;
+        else if (status === 'Published') counts.posted++;
+      });
+      return { statusCode: 200, headers, body: JSON.stringify(counts) };
+    }
+
+    // ── PINTEREST BOARD ──
+    if (view === 'ro_pinterest') {
+      const res = await notionFetch(`/data_sources/${DATABASES.pinterest}/query`, {
+        method: 'POST',
+        body: JSON.stringify({ page_size: 100 }),
+      });
+      const columns = { idea: [], 'design ready': [], scheduled: [], live: [] };
+      (res.results || []).forEach(page => {
+        const p = page.properties;
+        const status = (p.Status?.select?.name || '').toLowerCase();
+        const name = p.Name?.title?.[0]?.plain_text || p['Pin name']?.title?.[0]?.plain_text || '';
+        if (columns[status]) columns[status].push({ id: page.id, name });
+      });
+      return { statusCode: 200, headers, body: JSON.stringify({ columns }) };
+    }
+
+    // ── PUBLISHING THIS WEEK (RO_SUBSTACK items with dates this week) ──
+    if (view === 'publishing_this_week') {
+      const res = await notionFetch(`/data_sources/${DATABASES.content}/query`, {
+        method: 'POST',
+        body: JSON.stringify({ page_size: 100 }),
+      });
+      const now = new Date();
+      const weekStart = new Date(now); weekStart.setDate(now.getDate() - now.getDay());
+      const weekEnd = new Date(weekStart); weekEnd.setDate(weekStart.getDate() + 7);
+      const ws = weekStart.toISOString().slice(0,10);
+      const we = weekEnd.toISOString().slice(0,10);
+      const items = (res.results || []).filter(page => {
+        const p = page.properties;
+        const status = p.Status?.select?.name || p['Section/Column']?.select?.name || '';
+        const date = p['post date']?.rich_text?.[0]?.plain_text || p['post date']?.date?.start || '';
+        return date >= ws && date < we && ['Ready', 'Published'].includes(status);
+      }).map(page => {
+        const p = page.properties;
+        return {
+          id: page.id,
+          name: p.Name?.title?.[0]?.plain_text || '',
+          date: p['post date']?.rich_text?.[0]?.plain_text || '',
+          type: p.type?.select?.name || '',
+          status: p.Status?.select?.name || p['Section/Column']?.select?.name || '',
+        };
+      });
+      return { statusCode: 200, headers, body: JSON.stringify({ items }) };
+    }
+
+    // ── IN PROGRESS CONTENT (Drafting / On the Burner) ──
+    if (view === 'in_progress_content') {
+      const res = await notionFetch(`/data_sources/${DATABASES.content}/query`, {
+        method: 'POST',
+        body: JSON.stringify({ page_size: 100 }),
+      });
+      const items = (res.results || []).filter(page => {
+        const status = page.properties?.Status?.select?.name || page.properties?.['Section/Column']?.select?.name || '';
+        return ['Drafting', 'On the Burner'].includes(status);
+      }).map(page => {
+        const p = page.properties;
+        return {
+          id: page.id,
+          name: p.Name?.title?.[0]?.plain_text || '',
+          type: p.type?.select?.name || '',
+          status: p.Status?.select?.name || p['Section/Column']?.select?.name || '',
+        };
+      });
+      return { statusCode: 200, headers, body: JSON.stringify({ items }) };
     }
 
     return { statusCode: 400, headers, body: JSON.stringify({ error: 'unknown view' }) };
